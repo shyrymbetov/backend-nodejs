@@ -1,0 +1,46 @@
+{
+  "name": "nova-back",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app",
+    "dev": "nodemon src/app",
+    "migration:create": "npx typeorm-ts-node-esm migration:generate -d src/migrations-data-source.ts",
+    "migration:up": "npx typeorm-ts-node-esm migration:run -d src/migrations-data-source.ts",
+    "migration:down": "npx typeorm-ts-node-esm migration:revert -d src/migrations-data-source.ts",
+    "seed:create": "npx typeorm-ts-node-esm migration:create -d src/seeds-data-source.ts",
+    "seed:up": "npx typeorm-ts-node-esm migration:run -d src/seeds-data-source.ts",
+    "seed:down": "npx typeorm-ts-node-esm migration:revert -d src/seeds-data-source.ts",
+    "format:check": "prettier --check src",
+    "format:write": "prettier --write src",
+    "lint:check": "eslint src",
+    "lint:fix": "eslint --fix src"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "pg": "^8.11.0",
+    "typeorm": "^0.3.16",
+    "typeorm-naming-strategies": "^4.1.0",
+    "znv": "^0.3.2",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/http-errors": "^2.0.1",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/node": "^20.1.7",
+    "@types/pg": "^8.6.6",
+    "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@typescript-eslint/parser": "^5.59.6",
+    "eslint": "^8.40.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.22",
+    "prettier": "^2.8.8",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
