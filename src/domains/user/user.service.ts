@@ -9,9 +9,7 @@ export async function getUsers(): Promise<UserEntity[]> {
 }
 
 export async function createUser(userToCreate: CreateUserType) {
-  const createduser = userRepository.create(userToCreate);
-
-  return await userRepository.save(createduser);
+  return await userRepository.save(userToCreate);
 }
 
 export async function getUserById(id: number): Promise<UserEntity | null> {

@@ -14,4 +14,5 @@ export const env = parseEnv(process.env, {
   API_HOST: z.string().min(1),
   API_PORT: port(),
   NODE_ENV: z.enum(['development', 'production']).default('development'),
+  CORS_ORIGIN: z.string().min(1),
 });

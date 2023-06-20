@@ -17,10 +17,13 @@ const dataSourceConfig: PostgresConnectionOptions = {
 };
 
 const apiConfig = {
+  cors: {
+    origin: env.CORS_ORIGIN,
+    credentials: true,
+  },
   server: {
     port: env.API_PORT,
   },
-  cors: true,
   logger: {
     level: 'debug',
     color: true,

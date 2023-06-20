@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from "express";
 import { ZodError } from 'zod';
 import { ErrorResponseBody } from '../shared/types/error-response-body.type';
 import { HttpError } from 'http-errors';
@@ -6,7 +6,8 @@ import { HttpError } from 'http-errors';
 export function errorHandlerMiddleware(
   err: unknown,
   _req: Request,
-  res: Response
+  res: Response,
+  _next: NextFunction
 ) {
   console.error(err);
   const responseBody: ErrorResponseBody = {

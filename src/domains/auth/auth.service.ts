@@ -7,18 +7,18 @@ import { LoginUserDto } from './dtos/login-user.dto';
 import { TokenPayloadSchema } from './schemas/token-payload.schema';
 import { TokenPayloadType } from './types/token-payload.type';
 import { BadRequest } from 'http-errors';
+import { UserRoleEnum } from '../user/types/user-role.enum';
 
-export async function register(userDto: RegisterUserDto) {
+export async function registerStudent(userDto: RegisterUserDto) {
   const hashedPassword = hashPwd(userDto.password);
 
-  const user = await createUser({
+  return await createUser({
     email: userDto.email,
     firstName: userDto.firstName,
     lastName: userDto.lastName,
     hashedPassword,
+    role: UserRoleEnum.Student,
   });
-
-  return user;
 }
 
 export async function login(userDto: LoginUserDto) {
