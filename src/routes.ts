@@ -1,3 +1,4 @@
+import 'express-async-errors';
 import { userRouter } from './domains/user/user.router';
 import { authRouter } from './domains/auth/auth.router';
 import type { Express } from 'express';

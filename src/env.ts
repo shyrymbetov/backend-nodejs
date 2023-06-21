@@ -3,6 +3,7 @@ import { parseEnv, port, z } from 'znv';
 export const env = parseEnv(process.env, {
   DB_HOST: z.string().min(1),
   DB_NAME: z.string().min(1),
+  DB_SCHEMA: z.string().min(1),
   DB_PORT: port(),
   DB_APP_USER: z.string().min(1),
   DB_APP_PASS: z.string().min(1),

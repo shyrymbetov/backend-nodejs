@@ -1,20 +1,21 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { ErrorResponseBody } from '../shared/types/error-response-body.type';
 import { HttpError } from 'http-errors';
 
 export function errorHandlerMiddleware(
-  err: unknown,
+  err: Error,
   _req: Request,
   res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next: NextFunction
 ) {
   console.error(err);
   const responseBody: ErrorResponseBody = {
     fail: true,
     error: 'InternalServerError',
-    message: 'Something went wrong on the server',
-    details: err,
+    message: err.message,
+    details: err.stack,
   };
 
   if (err instanceof HttpError) {

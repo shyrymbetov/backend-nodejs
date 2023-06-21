@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+POSTGRES="psql ${DB_NAME} --username ${POSTGRES_USER}"
+
+echo "Creating user: ${DB_MIGRATOR_USER}"
+
+$POSTGRES <<-EOSQL
+CREATE USER ${DB_MIGRATOR_USER} WITH PASSWORD '${DB_MIGRATOR_PASS}';
+EOSQL

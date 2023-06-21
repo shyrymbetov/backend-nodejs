@@ -7,8 +7,9 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 import { UserRoleEnum } from './types/user-role.enum';
+import { env } from '../../env';
 
-@Entity()
+@Entity({ schema: env.DB_SCHEMA })
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id!: number;

@@ -1,3 +1,4 @@
+import './process';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -18,9 +19,8 @@ addRoutes(app);
 
 app.use(errorHandlerMiddleware);
 
-app.listen(config.api.server.port, async () => {
-  console.log(
-    `⚡️[server]: Server listening on port ${config.api.server.port}`
-  );
+
+app.listen(config.api.port, async () => {
+  console.log(`⚡️[server]: Server listening on port ${config.api.port}`);
   await connectToDatabase();
 });
