@@ -4,7 +4,7 @@ export const TokenPayloadSchema = z
   .object({
     user: z
       .object({
-        id: z.number(),
+        id: z.string(),
       })
       .strict(),
   })

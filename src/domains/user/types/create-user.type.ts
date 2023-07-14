@@ -1,9 +1,20 @@
 import { UserRoleEnum } from './user-role.enum';
+import {Column} from "typeorm";
 
 export type CreateUserType = {
   email: string;
   firstName: string;
   lastName: string;
-  hashedPassword: string;
+  hashedPassword?: string;
+  birthDate: Date;
+  phone: string;
+
+  regionId: string;
+  localId: string;
+  school?: string | null;
+  class?: number | null;
+
+  masterId?: string | null;
+  orientatorId?: string | null;
   role: UserRoleEnum;
 };

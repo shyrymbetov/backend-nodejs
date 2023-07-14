@@ -14,8 +14,7 @@ export function hasRoleMiddleware(role: UserRoleEnum) {
     if (!user) {
       throw new NotFound('No such user exists');
     }
-
-    if (role === user?.role) {
+    if (role !== user?.role) {
       throw new Forbidden(`User must have ${role} role`);
     }
 

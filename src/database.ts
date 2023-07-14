@@ -1,6 +1,5 @@
 import { DataSource } from 'typeorm';
 import { config } from './config';
-import { UserEntity } from './domains/user/user.entity';
 
 export const dataSource = new DataSource(config.db);
 
@@ -15,8 +14,4 @@ export async function connectToDatabase() {
     return;
   }
   console.log(`⚡️[database]: Connected to database on ${uri}`);
-}
-
-export function getUserRepository() {
-  return dataSource.getRepository(UserEntity);
 }

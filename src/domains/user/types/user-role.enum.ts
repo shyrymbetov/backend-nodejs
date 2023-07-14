@@ -1,6 +1,8 @@
 export enum UserRoleEnum {
   Admin = 'admin',
   Student = 'student',
-  Docsman = 'docsman',
+  Schoolboy = 'schoolboy',
+  Expert = 'expert',
+  MasterExpert = 'master-expert',
   Orientator = 'orientator',
 }
