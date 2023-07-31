@@ -14,6 +14,7 @@ import {
   generateEmailVerificationLink,
   verificationUserEmail
 } from "./user-action-link.service";
+import {VerifyOrChangePwdSchema} from "./schemas/verify-or-change-pwd.schema";
 
 //handler for Auth Service
 export async function registerHandler(req: Request, res: Response) {
@@ -46,9 +47,8 @@ export async function generateChangePasswordLinkHandler(req: Request, res: Respo
 }
 
 export async function changeUserPasswordByLinkHandler(req: Request, res: Response) {
-  const { pwdId } = req.params;
-  const { body } = LoginUserSchema.parse(req);
-  return res.send(await changeUserPasswordByLink(pwdId, body));
+  const { body, params } = VerifyOrChangePwdSchema.parse(req);
+  return res.send(await changeUserPasswordByLink(params.linkId, body));
 }
 
 export async function generateEmailVerificationLinkHandler(req: Request, res: Response) {
@@ -57,8 +57,7 @@ export async function generateEmailVerificationLinkHandler(req: Request, res: Re
 }
 
 export async function verifyUserEmailByLinkHandler(req: Request, res: Response) {
-  const { pwdId } = req.params;
-  const { body } = LoginUserSchema.parse(req);
-  return res.send(await verificationUserEmail(pwdId, body));
+  const { body, params } = VerifyOrChangePwdSchema.parse(req);
+  return res.send(await verificationUserEmail(params.linkId, body));
 }
 

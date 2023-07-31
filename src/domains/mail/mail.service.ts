@@ -1,7 +1,6 @@
 import {MailMessageType} from "./types/mail-message.type";
-import nodemailer from 'nodemailer';
-import {env} from "../../env";
 import {config} from "../../config";
+const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
     host: config.mail.host,

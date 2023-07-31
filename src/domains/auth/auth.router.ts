@@ -17,6 +17,6 @@ const actionLinkRouter = Router();
 authRouter.use('/action', actionLinkRouter);
 
 actionLinkRouter.route('/generate-email').post(generateEmailVerificationLinkHandler);
-actionLinkRouter.route('/email-verify/:verifyId').post(verifyUserEmailByLinkHandler);
+actionLinkRouter.route('/email-verify/:linkId').post(verifyUserEmailByLinkHandler);
 actionLinkRouter.route('/generate-pwd').post(generateChangePasswordLinkHandler);
-actionLinkRouter.route('/change-password/:pwdId').post(changeUserPasswordByLinkHandler);
+actionLinkRouter.route('/change-password/:linkId').post(changeUserPasswordByLinkHandler);

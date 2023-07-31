@@ -4,6 +4,7 @@ import {PasswordChangeLinkEntity} from "./model/password-change-link.entity";
 import {BadRequest} from "http-errors";
 import {EmailVerifyLinkEntity} from "./model/email-verify-link.entity";
 import {LoginUserDto} from "./dtos/login-user.dto";
+import {sendMailMessage} from "../mail/mail.service";
 
 const passwordChangeRepository = dataSource.getRepository(PasswordChangeLinkEntity);
 const emailVerifyRepository = dataSource.getRepository(EmailVerifyLinkEntity);
@@ -14,19 +15,31 @@ export async function generateChangePasswordLink(email: string) {
     if (!user) {
         throw new BadRequest('User not found');
     }
-    const changePasswordLink = createChangePasswordLink(user.id);
-    // sendMail()
+    const changePasswordLink = await createChangePasswordLink(user.id);
+    await sendMailChangePasswordLink(email, changePasswordLink)
     console.log(changePasswordLink)
     return "generated";
+}
+
+export async function sendMailChangePasswordLink(email: string, changePasswordLink: string) {
+    //TODO html
+    await sendMailMessage({
+        to: email,
+        subject: 'Password Change Link',
+        html: `/generate-pwd/${changePasswordLink}`
+    })
 }
 
 export async function deactivatePasswordChangeLink(pwdChangeId: string) {
     const link = await passwordChangeRepository.findOneBy({id: pwdChangeId})
 
+    console.log('here')
     const now = new Date();
-    if (!link || !link.used || now >= link.expiredDate) { //check to change
+    if (!link || link.used || now >= link.expiredDate) { //check to change
+        console.log('here not changed')
         return;
     }
+    console.log('here changed')
 
     return link.userId;
 }
@@ -59,7 +72,7 @@ export async function deactivateEmailVerificationLink(referralLink: string, code
     const link = await emailVerifyRepository.findOneBy({id: referralLink})
 
     const now = new Date();
-    if (!link || !link.used || code != link.code
+    if (!link || link.used || code != link.code
         || now >= link.expiredDate) { //check to change
         return;
     }
