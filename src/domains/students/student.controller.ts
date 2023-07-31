@@ -18,20 +18,12 @@ export async function getStudentsHandler(req: Request, res: Response) {
     if (!req.user?.id) {
         throw new Unauthorized('User not logged in');
     }
-    console.log(query)
     await setManagerIdsToQuery(req.user.id, query)
-
-    console.log(query)
-
     return res.send(await getStudents(query));
 }
 
 export async function getStudentHandler(req: Request, res: Response) {
     let { id } = req.params
-    if (!id) {
-        id = req.user?.id ?? ''
-    }
-
     return res.send(await getStudentById(id));
 }
 
@@ -41,9 +33,8 @@ export async function createStudentHandler(req: Request, res: Response) {
 }
 
 export async function editStudentHandler(req: Request, res: Response) {
-    const { id } = req.params
-    const { body } = CreateStudentSchema.parse(req);
-    return res.send(await editStudent(id, body));
+    const { body, params } = CreateStudentSchema.parse(req);
+    return res.send(await editStudent(params.id, body));
 }
 
 export async function editStudentOrientatorHandler(req: Request, res: Response) {

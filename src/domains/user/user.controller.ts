@@ -39,13 +39,12 @@ export async function createUserHandler(req: Request, res: Response) {
 }
 
 export async function editUserHandler(req: Request, res: Response) {
-    const id = req.user?.id ?? ''
-    const {body} = CreateUserSchema.parse(req);
-    return res.send(await editUser(id, body));
+    const {body, params} = CreateUserSchema.parse(req);
+    return res.send(await editUser(params.id, body));
 }
 
 export async function editCurrentUserHandler(req: Request, res: Response) {
-    const {id} = req.params
+    const id = req.user?.id ?? ''
     const {body} = EditCurrentUserSchema.parse(req);
     return res.send(await editCurrentUser(id, body));
 }
