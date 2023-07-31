@@ -1,12 +1,11 @@
-import {UserRoleEnum} from "./user-role.enum";
 
-export type CreateUserType = {
+export type RegisterUserType = {
   avatar?: string;
   email: string;
   firstName: string;
   lastName: string;
-  hashedPassword?: string;
-  birthDate: Date;
+  password: string;
+  birthDate: string;
   phone: string;
 
   regionId: string;
@@ -16,5 +15,5 @@ export type CreateUserType = {
 
   masterId?: string | null;
   orientatorId?: string | null;
-  role: UserRoleEnum;
+  type: string;
 };

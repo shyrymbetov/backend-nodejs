@@ -1,20 +1,17 @@
 import {UserRoleEnum} from "./user-role.enum";
 
-export type CreateUserType = {
+//User without password
+export type ManagerUserType = {
+  id: string;
   avatar?: string;
   email: string;
   firstName: string;
   lastName: string;
-  hashedPassword?: string;
   birthDate: Date;
   phone: string;
-
   regionId: string;
   localId: string;
-  school?: string | null;
-  class?: number | null;
-
-  masterId?: string | null;
-  orientatorId?: string | null;
+  studentCount: number;
+  schoolboyCount: number;
   role: UserRoleEnum;
 };

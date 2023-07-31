@@ -4,10 +4,10 @@ import {
     PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
-    DeleteDateColumn,
+    DeleteDateColumn, ManyToOne, JoinColumn, OneToMany,
 } from 'typeorm';
-import {UserRoleEnum} from './types/user-role.enum';
-import {env} from '../../env';
+import {UserRoleEnum} from '../types/user-role.enum';
+import {env} from '../../../env';
 
 @Entity({schema: env.DB_SCHEMA})
 export class UserEntity {
@@ -31,6 +31,9 @@ export class UserEntity {
 
     @Column({type: 'boolean', default: false})
     active!: boolean;
+
+    @Column({type: 'boolean', default: false})
+    verified!: boolean;
 
     @Column()
     birthDate!: Date;
@@ -61,6 +64,20 @@ export class UserEntity {
         enum: UserRoleEnum,
     })
     role!: UserRoleEnum;
+
+    @ManyToOne(() => UserEntity, user => user.orientatorStudents)
+    @JoinColumn({ name: 'orientator_id' })
+    orientator?: UserEntity;
+
+    @ManyToOne(() => UserEntity, user => user.masterStudents)
+    @JoinColumn({ name: 'master_id' })
+    master?: UserEntity;
+
+    @OneToMany(() => UserEntity, user => user.orientator)
+    orientatorStudents?: UserEntity[];
+
+    @OneToMany(() => UserEntity, user => user.master)
+    masterStudents?: UserEntity[];
 
     @CreateDateColumn()
     createdAt!: Date;

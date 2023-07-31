@@ -1,13 +1,22 @@
 import { Router } from 'express';
 import {
-    emailCheckHandler,
+    changeUserPasswordByLinkHandler,
+    emailCheckHandler, generateChangePasswordLinkHandler, generateEmailVerificationLinkHandler,
     loginHandler,
     registerHandler,
-    registerWithReferralLinkHandler
+    registerWithReferralLinkHandler, verifyUserEmailByLinkHandler
 } from './auth.controller';
 
 export const authRouter = Router();
 authRouter.route('/register-student').post(registerHandler);
+authRouter.route('/referral-link/:userId').post(registerWithReferralLinkHandler);
 authRouter.route('/login').post(loginHandler);
 authRouter.route('/email-check').post(emailCheckHandler);
-authRouter.route('/referral/:referral').post(registerWithReferralLinkHandler);
+
+const actionLinkRouter = Router();
+authRouter.use('/action', actionLinkRouter);
+
+actionLinkRouter.route('/generate-email').post(generateEmailVerificationLinkHandler);
+actionLinkRouter.route('/email-verify/:linkId').post(verifyUserEmailByLinkHandler);
+actionLinkRouter.route('/generate-pwd').post(generateChangePasswordLinkHandler);
+actionLinkRouter.route('/change-password/:linkId').post(changeUserPasswordByLinkHandler);
