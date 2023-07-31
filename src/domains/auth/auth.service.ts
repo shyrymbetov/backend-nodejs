@@ -6,6 +6,7 @@ import {
     getMasterExpert,
     getRoleByType,
     getUserByEmail,
+    getUserById,
     updateUserPassword
 } from '../user/user.service';
 import {RegisterUserDto} from './dtos/register-user.dto';
@@ -14,15 +15,32 @@ import {LoginUserDto} from './dtos/login-user.dto';
 import {TokenPayloadSchema} from './schemas/token-payload.schema';
 import {TokenPayloadType} from './types/token-payload.type';
 import {UserRoleEnum} from '../user/types/user-role.enum';
-import {BadRequest} from "http-errors";
+import {BadRequest, Forbidden} from "http-errors";
+import {deactivatePasswordChangeLink} from "./user-action-link.service";
+import {RegisterUserType} from "./types/register-user.type";
 
-export async function register(userDto: RegisterUserDto) {
+
+export async function changeUserPasswordByLink(pwdChangeId: string, userDto: LoginUserDto) {
+    const userId = await deactivatePasswordChangeLink(pwdChangeId)
+    let updated
+
+    if (userId) {
+        const hashedPassword = hashPwd(userDto.password);
+        updated = await updateUserPassword({
+            userId: userId,
+            hashedPassword: hashedPassword,
+        });
+    }
+
+    return updated;
+}
+
+export async function register(userDto: RegisterUserType | RegisterUserDto) {
     const hashedPassword = hashPwd(userDto.password);
     const masterId = await getMasterExpert();
     const role: UserRoleEnum = getRoleByType(userDto.type)
 
-    console.log(role)
-    console.log(userDto.type)
+
     let user = {
         email: userDto.email,
         firstName: userDto.firstName,
@@ -33,7 +51,8 @@ export async function register(userDto: RegisterUserDto) {
         localId: userDto.localId,
         school: userDto.school ?? null,
         class: userDto.class ?? null,
-        masterId: masterId,
+        masterId: userDto['masterId'] ? userDto['masterId'] : masterId,
+        orientatorId: userDto['orientatorId'] ?? null,
         hashedPassword: hashedPassword,
         role: role,
     }
@@ -41,14 +60,21 @@ export async function register(userDto: RegisterUserDto) {
     return await createUser(user);
 }
 
-export async function registerWithReferralLink(referralLink: string, userDto: LoginUserDto) {
-    const hashedPassword = hashPwd(userDto.password);
+export async function registerWithReferralLink(userId: string, userDto: RegisterUserDto) {
+    const user = await getUserById(userId)
+    let newUser = { ...userDto }
+    if (!user) {
+        return;
+    }
+    if (user?.role == UserRoleEnum.Orientator) {
+        newUser['orientatorId'] = user.id
+    }
+    if (user?.role == UserRoleEnum.Expert
+        || user?.role == UserRoleEnum.MasterExpert) {
+        newUser['masterId'] = user.id
+    }
 
-    const updated = await updateUserPassword({
-        email: userDto.email,
-        password: hashedPassword,
-    });
-    return updated ? updated : null;
+    return register({...userDto});
 }
 
 export async function emailCheck(email: string) {
@@ -60,6 +86,8 @@ export async function login(userDto: LoginUserDto) {
 
     if (!user || !validatePassword(userDto.password, user.hashedPassword)) {
         throw new BadRequest('Wrong credentials');
+    } else if (!user.verified) {
+        throw new Forbidden('Email not verified');
     }
 
     return generateAccessToken(user.id);

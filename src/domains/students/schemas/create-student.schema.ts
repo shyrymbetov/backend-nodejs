@@ -1,6 +1,6 @@
 import z from 'zod';
 
-export const CreateUserSchema = z.object({
+export const CreateStudentSchema = z.object({
   body: z
     .object({
       id: z.string().nullable().default(null),
@@ -11,7 +11,9 @@ export const CreateUserSchema = z.object({
       phone: z.string(),
       regionId: z.string(),
       localId: z.string(),
-      type: z.enum(['expert', 'master-expert', 'orientator']).default('orientator'),
+      school: z.string().nullable(),
+      class: z.number().nullable(),
+      type: z.enum(['schoolboy', 'student']).default('student'),
     })
     .strict(),
   query: z.object({}).strict(),

@@ -1,17 +1,19 @@
 import z from 'zod';
 
-export const CreateUserSchema = z.object({
+export const EditCurrentUserSchema = z.object({
   body: z
     .object({
       id: z.string().nullable().default(null),
-      email: z.string(),
+      email: z.string().nullable().default(null),
       firstName: z.string(),
       lastName: z.string(),
       birthDate: z.string().datetime(),
       phone: z.string(),
       regionId: z.string(),
       localId: z.string(),
-      type: z.enum(['expert', 'master-expert', 'orientator']).default('orientator'),
+      school: z.string().nullable(),
+      class: z.number().nullable(),
+      type: z.string().nullable().default(null),
     })
     .strict(),
   query: z.object({}).strict(),

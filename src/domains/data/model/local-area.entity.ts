@@ -6,15 +6,15 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
 } from 'typeorm';
-import { env } from '../../env';
+import { env } from '../../../env';
 
 @Entity({ schema: env.DB_SCHEMA })
-export class SchoolEntity {
+export class LocalAreaEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column({type: 'uuid'})
-  localId!: string;
+  regionId!: string;
 
   @Column()
   nameKZ!: string;
