@@ -39,8 +39,9 @@ export async function createUserHandler(req: Request, res: Response) {
 }
 
 export async function editUserHandler(req: Request, res: Response) {
-    const {body, params} = CreateUserSchema.parse(req);
-    return res.send(await editUser(params.id, body));
+    const { id } = req.params
+    const { body } = CreateUserSchema.parse(req);
+    return res.send(await editUser(id, body));
 }
 
 export async function editCurrentUserHandler(req: Request, res: Response) {

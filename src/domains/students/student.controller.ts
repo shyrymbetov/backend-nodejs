@@ -33,8 +33,9 @@ export async function createStudentHandler(req: Request, res: Response) {
 }
 
 export async function editStudentHandler(req: Request, res: Response) {
-    const { body, params } = CreateStudentSchema.parse(req);
-    return res.send(await editStudent(params.id, body));
+    const { id } = req.params
+    const { body } = CreateStudentSchema.parse(req);
+    return res.send(await editStudent(id, body));
 }
 
 export async function editStudentOrientatorHandler(req: Request, res: Response) {
