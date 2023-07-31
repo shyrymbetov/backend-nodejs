@@ -4,7 +4,7 @@ export const EditCurrentUserSchema = z.object({
   body: z
     .object({
       id: z.string().nullable().default(null),
-      avatar: z.string().optional(),
+      avatar: z.string().nullable().default(null).optional(),
       email: z.string().nullable().default(null),
       firstName: z.string(),
       lastName: z.string(),
