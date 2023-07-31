@@ -17,5 +17,7 @@ export const CreateStudentSchema = z.object({
     })
     .strict(),
   query: z.object({}).strict(),
-  params: z.object({}).strict(),
+  params: z.object({
+      id: z.string().optional(),
+  }).strict(),
 });
