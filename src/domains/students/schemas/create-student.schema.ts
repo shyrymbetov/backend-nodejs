@@ -4,6 +4,7 @@ export const CreateStudentSchema = z.object({
   body: z
     .object({
       id: z.string().nullable().default(null),
+      avatar: z.string().optional(),
       email: z.string(),
       firstName: z.string(),
       lastName: z.string(),
