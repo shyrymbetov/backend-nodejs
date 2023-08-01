@@ -8,7 +8,7 @@ export async function getFileById(id: string): Promise<FileEntity | null> {
 }
 
 export async function uploadFiles(files: FileRequestDto[]) {
-    const result = []
+    const result: any[] = []
     for (const file of files) {
         const n = file.originalname.lastIndexOf('/');
         const fileFormat = file.originalname.substring(n + 1);
