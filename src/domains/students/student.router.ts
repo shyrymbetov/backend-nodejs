@@ -14,12 +14,12 @@ import {UserRoleEnum} from "../user/types/user-role.enum";
 export const studentRouter = Router();
 studentRouter.route('/')
     .get(isAuthenticatedMiddleware, getStudentsHandler)
-    .post(isAuthenticatedMiddleware, canManageStudentMiddleware, createStudentHandler)
+    .post(isAuthenticatedMiddleware, createStudentHandler)
 ;
-
+//TODO add middleware for expert orientator master-expert
 studentRouter.route('/:id')
     .get(isAuthenticatedMiddleware, getStudentHandler)
-    .patch(isAuthenticatedMiddleware, canManageStudentMiddleware, editStudentHandler)
+    .patch(isAuthenticatedMiddleware, editStudentHandler)
 ;
 
 studentRouter.route('edit-orientator')
