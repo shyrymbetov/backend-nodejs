@@ -89,10 +89,19 @@ export async function generateEmailVerificationLink(email: string) {
     if (!user) {
         throw new BadRequest('User not found');
     }
-    const changePasswordLink = createEmailVerificationLink(user.id, email);
-    // sendMail()
+    const changePasswordLink = await createEmailVerificationLink(user.id, email);
+    await sendMailEmailVerifyLink(email, changePasswordLink.id, changePasswordLink.code)
     console.log(changePasswordLink)
     return "generated";
+}
+
+export async function sendMailEmailVerifyLink(email: string, changePasswordLink: string, code: string) {
+    //TODO html
+    await sendMailMessage({
+        to: email,
+        subject: 'Password Change Link',
+        html: `/generate-pwd/${changePasswordLink}`
+    })
 }
 
 export async function createEmailVerificationLink(userId: string, email: string) {

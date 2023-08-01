@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
-import {getFileById, uploadFiles} from "./file.service";
+import {getFileById, uploadFile, uploadFiles} from "./file.service";
 import {BadRequest} from "http-errors";
 import {EmailCheckSchema} from "../auth/schemas/email-check.schema";
 import {FileUploadSchema} from "./schemas/file-upload.schema";
+import {FilesUploadSchema} from "./schemas/files-upload.schema";
 const fileSystem = require('fs'), path = require('path');
 
 
@@ -29,6 +30,11 @@ export async function getFileHandler(req: Request, res: Response) {
 }
 
 export async function uploadFilesHandler(req: Request, res: Response) {
+    const {files} = FilesUploadSchema.parse(req);
+    res.send(await uploadFiles(files));
+}
+
+export async function uploadFileHandler(req: Request, res: Response) {
     const {file} = FileUploadSchema.parse(req);
-    res.send(await uploadFiles(file));
+    res.send(await uploadFile(file));
 }
