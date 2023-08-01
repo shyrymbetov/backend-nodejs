@@ -3,8 +3,8 @@ import {dataSource} from "../../database";
 import {PasswordChangeLinkEntity} from "./model/password-change-link.entity";
 import {BadRequest} from "http-errors";
 import {EmailVerifyLinkEntity} from "./model/email-verify-link.entity";
-import {LoginUserDto} from "./dtos/login-user.dto";
 import {sendMailMessage} from "../mail/mail.service";
+import {VerifyOrChangePwdDto} from "./dtos/verify-change.dto";
 
 const passwordChangeRepository = dataSource.getRepository(PasswordChangeLinkEntity);
 const emailVerifyRepository = dataSource.getRepository(EmailVerifyLinkEntity);
@@ -58,7 +58,7 @@ export async function createChangePasswordLink(userId: string) {
     return link.id
 }
 
-export async function verificationUserEmail(verifyId: string, userDto: LoginUserDto) {
+export async function verificationUserEmail(verifyId: string, userDto: VerifyOrChangePwdDto) {
     const link = await deactivateEmailVerificationLink(verifyId, userDto.password)
     let updated
     if (link && link.email) {

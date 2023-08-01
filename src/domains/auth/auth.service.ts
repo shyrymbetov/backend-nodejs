@@ -18,9 +18,10 @@ import {UserRoleEnum} from '../user/types/user-role.enum';
 import {BadRequest, Forbidden} from "http-errors";
 import {deactivatePasswordChangeLink} from "./user-action-link.service";
 import {RegisterUserType} from "./types/register-user.type";
+import {VerifyOrChangePwdDto} from "./dtos/verify-change.dto";
 
 
-export async function changeUserPasswordByLink(pwdChangeId: string, userDto: LoginUserDto) {
+export async function changeUserPasswordByLink(pwdChangeId: string, userDto: VerifyOrChangePwdDto) {
     const userId = await deactivatePasswordChangeLink(pwdChangeId)
     let updated
 
