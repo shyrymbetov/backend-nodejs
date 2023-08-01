@@ -29,6 +29,6 @@ export async function getFileHandler(req: Request, res: Response) {
 }
 
 export async function uploadFilesHandler(req: Request, res: Response) {
-    const {files} = FileUploadSchema.parse(req);
-    res.send(await uploadFiles(files));
+    const {file} = FileUploadSchema.parse(req);
+    res.send(await uploadFiles(file));
 }

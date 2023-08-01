@@ -9,7 +9,7 @@ import {
 
 export const authRouter = Router();
 authRouter.route('/register-student').post(registerHandler);
-authRouter.route('/referral-link/:userId').post(registerWithReferralLinkHandler);
+authRouter.route('/register/referral/:userId').post(registerWithReferralLinkHandler);
 authRouter.route('/login').post(loginHandler);
 authRouter.route('/email-check').post(emailCheckHandler);
 
