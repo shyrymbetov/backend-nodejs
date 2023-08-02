@@ -9,6 +9,21 @@ import {PasswordChangeLinkEntity} from "./domains/auth/model/password-change-lin
 import {UniversityEntity} from "./domains/university/model/university.entity";
 import {EmailVerifyLinkEntity} from "./domains/auth/model/email-verify-link.entity";
 import {FileEntity} from "./domains/files/model/file.entity";
+import {UniversityImportantDatesEntity} from "./domains/university/model/university-important-dates.entity";
+import {UniversityAdmissionInformationEntity} from "./domains/university/model/university-admission-information.entity";
+import {
+  UniversityAdmissionRequirementsEntity
+} from "./domains/university/model/university-admission-requirements.entity";
+import {UniversityCampusInformationEntity} from "./domains/university/model/university-campus-information.entity";
+import {UniversityDegreeEntity} from "./domains/university/model/university-degree.entity";
+import {UniversityDiscountScholarshipsEntity} from "./domains/university/model/university-discount-scholarships.entity";
+import {UniversityFacultyEntity} from "./domains/university/data/model/university-faculty.entity";
+import {UniversitySpecialityEntity} from "./domains/university/data/model/university-speciality.entity";
+import {UniversityTuitionCostEntity} from "./domains/university/model/university-tuition-cost.entity";
+import {UniversityCountryEntity} from "./domains/university/data/model/university-country.entity";
+import {UniversityStateEntity} from "./domains/university/data/model/university-state.entity";
+import {WorksheetEntity} from "./domains/worksheet/model/worksheet.entity";
+import {WorksheetFieldsEntity} from "./domains/worksheet/model/worksheet-fields.entity";
 
 const entities = [
   UserEntity,
@@ -19,6 +34,19 @@ const entities = [
   UniversityEntity,
   EmailVerifyLinkEntity,
   FileEntity,
+  UniversityImportantDatesEntity,
+  UniversityAdmissionInformationEntity,
+  UniversityAdmissionRequirementsEntity,
+  UniversityCampusInformationEntity,
+  UniversityDegreeEntity,
+  UniversityDiscountScholarshipsEntity,
+  UniversityFacultyEntity,
+  UniversitySpecialityEntity,
+  UniversityTuitionCostEntity,
+  UniversityCountryEntity,
+  UniversityStateEntity,
+  WorksheetEntity,
+  WorksheetFieldsEntity
 ]
 
 const dataSourceConfig: PostgresConnectionOptions = {

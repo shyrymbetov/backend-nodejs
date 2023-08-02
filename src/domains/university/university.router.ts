@@ -8,10 +8,14 @@ import {
 } from './university.controller';
 import {isAuthenticatedMiddleware} from '../../middlewares/is-authenticated.middleware';
 import {isAdminMiddleware} from '../../middlewares/is-admin.middleware';
+import {authRouter} from "../auth/auth.router";
+import {universityDataRouter} from "./data/university-data.router";
+
+authRouter.use('/data', universityDataRouter);
 
 export const universityRouter = Router();
 universityRouter.route('/')
-    .get(isAuthenticatedMiddleware, getUniversitiesHandler)
+    .get(isAuthenticatedMiddleware, isAdminMiddleware, getUniversitiesHandler)
     .post(isAuthenticatedMiddleware, isAdminMiddleware, createUniversityHandler)
 ;
 
@@ -20,3 +24,5 @@ universityRouter.route('/:id')
   .patch(isAuthenticatedMiddleware, isAdminMiddleware, editUniversityHandler)
   .delete(isAuthenticatedMiddleware, isAdminMiddleware, deleteUniversityHandler)
 ;
+
+
