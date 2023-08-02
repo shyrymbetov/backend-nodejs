@@ -1,13 +1,20 @@
 import z from 'zod';
 
 export const UniversityCampusInformationSchema = z.object({
-    id: z.string().nullable().default(null).optional(),
-    name: z.string().nullable().default(null),
-    deadline: z.string().datetime().nullable().default(null),
-    additionalDates: z.array(
+    id: z.string().optional(),
+    title: z.string().optional(),
+    description: z.string().optional(),
+    additionalDescription: z.string().optional(),
+    gallery: z.array(z.string()).optional().transform((val) => val ?? []),
+    additionalInformation: z.array(
         z.object({
-            date: z.string().datetime().nullable().default(null),
-            description: z.string().nullable().default(null)
+            title: z.string().optional(),
+            fields: z.array(
+                z.object({
+                    name: z.string().optional(),
+                    count: z.string().optional(),
+                })
+            )
         })
     ),
 });

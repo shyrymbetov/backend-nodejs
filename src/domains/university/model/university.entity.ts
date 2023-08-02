@@ -4,14 +4,13 @@ import {
     PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
-    DeleteDateColumn, OneToMany, JoinColumn, OneToOne, ManyToOne,
+    DeleteDateColumn,
+    OneToMany, JoinColumn, OneToOne, ManyToOne,
 } from 'typeorm';
 import {env} from '../../../env';
-import {AdditionalDateType} from "../types/additional-date.type";
 import {UniversityImportantDatesEntity} from "./university-important-dates.entity";
 import {KeyFactType} from "../types/key-fact.type";
 import {RatingInformationType} from "../types/rating-information.type";
-import {UserRoleEnum} from "../../user/types/user-role.enum";
 import {TopRatingEnum} from "../types/top-rating.enum";
 import {ScholarshipEnum} from "../types/scholarship.enum";
 import {UniversityCampusInformationEntity} from "./university-campus-information.entity";
@@ -54,7 +53,7 @@ export class UniversityEntity {
     @Column()
     description!: string
 
-    @Column({type: 'uuid'})
+    @Column({type: 'uuid', nullable: true})
     logo!: string
 
     @Column()

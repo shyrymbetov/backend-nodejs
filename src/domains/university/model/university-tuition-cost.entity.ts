@@ -7,10 +7,7 @@ import {
     DeleteDateColumn, ManyToOne, JoinColumn, OneToOne,
 } from 'typeorm';
 import {env} from '../../../env';
-import {AdditionalDateType} from "../types/additional-date.type";
 import {UniversityEntity} from "./university.entity";
-import {AdditionalInformationType} from "../types/additional-information.type";
-import {AdmissionStepsType} from "../types/admission-steps.type";
 import {CostAdditionalType} from "../types/cost-additional.type";
 import {CostProgramType} from "../types/cost-program.type";
 

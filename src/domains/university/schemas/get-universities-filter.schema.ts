@@ -12,11 +12,14 @@ export const GetUniversitiesFilterSchema = z.object({
       country: z.string().optional(),
       faculty: z.string().optional(),
       speciality: z.string().optional(),
-      rating: z.enum(Object.values(TopRatingEnum)).optional(),
-      scholarshipType: z.enum(Object.values(ScholarshipEnum)).optional(),
-      minFee: z.number().positive().optional(),
+      rating: z.enum(['TOP_100', 'TOP_200', 'TOP_500']).optional()
+          .transform((val) => val ? (val as TopRatingEnum) : undefined),
+      scholarshipType: z.enum(['NEED_BASED', 'MERIT', 'GOVERNMENT']).optional()
+        .transform((val) => val ? (val as ScholarshipEnum) : undefined),
+        minFee: z.number().positive().optional(),
       maxFee: z.number().positive().optional(),
-      degree: z.enum(Object.values(EduDegreeEnum)).optional(),
+      degree: z.enum(['BACHELOR', 'MASTERS_DEGREE', 'LANGUAGE_PROGRAM', 'FOUNDATION', 'DEGREE_PREPARATION',]).optional()
+          .transform((val) => val ? (val as EduDegreeEnum) : undefined),
   }).strict(),
   params: z.object({}).strict(),
 });

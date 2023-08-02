@@ -1,24 +1,24 @@
 import z from 'zod';
 
 export const UniversityTuitionCostSchema = z.object({
-    id: z.string().nullable().default(null).optional(),
-    title: z.string().nullable().default(null),
-    description: z.string().nullable().default(null),
-    tuitionCost: z.number().positive().nullable().default(null),
-    fullCost: z.number().positive().nullable().default(null),
+    id: z.string().optional(),
+    title: z.string().optional(),
+    description: z.string().optional(),
+    tuitionCost: z.number().positive().optional(),
+    fullCost: z.number().positive().optional(),
     additionalCost: z.array(
         z.object({
-            name: z.string().nullable().default(null),
-            grade: z.string().nullable().default(null),
+            name: z.string().optional(),
+            cost: z.string().optional(),
         })
     ),
     programCost: z.array(
         z.object({
-            title: z.string().nullable().default(null),
+            title: z.string().optional(),
             fields: z.array(
                 z.object({
-                    name: z.string().nullable().default(null),
-                    cost: z.string().nullable().default(null),
+                    name: z.string().optional(),
+                    cost: z.string().optional(),
                 })
             )
         })

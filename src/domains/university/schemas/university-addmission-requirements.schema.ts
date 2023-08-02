@@ -1,22 +1,22 @@
 import z from 'zod';
 
 export const UniversityAdmissionRequirementsSchema = z.object({
-    id: z.string().nullable().default(null),
-    title: z.string().nullable().default(null),
-    description: z.string().nullable().default(null),
+    id: z.string().optional(),
+    title: z.string().optional(),
+    description: z.string().optional(),
     certificates: z.array(
         z.object({
-            certificateType: z.string().nullable().default(null),
-            grade: z.string().nullable().default(null),
+            certificateType: z.string().optional(),
+            grade: z.string().optional(),
         })
     ),
     requirements: z.array(
         z.object({
-            title: z.string().nullable().default(null),
+            title: z.string().optional(),
             fields: z.array(
                 z.object({
-                    name: z.string().nullable().default(null),
-                    grade: z.string().nullable().default(null),
+                    name: z.string().optional(),
+                    grade: z.string().optional(),
                 })
             )
         })

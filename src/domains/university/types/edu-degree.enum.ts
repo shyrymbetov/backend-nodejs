@@ -1,7 +1,7 @@
 export enum EduDegreeEnum {
-  BACHELOR ='Bachelor',
-  MASTERS_DEGREE  = 'Master\'s degree',
-  LANGUAGE_PROGRAM = 'Language program',
-  FOUNDATION = 'Foundation',
-  DEGREE_PREPARATION = 'Degree Preparation',
+  BACHELOR = 'BACHELOR',
+  MASTERS_DEGREE  = 'MASTERS_DEGREE',
+  LANGUAGE_PROGRAM = 'LANGUAGE_PROGRAM',
+  FOUNDATION = 'FOUNDATION',
+  DEGREE_PREPARATION = 'DEGREE_PREPARATION',
 }

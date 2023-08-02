@@ -7,7 +7,6 @@ import {
     DeleteDateColumn, ManyToOne, JoinColumn,
 } from 'typeorm';
 import {env} from '../../../env';
-import {AdditionalDateType} from "../types/additional-date.type";
 import {UniversityEntity} from "./university.entity";
 import {AdditionalInformationType} from "../types/additional-information.type";
 
@@ -33,7 +32,7 @@ export class UniversityCampusInformationEntity {
     gallery!: string[]
 
     @Column({ type: 'json' })
-    additionalDates!: AdditionalInformationType[]
+    additionalInformation!: AdditionalInformationType[]
 
     @CreateDateColumn()
     createdAt!: Date;

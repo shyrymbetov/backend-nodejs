@@ -7,11 +7,8 @@ import {
     DeleteDateColumn, ManyToOne, JoinColumn, OneToMany,
 } from 'typeorm';
 import {env} from '../../../env';
-import {AdditionalDateType} from "../types/additional-date.type";
 import {UniversityEntity} from "./university.entity";
-import {ScholarshipEnum} from "../types/scholarship.enum";
 import {EduDegreeEnum} from "../types/edu-degree.enum";
-import {UniversityImportantDatesEntity} from "./university-important-dates.entity";
 import {UniversityFacultyEntity} from "../data/model/university-faculty.entity";
 
 @Entity({schema: env.DB_SCHEMA})
