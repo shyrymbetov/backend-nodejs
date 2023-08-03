@@ -5,7 +5,7 @@ import {
     existUserByEmail,
     getMasterExpert,
     getRoleByType,
-    getUserByEmail,
+    getUserByEmailWithPassword,
     getUserById,
     updateUserPassword
 } from '../user/user.service';
@@ -83,7 +83,7 @@ export async function emailCheck(email: string) {
 }
 
 export async function login(userDto: LoginUserDto) {
-    const user = await getUserByEmail(userDto.email);
+    const user = await getUserByEmailWithPassword(userDto.email);
 
     if (!user || !validatePassword(userDto.password, user.hashedPassword)) {
         throw new BadRequest('Wrong credentials');

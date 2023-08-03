@@ -145,6 +145,13 @@ export async function getUserByEmail(email: string): Promise<UserEntity | null> 
     return await userRepository.findOneBy({email: email});
 }
 
+export async function getUserByEmailWithPassword(email: string): Promise<UserEntity> {
+    return await userRepository.findOneOrFail({
+        where: {email: email},
+        select: ["id", "email", "verified", "hashedPassword"]
+    });
+}
+
 export async function getMasterExpert(): Promise<string | null> {
     const user = await userRepository.findOneBy({role: UserRoleEnum.MasterExpert})
     return user?.id ? user.id : null;
@@ -257,8 +264,6 @@ async function sendReferralLinkToNewUser(userId: string) {
 }
 
 export async function createUser(userToCreate: CreateUserType) {
-    const newUser = await userRepository.save(userToCreate);
-    newUser.hashedPassword = ''
-    return newUser;
+    return await userRepository.save(userToCreate);
 }
 
