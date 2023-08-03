@@ -232,6 +232,7 @@ export async function editCurrentUser(id: string, userDto: EditCurrentUserDto) {
 export async function updateUserPassword(userDto: ChangeUserPasswordType) {
     return await userRepository.update(userDto.userId, {
         active: true,
+        verified: true,
         hashedPassword: userDto.hashedPassword,
     });
 }
