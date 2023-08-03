@@ -24,7 +24,7 @@ export const CreateUniversitySchema = z.object({
         stateId: z.string().nullable().default(null).optional(),
         city: z.string(),
         description: z.string().optional(),
-        logo: z.string().optional(),
+        logo: z.string().nullable().default(null).optional(),
         fullDescription: z.string().optional(),
         color: z.string().optional(),
         gallery: z.array(z.string()).optional().transform((val) => val ?? []),

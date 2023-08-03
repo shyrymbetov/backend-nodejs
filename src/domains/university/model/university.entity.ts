@@ -54,7 +54,7 @@ export class UniversityEntity {
     description!: string
 
     @Column({type: 'uuid', nullable: true})
-    logo!: string
+    logo!: string | null
 
     @Column()
     color!: string
@@ -141,7 +141,7 @@ export class UniversityEntity {
     @OneToOne(
         () => WorksheetEntity,
         worksheet => worksheet.university,
-        { nullable: true})
+        { nullable: true })
     worksheet!: WorksheetEntity;
 
     @CreateDateColumn()

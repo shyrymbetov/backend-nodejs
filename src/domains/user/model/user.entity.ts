@@ -26,7 +26,7 @@ export class UserEntity {
     @Column()
     lastName!: string;
 
-    @Column({type: 'varchar', nullable: true })
+    @Column({type: 'varchar', nullable: true, select: false })
     hashedPassword!: string | null;
 
     @Column({type: 'boolean', default: false})

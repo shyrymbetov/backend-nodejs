@@ -12,6 +12,7 @@ export async function getUniversities(filter: any): Promise<any> {
 
   const data = await universityRepository.createQueryBuilder('university')
       .leftJoinAndSelect('university.tuitionCost', 'tuition')
+      .leftJoinAndSelect('university.worksheet', 'worksheet')
       .select([
         'university.id as id',
         'university.logo as logo',
@@ -19,6 +20,7 @@ export async function getUniversities(filter: any): Promise<any> {
         'tuition.tuitionCost as tuitionCost',
         'university.isVisible as isVisible',
         'university.canApply as canApply',
+        'worksheet.id as worksheetId',
       ])
       .where(conditionString, conditionParameters)
       .skip((filter.page - 1) * filter.size)

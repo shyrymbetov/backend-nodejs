@@ -15,6 +15,11 @@ userRouter.route('/')
     .post(isAuthenticatedMiddleware, isAdminMiddleware, createUserHandler)
 ;
 
+userRouter.route('/my')
+    .get(isAuthenticatedMiddleware, getCurrentUserHandler)
+    .patch(isAuthenticatedMiddleware, editCurrentUserHandler)
+;
+
 userRouter.route('/:id')
   .get(isAuthenticatedMiddleware, getUserHandler)
   .patch(isAuthenticatedMiddleware, isAdminMiddleware, editUserHandler)
@@ -25,8 +30,5 @@ userRouter.route('/students/:id')
   .get(isAuthenticatedMiddleware, getUserStudentsHandler)
 ;
 
-userRouter.route('/my')
-    .get(isAuthenticatedMiddleware, getCurrentUserHandler)
-    .patch(isAuthenticatedMiddleware, editCurrentUserHandler)
-;
+
 
