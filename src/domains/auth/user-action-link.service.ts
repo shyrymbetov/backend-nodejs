@@ -113,6 +113,7 @@ export async function createEmailVerificationLink(userId: string, email: string)
         userId: userId,
         email: email,
         active: true,
+        used: false,
         code: code,
         expiredDate: expiredDate,
     });
