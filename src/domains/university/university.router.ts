@@ -4,7 +4,7 @@ import {
     getUniversitiesHandler,
     createUniversityHandler,
     editUniversityHandler,
-    deleteUniversityHandler
+    deleteUniversityHandler, editUniversityVisibleHandler, editUniversityActionsHandler
 } from './university.controller';
 import {isAuthenticatedMiddleware} from '../../middlewares/is-authenticated.middleware';
 import {isAdminMiddleware} from '../../middlewares/is-admin.middleware';
@@ -23,6 +23,10 @@ universityRouter.route('/:id')
   .get(isAuthenticatedMiddleware, isAdminMiddleware, getUniversityHandler)
   .patch(isAuthenticatedMiddleware, isAdminMiddleware, editUniversityHandler)
   .delete(isAuthenticatedMiddleware, isAdminMiddleware, deleteUniversityHandler)
+;
+
+universityRouter.route('/actions/:id')
+  .patch(isAuthenticatedMiddleware, isAdminMiddleware, editUniversityActionsHandler)
 ;
 
 

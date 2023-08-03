@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
 import {
   createUniversity,
-  deleteUniversity, editUniversity,
+  deleteUniversity, editUniversity, editUniversityActions,
   getUniversities,
   getUniversityById,
 } from './university.service';
 import {CreateUniversitySchema} from "./schemas/create-university.schema";
 import {GetUniversitiesFilterSchema} from "./schemas/get-universities-filter.schema";
 import {GetUsersFilterSchema} from "../user/schemas/get-users-filter.schema";
+import {UniversityActionsSchema} from "./schemas/university-actions.schema";
 
 export async function getUniversityHandler(req: Request, res: Response) {
   let { id } = req.params
@@ -28,6 +29,12 @@ export async function editUniversityHandler(req: Request, res: Response) {
   const { id } = req.params
   const { body } = CreateUniversitySchema.parse(req);
   return res.send(await editUniversity(id, body));
+}
+
+export async function editUniversityActionsHandler(req: Request, res: Response) {
+  const { id } = req.params
+  const { body } = UniversityActionsSchema.parse(req);
+  return res.send(await editUniversityActions(id, body));
 }
 
 export async function deleteUniversityHandler(req: Request, res: Response) {

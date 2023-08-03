@@ -2,6 +2,7 @@ import {dataSource} from '../../database';
 import {UniversityEntity } from './model/university.entity';
 import {CreateUniversityDto} from "./dtos/create-university.dto";
 import {GetUniversitiesFilterDto} from "./dtos/get-univerties-params.dto";
+import {UniversityActionsDto} from "./dtos/university-actions.dto";
 
 const universityRepository = dataSource.getRepository(UniversityEntity);
 
@@ -63,8 +64,14 @@ export async function createUniversity(universityDto: CreateUniversityDto) {
 }
 
 export async function editUniversity(id: string, universityDto: CreateUniversityDto) {
-
   return await universityRepository.update(id, universityDto);
+}
+
+export async function editUniversityActions(id: string, universityDto: UniversityActionsDto) {
+  return await universityRepository.update(id, {
+      isVisible: universityDto.isVisible,
+      canApply: universityDto.canApply
+  });
 }
 
 export async function deleteUniversity(id: string) {
