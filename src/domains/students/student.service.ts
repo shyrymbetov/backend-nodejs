@@ -26,6 +26,8 @@ export async function getStudents(filter: GetStudentsParamsDto): Promise<any> {
         .select([
             'students.id as id',
             'students.avatar as avatar',
+            'students.email as email',
+            'students.active as active',
             'students.firstName as firstName',
             'students.lastName as lastName',
             'students.orientatorId as orientatorId',
