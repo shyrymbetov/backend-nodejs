@@ -1,9 +1,10 @@
 import z from 'zod';
+import {isValidUUID} from "../../../../shared/util.service";
 
 export const CreateCountrySchema = z.object({
   body: z
     .object({
-        id: z.string().optional(),
+        id: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
         name: z.string(),
     })
     .strict(),

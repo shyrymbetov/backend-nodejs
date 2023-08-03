@@ -1,7 +1,8 @@
 import z from 'zod';
+import {isValidUUID} from "../../../shared/util.service";
 
 export const UniversityCampusInformationSchema = z.object({
-    id: z.string().optional(),
+    id: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
     title: z.string().optional(),
     description: z.string().optional(),
     additionalDescription: z.string().optional(),

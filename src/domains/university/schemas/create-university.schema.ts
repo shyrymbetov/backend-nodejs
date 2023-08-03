@@ -12,11 +12,12 @@ import {UniversityDiscountScholarshipsSchema} from "./university-discount-schola
 import {UniversityDegreeSchema} from "./university-degrees.schema";
 import {UserRoleEnum} from "../../user/types/user-role.enum";
 import {StudyLanguageEnum} from "../types/study-language.enum";
+import {isValidUUID} from "../../../shared/util.service";
 
 export const CreateUniversitySchema = z.object({
   body: z
     .object({
-        id: z.string().optional(),
+        id: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
         isVisible: z.boolean().optional(),
         canApply: z.boolean().optional(),
         universityName: z.string(),
