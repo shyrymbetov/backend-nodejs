@@ -4,7 +4,8 @@ import {
     getUniversitiesHandler,
     createUniversityHandler,
     editUniversityHandler,
-    deleteUniversityHandler, editUniversityVisibleHandler, editUniversityActionsHandler
+    deleteUniversityHandler,
+    editUniversityActionsHandler
 } from './university.controller';
 import {isAuthenticatedMiddleware} from '../../middlewares/is-authenticated.middleware';
 import {isAdminMiddleware} from '../../middlewares/is-admin.middleware';
