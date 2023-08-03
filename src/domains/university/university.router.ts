@@ -9,10 +9,8 @@ import {
 } from './university.controller';
 import {isAuthenticatedMiddleware} from '../../middlewares/is-authenticated.middleware';
 import {isAdminMiddleware} from '../../middlewares/is-admin.middleware';
-import {authRouter} from "../auth/auth.router";
 import {universityDataRouter} from "./data/university-data.router";
 
-authRouter.use('/data', universityDataRouter);
 
 export const universityRouter = Router();
 universityRouter.route('/')
@@ -29,5 +27,7 @@ universityRouter.route('/:id')
 universityRouter.route('/actions/:id')
   .patch(isAuthenticatedMiddleware, isAdminMiddleware, editUniversityActionsHandler)
 ;
+
+universityRouter.use('/data', universityDataRouter);
 
 
