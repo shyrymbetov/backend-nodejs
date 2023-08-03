@@ -43,21 +43,21 @@ export async function emailCheckHandler(req: Request, res: Response) {
 //handler for Action Link Service
 export async function generateChangePasswordLinkHandler(req: Request, res: Response) {
   const { body } = EmailCheckSchema.parse(req);
-  return res.send(await generateChangePasswordLink(body.email));
+  return res.send(await generateChangePasswordLink(body.email)).status(200);
 }
 
 export async function changeUserPasswordByLinkHandler(req: Request, res: Response) {
   const { body, params } = VerifyOrChangePwdSchema.parse(req);
-  return res.send(await changeUserPasswordByLink(params.linkId, body));
+  return res.send(await changeUserPasswordByLink(params.linkId, body)).status(200);
 }
 
 export async function generateEmailVerificationLinkHandler(req: Request, res: Response) {
   const { body } = EmailCheckSchema.parse(req);
-  return res.send(await generateEmailVerificationLink(body.email));
+  return res.send(await generateEmailVerificationLink(body.email)).status(200);
 }
 
 export async function verifyUserEmailByLinkHandler(req: Request, res: Response) {
   const { body, params } = VerifyOrChangePwdSchema.parse(req);
-  return res.send(await verificationUserEmail(params.linkId, body));
+  return res.send(await verificationUserEmail(params.linkId, body)).status(200);
 }
 
