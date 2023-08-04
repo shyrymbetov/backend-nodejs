@@ -133,34 +133,25 @@ export async function createStudent(userDto: CreateStudentDto) {
 }
 
 export async function editStudent(id: string, userDto: CreateStudentDto) {
-    const role: UserRoleEnum = getRoleByType(userDto.type)
-    const masterExpert = await getMasterExpert()
-    let userEditInfo
+    const student = await getStudentById(id)
 
-    if (masterExpert && masterExpert == id) {
-        // Master Expert role email will not be change
-        userEditInfo = {
-            firstName: userDto.firstName,
-            lastName: userDto.lastName,
-            birthDate: new Date(Date.parse(userDto.birthDate)),
-            regionId: userDto.regionId,
-            phone: userDto.phone,
-            localId: userDto.localId
-        }
-    } else if (masterExpert && role == UserRoleEnum.MasterExpert) {
-        // If someone want to edit any user to Master Expert
-        return ;
-    } else {
-        userEditInfo = {
-            email: userDto.email,
-            firstName: userDto.firstName,
-            lastName: userDto.lastName,
-            role: role,
-            birthDate: new Date(Date.parse(userDto.birthDate)),
-            regionId: userDto.regionId,
-            phone: userDto.phone,
-            localId: userDto.localId
-        }
+    if (student.active) {
+        return "student active";
+    }
+
+    // if (masterExpert) {}
+    const role: UserRoleEnum = getRoleByType(userDto.type)
+    let userEditInfo = {
+        email: userDto.email,
+        firstName: userDto.firstName,
+        lastName: userDto.lastName,
+        birthDate: new Date(Date.parse(userDto.birthDate)),
+        regionId: userDto.regionId,
+        phone: userDto.phone,
+        localId: userDto.localId,
+        school: userDto.school ?? null,
+        class: userDto.class ?? null,
+        role: role,
     }
 
     return await userRepository.update(id, userEditInfo);
