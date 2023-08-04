@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import {UserRoleEnum} from '../types/user-role.enum';
 import {env} from '../../../env';
+import {ApplicationEntity} from "../../application/model/application.entity";
 
 @Entity({schema: env.DB_SCHEMA})
 export class UserEntity {
@@ -78,6 +79,9 @@ export class UserEntity {
 
     @OneToMany(() => UserEntity, user => user.master)
     masterStudents?: UserEntity[];
+
+    @OneToMany(() => ApplicationEntity, application => application.student)
+    applications?: ApplicationEntity[];
 
     @CreateDateColumn()
     createdAt!: Date;

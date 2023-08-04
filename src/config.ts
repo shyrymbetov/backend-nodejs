@@ -24,6 +24,9 @@ import {UniversityCountryEntity} from "./domains/university/data/model/universit
 import {UniversityStateEntity} from "./domains/university/data/model/university-state.entity";
 import {WorksheetEntity} from "./domains/worksheet/model/worksheet.entity";
 import {WorksheetFieldsEntity} from "./domains/worksheet/model/worksheet-fields.entity";
+import {ApplicationEntity} from "./domains/application/model/application.entity";
+import {ChatEntity} from "./domains/chat/model/chat.entity";
+import {ChatMessagesEntity} from "./domains/chat/model/chat-messages.entity";
 
 const entities = [
   UserEntity,
@@ -46,7 +49,10 @@ const entities = [
   UniversityCountryEntity,
   UniversityStateEntity,
   WorksheetEntity,
-  WorksheetFieldsEntity
+  WorksheetFieldsEntity,
+  ApplicationEntity,
+  ChatEntity,
+  ChatMessagesEntity
 ]
 
 const dataSourceConfig: PostgresConnectionOptions = {

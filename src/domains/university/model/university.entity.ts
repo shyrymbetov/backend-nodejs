@@ -23,6 +23,7 @@ import {WorksheetEntity} from "../../worksheet/model/worksheet.entity";
 import {UniversityCountryEntity} from "../data/model/university-country.entity";
 import {UniversityStateEntity} from "../data/model/university-state.entity";
 import {StudyLanguageEnum} from "../types/study-language.enum";
+import {ApplicationEntity} from "../../application/model/application.entity";
 
 @Entity({schema: env.DB_SCHEMA})
 export class UniversityEntity {
@@ -143,6 +144,9 @@ export class UniversityEntity {
         worksheet => worksheet.university,
         { nullable: true })
     worksheet!: WorksheetEntity;
+
+    @OneToMany(() => ApplicationEntity, application => application.university)
+    applications!: ApplicationEntity[];
 
     @CreateDateColumn()
     createdAt!: Date;
