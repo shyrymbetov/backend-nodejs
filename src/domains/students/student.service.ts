@@ -103,9 +103,9 @@ export async function setManagerIdsToNewStudent(userId: string, newStudent: Crea
     const currentUser = await getUserById(userId);
 
     if(currentUser?.role == UserRoleEnum.Orientator) {
-        newStudent.orientatorId = userId
+        newStudent["orientatorId"] = userId
     } else if(currentUser?.role == UserRoleEnum.Expert) {
-        newStudent.masterId = userId
+        newStudent["masterId"] = userId
     }
 
 }
