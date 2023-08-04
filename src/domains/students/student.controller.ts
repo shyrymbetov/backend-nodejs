@@ -6,7 +6,7 @@ import {
     editStudent,
     editStudentExpert, editStudentOrientator,
     getStudentById,
-    getStudents,
+    getStudents, setManagerIdsToNewStudent,
     setManagerIdsToQuery
 } from "./student.service";
 import {GetStudentsFilterSchema} from "./schemas/get-students-filter.schema";
@@ -28,7 +28,14 @@ export async function getStudentHandler(req: Request, res: Response) {
 }
 
 export async function createStudentHandler(req: Request, res: Response) {
+
+    if (!req.user?.id) {
+        throw new Unauthorized('User not logged in');
+    }
+
     const { body } = CreateStudentSchema.parse(req);
+    await setManagerIdsToNewStudent(req.user.id, body)
+
     return res.send(await createStudent(body));
 }
 

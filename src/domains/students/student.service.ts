@@ -19,6 +19,7 @@ export async function setManagerIdsToQuery(userId: string, query: GetStudentsPar
     }
 
 }
+
 export async function getStudents(filter: GetStudentsParamsDto): Promise<any> {
     const { conditionString, conditionParameters } = generateConditionsForGetStudents(filter)
 
@@ -98,6 +99,17 @@ export async function getStudentById(id: string): Promise<any | null> {
     } );
 }
 
+export async function setManagerIdsToNewStudent(userId: string, newStudent: CreateStudentDto) {
+    const currentUser = await getUserById(userId);
+
+    if(currentUser?.role == UserRoleEnum.Orientator) {
+        newStudent.orientatorId = userId
+    } else if(currentUser?.role == UserRoleEnum.Expert) {
+        newStudent.masterId = userId
+    }
+
+}
+
 export async function createStudent(userDto: CreateStudentDto) {
     const role: UserRoleEnum = getRoleByType(userDto.type)
     const masterExpert = await getMasterExpert();
@@ -118,20 +130,6 @@ export async function createStudent(userDto: CreateStudentDto) {
     }
 
     return await createUser(user);
-    if (masterExpert && role == UserRoleEnum.MasterExpert) {
-        return;
-    }
-
-    return await createUser({
-        email: userDto.email,
-        firstName: userDto.firstName,
-        lastName: userDto.lastName,
-        role: role,
-        birthDate: new Date(Date.parse(userDto.birthDate)),
-        regionId: userDto.regionId,
-        phone: userDto.phone,
-        localId: userDto.localId
-    });
 }
 
 export async function editStudent(id: string, userDto: CreateStudentDto) {
