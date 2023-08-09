@@ -15,14 +15,17 @@ studentRouter.route('/')
     .get(isAuthenticatedMiddleware, getStudentsHandler)
     .post(isAuthenticatedMiddleware, createStudentHandler)
 ;
-//TODO add middleware for expert orientator master-expert
-studentRouter.route('/:id')
-    .get(isAuthenticatedMiddleware, getStudentHandler)
-    .patch(isAuthenticatedMiddleware, editStudentHandler)
-;
 
 studentRouter.route('edit-orientator')
     .patch(isAuthenticatedMiddleware, hasRoleMiddleware(UserRoleEnum.MasterExpert), editStudentOrientatorHandler);
 
 studentRouter.route('edit-expert')
     .patch(isAuthenticatedMiddleware, hasRoleMiddleware(UserRoleEnum.MasterExpert), editStudentExpertHandler);
+
+//TODO add middleware for expert orientator master-expert
+studentRouter.route('/:id')
+    .get(isAuthenticatedMiddleware, getStudentHandler)
+    .patch(isAuthenticatedMiddleware, editStudentHandler)
+;
+
+
