@@ -1,6 +1,5 @@
 import {dataSource} from '../../database';
 import {RegionEntity} from "./model/region.entity";
-import {UserEntity} from "../user/model/user.entity";
 import {LocalAreaEntity} from "./model/local-area.entity";
 import {SchoolEntity} from "./model/school.entity";
 

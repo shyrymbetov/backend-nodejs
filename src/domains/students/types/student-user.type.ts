@@ -1,4 +1,4 @@
-import {UserRoleEnum} from "./user-role.enum";
+import {UserRoleEnum} from "../../user/types/user-role.enum";
 
 //User without password
 export type StudentUserType = {

@@ -7,7 +7,6 @@ import {
 } from './university.service';
 import {CreateUniversitySchema} from "./schemas/create-university.schema";
 import {GetUniversitiesFilterSchema} from "./schemas/get-universities-filter.schema";
-import {GetUsersFilterSchema} from "../user/schemas/get-users-filter.schema";
 import {UniversityActionsSchema} from "./schemas/university-actions.schema";
 
 export async function getUniversityHandler(req: Request, res: Response) {

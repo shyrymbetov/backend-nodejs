@@ -1,6 +1,5 @@
 import {Router} from "express";
 import {isAuthenticatedMiddleware} from "../../middlewares/is-authenticated.middleware";
-import {canManageStudentMiddleware} from "../../middlewares/can-manage-student.middleware";
 import {
     createStudentHandler,
     editStudentExpertHandler,

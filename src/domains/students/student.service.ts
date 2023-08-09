@@ -4,7 +4,6 @@ import {UserRoleEnum} from "../user/types/user-role.enum";
 import {createUser, getMasterExpert, getRoleByType, getUserById} from "../user/user.service";
 import {CreateStudentDto} from "./dtos/create-student.dto";
 import {GetStudentsParamsDto} from "./dtos/get-student-params.dto";
-import {ChangeUserPasswordType} from "../user/types/change-password.type";
 import {EditStudentManagerDto} from "./dtos/edit-student-manager.dto";
 
 const userRepository = dataSource.getRepository(UserEntity);

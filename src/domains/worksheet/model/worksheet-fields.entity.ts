@@ -23,7 +23,7 @@ export class WorksheetFieldsEntity {
         type: 'enum',
         enum: WorksheetFieldEnum,
     })
-    scholarshipType!: WorksheetFieldEnum
+    type!: WorksheetFieldEnum
 
     @Column({type:'varchar', nullable: true})
     placeholder!: string

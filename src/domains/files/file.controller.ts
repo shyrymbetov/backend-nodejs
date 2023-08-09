@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import {getFileById, uploadFile, uploadFiles} from "./file.service";
 import {BadRequest} from "http-errors";
-import {EmailCheckSchema} from "../auth/schemas/email-check.schema";
 import {FileUploadSchema} from "./schemas/file-upload.schema";
 import {FilesUploadSchema} from "./schemas/files-upload.schema";
 const fileSystem = require('fs'), path = require('path');
