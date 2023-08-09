@@ -16,10 +16,10 @@ studentRouter.route('/')
     .post(isAuthenticatedMiddleware, createStudentHandler)
 ;
 
-studentRouter.route('edit-orientator')
+studentRouter.route('/edit-orientator')
     .patch(isAuthenticatedMiddleware, hasRoleMiddleware(UserRoleEnum.MasterExpert), editStudentOrientatorHandler);
 
-studentRouter.route('edit-expert')
+studentRouter.route('/edit-expert')
     .patch(isAuthenticatedMiddleware, hasRoleMiddleware(UserRoleEnum.MasterExpert), editStudentExpertHandler);
 
 //TODO add middleware for expert orientator master-expert
