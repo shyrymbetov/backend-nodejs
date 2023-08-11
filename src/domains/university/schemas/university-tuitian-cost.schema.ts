@@ -12,7 +12,7 @@ export const UniversityTuitionCostSchema = z.object({
             name: z.string().optional(),
             cost: z.string().optional(),
         })
-    ),
+    ).optional().transform((val) => val ?? []),
     programCost: z.array(
         z.object({
             title: z.string().optional(),
@@ -23,5 +23,5 @@ export const UniversityTuitionCostSchema = z.object({
                 })
             )
         })
-    ),
+    ).optional().transform((val) => val ?? []),
 });
