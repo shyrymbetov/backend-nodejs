@@ -15,5 +15,5 @@ export const UniversityDiscountScholarshipsSchema = z.object({
                 })
             )
         })
-    ),
+    ).optional().transform((val) => val ?? []),
 });

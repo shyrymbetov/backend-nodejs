@@ -17,5 +17,5 @@ export const UniversityCampusInformationSchema = z.object({
                 })
             )
         })
-    ),
+    ).optional().transform((val) => val ?? []),
 });

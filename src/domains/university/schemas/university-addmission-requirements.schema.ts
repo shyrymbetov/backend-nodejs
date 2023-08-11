@@ -10,7 +10,7 @@ export const UniversityAdmissionRequirementsSchema = z.object({
             certificateType: z.string().optional(),
             grade: z.string().optional(),
         })
-    ),
+    ).optional().transform((val) => val ?? []),
     requirements: z.array(
         z.object({
             title: z.string().optional(),
@@ -21,5 +21,5 @@ export const UniversityAdmissionRequirementsSchema = z.object({
                 })
             )
         })
-    ),
+    ).optional().transform((val) => val ?? []),
 });

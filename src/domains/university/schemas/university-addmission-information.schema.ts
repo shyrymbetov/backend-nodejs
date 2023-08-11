@@ -11,5 +11,5 @@ export const UniversityAdmissionInformationSchema = z.object({
             name: z.string().optional(),
             description: z.string().optional()
         })
-    ),
+    ).optional().transform((val) => val ?? []),
 });
