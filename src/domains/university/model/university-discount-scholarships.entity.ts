@@ -19,10 +19,10 @@ export class UniversityDiscountScholarshipsEntity {
     @JoinColumn({ name: 'universityId' }) // Correct the join column name to 'universityId'
     university!: UniversityEntity;
 
-    @Column()
+    @Column({nullable: true})
     title!: string
 
-    @Column()
+    @Column({nullable: true})
     description!: string
 
     @Column({ type: 'json' })

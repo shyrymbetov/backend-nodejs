@@ -19,10 +19,10 @@ export class UniversityImportantDatesEntity {
     @JoinColumn({ name: 'universityId' }) // Correct the join column name to 'universityId'
     university!: UniversityEntity;
 
-    @Column()
+    @Column({nullable: true})
     name!: string
 
-    @Column()
+    @Column({nullable: true})
     deadline!: Date
 
     @Column({ type: 'json' })

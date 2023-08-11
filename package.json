@@ -5,17 +5,10 @@
     "build": "tsc",
     "start": "node dist/app",
     "dev": "nodemon src/app",
-<<<<<<< HEAD
     "migration:generate": "npx typeorm-ts-node-esm migration:generate -d src/migrations-data-source.ts",
     "migration:up": "npx typeorm-ts-node-esm migration:run -d src/migrations-data-source.ts",
     "migration:down": "npx typeorm-ts-node-esm migration:revert -d src/migrations-data-source.ts",
     "seed:create": "npx typeorm-ts-node-esm migration:create -d src/seeds-data-source.ts",
-=======
-    "migration:create": "npx typeorm-ts-node-esm migration:generate -d src/migrations-data-source.ts",
-    "migration:up": "npx typeorm-ts-node-esm migration:run -d src/migrations-data-source.ts",
-    "migration:down": "npx typeorm-ts-node-esm migration:revert -d src/migrations-data-source.ts",
-    "seed:create": "npx typeorm-ts-node-esm migration:create",
->>>>>>> af6ada30878b714e86d57bafb0b00e646ab02384
     "seed:up": "npx typeorm-ts-node-esm migration:run -d src/seeds-data-source.ts",
     "seed:down": "npx typeorm-ts-node-esm migration:revert -d src/seeds-data-source.ts",
     "format:check": "prettier --check src",

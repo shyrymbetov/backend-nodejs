@@ -23,10 +23,11 @@ export class UniversityDegreeEntity {
     @Column({
         type: 'enum',
         enum: EduDegreeEnum,
+        nullable: true
     })
     degree!: EduDegreeEnum
 
-    @Column()
+    @Column({nullable: true})
     description!: string
 
     @OneToMany(() => UniversityFacultyEntity, faculty => faculty.degree, {cascade: true})
