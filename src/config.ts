@@ -2,9 +2,9 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
 import { UserEntity } from './domains/user/user.entity';
 import { env } from './env';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import {RegionEntity} from "./domains/data/region.entity";
-import {LocalAreaEntity} from "./domains/data/local-area.entity";
-import {SchoolEntity} from "./domains/data/school.entity";
+import { RegionEntity } from './domains/data/region.entity';
+import { LocalAreaEntity } from './domains/data/local-area.entity';
+import { SchoolEntity } from './domains/data/school.entity';
 
 const dataSourceConfig: PostgresConnectionOptions = {
   type: 'postgres',

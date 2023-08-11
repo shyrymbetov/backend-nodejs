@@ -14,11 +14,10 @@ import { env } from './env';
 const app = express();
 
 app.use(express.json());
-app.use(cors(config.api.cors))
+app.use(cors(config.api.cors));
 addRoutes(app);
 
 app.use(errorHandlerMiddleware);
-
 
 app.listen(config.api.port, async () => {
   console.log(`⚡️[server]: Server listening on port ${config.api.port}`);

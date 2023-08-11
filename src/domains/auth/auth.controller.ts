@@ -1,8 +1,13 @@
 import { Request, Response } from 'express';
-import {register, login, emailCheck, registerWithReferralLink} from './auth.service';
+import {
+  register,
+  login,
+  emailCheck,
+  registerWithReferralLink,
+} from './auth.service';
 import { RegisterUserSchema } from './schemas/register-user.schema';
 import { LoginUserSchema } from './schemas/login-user.schema';
-import {EmailCheckSchema} from "./schemas/email-check.schema";
+import { EmailCheckSchema } from './schemas/email-check.schema';
 
 export async function registerHandler(req: Request, res: Response) {
   const { body } = RegisterUserSchema.parse(req);
