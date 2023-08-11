@@ -8,7 +8,7 @@ export const UniversityImportantDateSchema = z.object({
     additionalDates: z.array(
         z.object({
             date: z.string().datetime().optional().transform(val => val ? new Date(Date.parse(val)) : undefined),
-            description: z.string().optional().transform((val) => val ?? [])
+            description: z.string().optional()
         })
-    ),
+    ).optional().transform((val) => val ?? []),
 });
