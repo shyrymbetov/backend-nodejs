@@ -4,27 +4,39 @@ import {
     PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
-    DeleteDateColumn, ManyToOne, JoinColumn, OneToOne,
+    DeleteDateColumn,
+    JoinColumn,
+    OneToOne,
 } from 'typeorm';
 import {env} from '../../../env';
 import {UniversityEntity} from "./university.entity";
+import {AdmissionStepsType} from "../types/admission-steps.type";
 import {AdmissionCertificatesType} from "../types/admission-certificates.type";
 import {AdmissionRequirementsType} from "../types/admission-requirements.type";
 
 @Entity({schema: env.DB_SCHEMA})
-export class UniversityAdmissionRequirementsEntity {
+export class UniversityAdmissionEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @OneToOne(() => UniversityEntity, university => university.admissionRequirements)
-    @JoinColumn({ name: 'universityId' }) // Correct the join column name to 'universityId'
+    @OneToOne(() => UniversityEntity, university => university.admission)
+    @JoinColumn({name: 'universityId'}) // Correct the join column name to 'universityId'
     university!: UniversityEntity;
 
     @Column({nullable: true})
-    title!: string
+    genTitle!: string
 
     @Column({nullable: true})
-    description!: string
+    genDescription!: string
+
+    @Column({type: 'json'})
+    admissionSteps!: AdmissionStepsType[]
+
+    @Column({nullable: true})
+    reqTitle!: string
+
+    @Column({nullable: true})
+    reqDescription!: string
 
     @Column({ type: 'json' })
     certificates!: AdmissionCertificatesType[]

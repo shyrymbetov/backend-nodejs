@@ -10,10 +10,6 @@ import {UniversityEntity} from "./domains/university/model/university.entity";
 import {EmailVerifyLinkEntity} from "./domains/auth/model/email-verify-link.entity";
 import {FileEntity} from "./domains/files/model/file.entity";
 import {UniversityImportantDatesEntity} from "./domains/university/model/university-important-dates.entity";
-import {UniversityAdmissionInformationEntity} from "./domains/university/model/university-admission-information.entity";
-import {
-  UniversityAdmissionRequirementsEntity
-} from "./domains/university/model/university-admission-requirements.entity";
 import {UniversityCampusInformationEntity} from "./domains/university/model/university-campus-information.entity";
 import {UniversityDegreeEntity} from "./domains/university/model/university-degree.entity";
 import {UniversityDiscountScholarshipsEntity} from "./domains/university/model/university-discount-scholarships.entity";
@@ -29,13 +25,12 @@ import {ChatMessagesEntity} from "./domains/chat/model/chat-messages.entity";
 import {ApplicationContactsFieldsEntity} from "./domains/application/model/application-contact-fields.entity";
 import {ApplicationEducationFieldsEntity} from "./domains/application/model/application-education-fields.entity";
 import {ApplicationLanguagesFieldsEntity} from "./domains/application/model/application-language-fields.entity";
-import {
-  ApplicationRecommendationsFieldsEntity
-} from "./domains/application/model/application-recomandations-fields.entity";
+import {ApplicationRecommendationsFieldsEntity} from "./domains/application/model/application-recomandations-fields.entity";
 import {ApplicationMotivationFieldsEntity} from "./domains/application/model/application-motivation-fields.entity";
 import {ApplicationDocumentsFieldsEntity} from "./domains/application/model/application-documents-fields.entity";
 import {ApplicationOtherFieldsEntity} from "./domains/application/model/application-other-fields.entity";
 import {ApplicationProfileFieldsEntity} from "./domains/application/model/application-profile-fields.entity";
+import {UniversityAdmissionEntity} from "./domains/university/model/university-admission.entity";
 
 const entities = [
   UserEntity,
@@ -47,8 +42,7 @@ const entities = [
   EmailVerifyLinkEntity,
   FileEntity,
   UniversityImportantDatesEntity,
-  UniversityAdmissionInformationEntity,
-  UniversityAdmissionRequirementsEntity,
+  UniversityAdmissionEntity,
   UniversityCampusInformationEntity,
   UniversityDegreeEntity,
   UniversityDiscountScholarshipsEntity,

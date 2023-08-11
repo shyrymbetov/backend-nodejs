@@ -14,8 +14,7 @@ import {RatingInformationType} from "../types/rating-information.type";
 import {TopRatingEnum} from "../types/top-rating.enum";
 import {ScholarshipEnum} from "../types/scholarship.enum";
 import {UniversityCampusInformationEntity} from "./university-campus-information.entity";
-import {UniversityAdmissionInformationEntity} from "./university-admission-information.entity";
-import {UniversityAdmissionRequirementsEntity} from "./university-admission-requirements.entity";
+import {UniversityAdmissionEntity} from "./university-admission.entity";
 import {UniversityTuitionCostEntity} from "./university-tuition-cost.entity";
 import {UniversityDegreeEntity} from "./university-degree.entity";
 import {UniversityDiscountScholarshipsEntity} from "./university-discount-scholarships.entity";
@@ -106,16 +105,10 @@ export class UniversityEntity {
 
     //Admission Information
     @OneToOne(
-        () => UniversityAdmissionInformationEntity,
+        () => UniversityAdmissionEntity,
         admission => admission.university,
         {cascade: true, nullable: true})
-    admissionInformation!: UniversityAdmissionInformationEntity;
-
-    @OneToOne(
-        () => UniversityAdmissionRequirementsEntity,
-        requirement => requirement.university,
-        {cascade: true, nullable: true})
-    admissionRequirements!: UniversityAdmissionRequirementsEntity;
+    admission!: UniversityAdmissionEntity;
 
     //Price Information
     @OneToOne(

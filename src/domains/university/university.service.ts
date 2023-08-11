@@ -62,9 +62,6 @@ export async function getUniversityById(id: string): Promise<UniversityEntity | 
 }
 
 export async function createUniversity(universityDto: CreateUniversityDto) {
-    console.log(universityDto)
-
-
   return await universityRepository.save(universityDto);
 }
 

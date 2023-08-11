@@ -4,8 +4,7 @@ import {ScholarshipEnum} from "../types/scholarship.enum";
 import {KeyFactsSchema} from "./key-facts.schema";
 import {RatingInformationSchema} from "./rating-information.schema";
 import {UniversityImportantDateSchema} from "./university-important-date.schema";
-import {UniversityAdmissionInformationSchema} from "./university-addmission-information.schema";
-import {UniversityAdmissionRequirementsSchema} from "./university-addmission-requirements.schema";
+import {UniversityAdmissionSchema} from "./university-addmission.schema";
 import {UniversityTuitionCostSchema} from "./university-tuitian-cost.schema";
 import {UniversityCampusInformationSchema} from "./university-campus-information.schema";
 import {UniversityDiscountScholarshipsSchema} from "./university-discount-scholarships.schema";
@@ -35,8 +34,7 @@ export const CreateUniversitySchema = z.object({
         importantDates: z.array(UniversityImportantDateSchema).optional().transform((val) => val ?? []),
         scholarshipType: z.enum(['NEED_BASED', 'MERIT', 'GOVERNMENT']).optional().transform((val) => val ? (val as ScholarshipEnum) : undefined),
         eduDegrees: z.array(UniversityDegreeSchema).optional().transform((val) => val ?? []),
-        admissionInformation: UniversityAdmissionInformationSchema.optional(),
-        admissionRequirements: UniversityAdmissionRequirementsSchema.optional(),
+        admission: UniversityAdmissionSchema.optional(),
         tuitionCost: UniversityTuitionCostSchema.optional(),
         campusInformation: z.array(UniversityCampusInformationSchema).optional().transform((val) => val ?? []),
         scholarships: UniversityDiscountScholarshipsSchema.optional(),
