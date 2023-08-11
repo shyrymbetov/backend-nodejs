@@ -10,7 +10,6 @@ import {UniversityTuitionCostSchema} from "./university-tuitian-cost.schema";
 import {UniversityCampusInformationSchema} from "./university-campus-information.schema";
 import {UniversityDiscountScholarshipsSchema} from "./university-discount-scholarships.schema";
 import {UniversityDegreeSchema} from "./university-degrees.schema";
-import {UserRoleEnum} from "../../user/types/user-role.enum";
 import {StudyLanguageEnum} from "../types/study-language.enum";
 import {isValidUUID} from "../../../shared/util.service";
 
@@ -22,7 +21,7 @@ export const CreateUniversitySchema = z.object({
         canApply: z.boolean().optional(),
         universityName: z.string(),
         countryId: z.string(),
-        stateId: z.string().nullable().default(null).optional(),
+        state: z.string().optional(),
         city: z.string(),
         description: z.string().optional(),
         logo: z.string().nullable().default(null).optional(),

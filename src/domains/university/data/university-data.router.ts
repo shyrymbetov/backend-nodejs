@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import {
     createUniversitiesCountryHandler,
-    createUniversitiesStateHandler, deleteUniversitiesCountryHandler, deleteUniversitiesStateHandler,
+    deleteUniversitiesCountryHandler,
     getUniversitiesCountryHandler,
     getUniversitiesFacultyHandler,
     getUniversitiesSpecialitiesHandler,
@@ -19,13 +19,7 @@ universityDataRouter.route('/country')
 universityDataRouter.route('/country/:id')
     .delete(isAuthenticatedMiddleware, isAdminMiddleware, deleteUniversitiesCountryHandler);
 
-universityDataRouter.route('/state')
-    .get(getUniversitiesStateHandler)
-    .post(isAuthenticatedMiddleware, isAdminMiddleware, createUniversitiesStateHandler)
-;
-universityDataRouter.route('/state/:id')
-    .delete(isAuthenticatedMiddleware, isAdminMiddleware, deleteUniversitiesStateHandler)
-;
+universityDataRouter.route('/state').get(getUniversitiesStateHandler);
 universityDataRouter.route('/faculty').get(getUniversitiesFacultyHandler);
 universityDataRouter.route('/specialities').get(getUniversitiesSpecialitiesHandler);
 

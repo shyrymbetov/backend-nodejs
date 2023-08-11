@@ -1,13 +1,12 @@
 import {dataSource} from "../../../database";
 import {UniversityCountryEntity} from "./model/university-country.entity";
-import {UniversityStateEntity} from "./model/university-state.entity";
 import {UniversityFacultyEntity} from "./model/university-faculty.entity";
 import {CreateCountryDto} from "./dtos/create-country.dto";
-import {CreatStateDto} from "./dtos/create-state.dto";
 import {UniversitySpecialityEntity} from "./model/university-speciality.entity";
+import {UniversityEntity} from "../model/university.entity";
 
+const universityRepository = dataSource.getRepository(UniversityEntity);
 const universityCountryRepository = dataSource.getRepository(UniversityCountryEntity);
-const universityStateRepository = dataSource.getRepository(UniversityStateEntity);
 const universityFacultyRepository = dataSource.getRepository(UniversityFacultyEntity);
 const universitySpecialityRepository = dataSource.getRepository(UniversitySpecialityEntity);
 
@@ -22,16 +21,13 @@ export async function deleteUniversitiesCountry(countryId: string): Promise<any>
     return await universityCountryRepository.delete(countryId);
 }
 export async function getUniversitiesState(filter: any): Promise<any> {
-    return  await universityStateRepository.find()
+    return await universityRepository
+        .createQueryBuilder('university')
+        .select('DISTINCT(university.state)', 'state')
+        .getRawMany()
 }
-export async function createUniversitiesState(stateDto: CreatStateDto): Promise<any> {
-    return await universityStateRepository.save(stateDto);
-}
-export async function deleteUniversitiesState(stateId: string): Promise<any> {
-    return await universityStateRepository.delete(stateId);
-}
-export async function getUniversitiesFaculty(filter: any): Promise<any> {
 
+export async function getUniversitiesFaculty(filter: any): Promise<any> {
     // const { conditionString, conditionParameters } = generateConditionsForGetUniversities(filter)
     return await universityFacultyRepository
         .createQueryBuilder('faculty')

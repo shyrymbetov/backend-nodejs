@@ -21,7 +21,6 @@ import {UniversityDegreeEntity} from "./university-degree.entity";
 import {UniversityDiscountScholarshipsEntity} from "./university-discount-scholarships.entity";
 import {WorksheetEntity} from "../../worksheet/model/worksheet.entity";
 import {UniversityCountryEntity} from "../data/model/university-country.entity";
-import {UniversityStateEntity} from "../data/model/university-state.entity";
 import {StudyLanguageEnum} from "../types/study-language.enum";
 import {ApplicationEntity} from "../../application/model/application.entity";
 
@@ -44,26 +43,25 @@ export class UniversityEntity {
     @JoinColumn({ name: 'countryId' }) // Correct the join column name to 'universityId'
     country!: UniversityCountryEntity;
 
-    @ManyToOne(() => UniversityStateEntity)
-    @JoinColumn({ name: 'stateId' }) // Correct the join column name to 'universityId'
-    state!: UniversityStateEntity;
+    @Column({nullable: true})
+    state!: string;
 
     @Column()
     city!: string
 
-    @Column()
+    @Column({nullable: true})
     description!: string
 
     @Column({type: 'uuid', nullable: true})
     logo!: string | null
 
-    @Column()
+    @Column({nullable: true})
     color!: string
 
     @Column('uuid',{array: true, nullable: true})
     gallery!: string[]
 
-    @Column({ type: 'json' })
+    @Column({ type: 'json'})
     keyFacts!: KeyFactType[]
 
     @Column({ type: 'json' })
@@ -76,7 +74,7 @@ export class UniversityEntity {
     })
     topRating!: TopRatingEnum
 
-    @Column()
+    @Column({nullable: true})
     fullDescription!: string
 
     @OneToMany(
@@ -89,12 +87,14 @@ export class UniversityEntity {
     @Column({
         type: 'enum',
         enum: ScholarshipEnum,
+        nullable: true
     })
     scholarshipType!: ScholarshipEnum
 
     @Column({
         type: 'enum',
         enum: StudyLanguageEnum,
+        nullable: true
     })
     studyLanguage!: StudyLanguageEnum
 
@@ -126,7 +126,7 @@ export class UniversityEntity {
 
     //Campus Information
     @OneToMany(
-        () => UniversityImportantDatesEntity,
+        () => UniversityCampusInformationEntity,
         campusInformation => campusInformation.university,
         {cascade: true, nullable: true})
     campusInformation!: UniversityCampusInformationEntity[];
