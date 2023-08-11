@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
 } from 'typeorm';
-import { env } from '../../env';
+import { env } from '../../../env';
 
 @Entity({ schema: env.DB_SCHEMA })
 export class RegionEntity {

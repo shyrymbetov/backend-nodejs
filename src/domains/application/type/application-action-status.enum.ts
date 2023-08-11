@@ -1,0 +1,5 @@
+export enum ApplicationActionStatusEnum {
+  ISSUED_OFFER = 'ISSUED_OFFER',
+  REQUIRES_ACTION = 'REQUIRES_ACTION',
+  REJECTED_OFFER  = 'REJECTED_OFFER',
+}

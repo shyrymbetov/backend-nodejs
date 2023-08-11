@@ -24,6 +24,8 @@
     "express-async-errors": "^3.1.1",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.4",
     "pg": "^8.11.0",
     "typeorm": "^0.3.16",
     "typeorm-naming-strategies": "^4.1.0",

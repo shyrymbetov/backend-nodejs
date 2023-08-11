@@ -1,7 +1,7 @@
-import { UserRoleEnum } from './user-role.enum';
-import {Column} from "typeorm";
+import {UserRoleEnum} from "./user-role.enum";
 
 export type CreateUserType = {
+  avatar?: string;
   email: string;
   firstName: string;
   lastName: string;

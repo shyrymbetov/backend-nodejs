@@ -1,0 +1,13 @@
+export enum WorksheetFieldEnum {
+  NAME = 'NAME',
+  EMAIL = 'EMAIL',
+  PHONE = 'PHONE',
+  DATE = 'DATE',
+  DROPDOWN = 'DROPDOWN',
+  LIMITATION = 'LIMITATION',
+  SURVEY = 'SURVEY',
+  CHECK = 'CHECK',
+  FILE = 'FILE',
+  QUANTITY = 'QUANTITY',
+  EDUCATION_FORM = 'EDUCATION_FORM',
+}
