@@ -16,7 +16,7 @@ export class WorksheetEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @OneToOne(type => UniversityEntity, university => university.scholarships)
+    @OneToOne(type => UniversityEntity, university => university.scholarships, {cascade: false})
     @JoinColumn({ name: 'universityId' }) // Correct the join column name to 'universityId'
     university!: UniversityEntity;
 
