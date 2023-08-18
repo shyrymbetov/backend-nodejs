@@ -17,7 +17,6 @@ export class WorksheetEntity {
     id!: string;
 
     @OneToOne(type => UniversityEntity, university => university.worksheet, {cascade: false})
-    @JoinColumn({ name: 'universityId' }) // Correct the join column name to 'universityId'
     university!: UniversityEntity;
 
     @OneToMany(() => WorksheetFieldsEntity, date => date.profile, {eager: true, cascade: true})
