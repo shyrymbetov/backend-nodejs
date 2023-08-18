@@ -13,6 +13,7 @@ export const WorksheetFieldSchema = z.object({
     required: z.boolean(),
     isFirstOptionEmpty: z.boolean().nullable().optional(),
     isCheckedByDefault: z.boolean().nullable().optional(),
+    isMultipleUpload: z.boolean().nullable().optional(),
     textLimitation: z.object({
         minWords: z.number().optional(),
         maxWords: z.number().optional(),
