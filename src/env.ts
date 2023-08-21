@@ -6,7 +6,7 @@ export const env = parseEnv(process.env, {
   DB_SCHEMA: z.string().min(1),
   DB_PORT: port(),
   DB_APP_USER: z.string().min(1),
-  DB_APP_PASS: z.string().min(1),
+  DB_APP_PASS: z.string().min(0),
   DB_MIGRATOR_USER: z.string().min(1),
   DB_MIGRATOR_PASS: z.string().min(1),
   JWT_SECRET: z.string().min(1),
