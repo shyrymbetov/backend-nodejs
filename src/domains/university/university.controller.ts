@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import {
   createUniversity,
   deleteUniversity, editUniversity, editUniversityActions,
-  getUniversities,
+  getUniversities, getUniversitiesToLanding,
   getUniversityById,
 } from './university.service';
 import {CreateUniversitySchema} from "./schemas/create-university.schema";
@@ -17,6 +17,14 @@ export async function getUniversityHandler(req: Request, res: Response) {
 export async function getUniversitiesHandler(req: Request, res: Response) {
   const {query} = GetUniversitiesFilterSchema.parse(req);
   return res.send(await getUniversities(query));
+}
+
+export async function getUniversitiesToLandingHandler(req: Request, res: Response) {
+  // const {query} = GetUniversitiesFilterSchema.parse(req);
+  // return res.send(await getUniversities(query));
+  const { country, faculty, degree, search, page } = req.query;
+
+  res.send(await getUniversitiesToLanding(country, faculty, degree, search, page))
 }
 
 export async function createUniversityHandler(req: Request, res: Response) {

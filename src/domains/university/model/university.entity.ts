@@ -22,6 +22,7 @@ import {WorksheetEntity} from "../../worksheet/model/worksheet.entity";
 import {UniversityCountryEntity} from "../data/model/university-country.entity";
 import {StudyLanguageEnum} from "../types/study-language.enum";
 import {ApplicationEntity} from "../../application/model/application.entity";
+import {nullable} from "zod";
 
 @Entity({schema: env.DB_SCHEMA})
 export class UniversityEntity {
@@ -38,8 +39,12 @@ export class UniversityEntity {
     @Column()
     universityName!: string
 
+    @Column('uuid')
+    countryId!: string
+
+
     @ManyToOne(() => UniversityCountryEntity)
-    @JoinColumn({ name: 'countryId' }) // Correct the join column name to 'universityId'
+    @JoinColumn({ name: 'country_id' }) // Correct the join column name to 'universityId'
     country!: UniversityCountryEntity;
 
     @Column({nullable: true})
@@ -132,11 +137,24 @@ export class UniversityEntity {
     scholarships!: UniversityDiscountScholarshipsEntity;
 
 
-    @OneToOne(
-        () => WorksheetEntity,
-        worksheet => worksheet.university,
-        { nullable: true })
+    // @OneToOne(
+    //     () => WorksheetEntity,
+    //     worksheet => worksheet.university,
+    //     { nullable: true })
+    // worksheet!: WorksheetEntity;
+
+    @OneToOne(() => WorksheetEntity, { nullable: true })
+    @JoinColumn({ name: 'worksheetId' }) // Correct the join column name to 'worksheetId'
     worksheet!: WorksheetEntity;
+
+    // @Column('uuid')
+    // worksheetId!: string
+    //
+    //
+    // @OneToOne(() => WorksheetEntity)
+    // @JoinColumn({ name: 'worksheet_id' }) // Correct the join column name to 'universityId'
+    // worksheet!: WorksheetEntity;
+
 
     @OneToMany(() => ApplicationEntity, application => application.university)
     applications!: ApplicationEntity[];

@@ -10,10 +10,10 @@ import {isAdminMiddleware} from '../../middlewares/is-admin.middleware';
 
 
 export const worksheetRouter = Router();
-worksheetRouter.route('/').post(isAuthenticatedMiddleware, isAdminMiddleware, createWorksheetHandler);
+worksheetRouter.route('/').post(createWorksheetHandler);
 
 worksheetRouter.route('/:id')
-  .get(isAuthenticatedMiddleware, getWorksheetHandler)
+  .get(getWorksheetHandler)
   .patch(isAuthenticatedMiddleware, isAdminMiddleware, editWorksheetHandler)
   .delete(isAuthenticatedMiddleware, isAdminMiddleware, deleteWorksheetHandler)
 ;

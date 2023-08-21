@@ -16,8 +16,13 @@ export class WorksheetEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @OneToOne(type => UniversityEntity, university => university.worksheet, {cascade: false})
+    @Column('uuid')
+    universityId!: string
+
+    @OneToOne(() => UniversityEntity)
+    @JoinColumn({ name: 'university_id' }) // Correct the join column name to 'universityId'
     university!: UniversityEntity;
+
 
     @OneToMany(() => WorksheetFieldsEntity, date => date.profile, {eager: true, cascade: true})
     profileFields!: WorksheetFieldsEntity[];
