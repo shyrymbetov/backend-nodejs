@@ -38,6 +38,9 @@ export class WorksheetFieldsEntity {
     required!: boolean
 
     @Column({type:'boolean',nullable: true})
+    isMultipleUpload!: boolean | null
+
+    @Column({type:'boolean',nullable: true})
     isFirstOptionEmpty!: boolean | null
 
     @Column({type:'boolean',nullable: true})

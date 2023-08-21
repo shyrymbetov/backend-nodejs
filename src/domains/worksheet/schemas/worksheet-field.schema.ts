@@ -13,6 +13,7 @@ export const WorksheetFieldSchema = z.object({
     required: z.boolean(),
     isFirstOptionEmpty: z.boolean().nullable().optional(),
     isCheckedByDefault: z.boolean().nullable().optional(),
+    isMultipleUpload: z.boolean().nullable().optional(),
     textLimitation: z.object({
         minWords: z.number().optional(),
         maxWords: z.number().optional(),
@@ -20,7 +21,7 @@ export const WorksheetFieldSchema = z.object({
         maxChar: z.number().optional(),
     }).nullable().optional(),
     options: z.array(z.string()).optional().transform((val) => val ?? []),
-    answerType: z.enum(['SINGLE', 'MULTIPLE']).nullable().transform((val) => val ? (val as FieldAnswerTypeEnum) : undefined),
+    answerType: z.enum(['SINGLE', 'MULTIPLE']).nullable().optional().transform((val) => val ? (val as FieldAnswerTypeEnum) : undefined),
     text: z.string().nullable().optional(),
     dateFormat: z.string().nullable().optional(),
     quantity: z.object({
