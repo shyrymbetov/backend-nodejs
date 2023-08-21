@@ -1,11 +1,12 @@
 import {UniversityEntity} from "../university/model/university.entity";
 import {CreateWorksheetDto} from "./dtos/create-worksheet.dto";
 import {dataSource} from "../../database";
+import {WorksheetEntity} from "./model/worksheet.entity";
 
-const worksheetRepository = dataSource.getRepository(UniversityEntity);
+const worksheetRepository = dataSource.getRepository(WorksheetEntity);
 
 
-export async function getWorksheetById(id: string): Promise<UniversityEntity | null> {
+export async function getWorksheetById(id: string): Promise<WorksheetEntity | null> {
     return await worksheetRepository.findOneBy({ id: id });
 }
 

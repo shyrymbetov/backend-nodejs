@@ -44,7 +44,8 @@ export async function getUniversitiesToLanding(country, faculty, degree, search,
         .leftJoinAndSelect('university.country', 'country')
         .leftJoinAndSelect('university.eduDegrees', 'eduDegrees')
         .leftJoinAndSelect('eduDegrees.faculties', 'faculties')
-        .leftJoinAndSelect('university.tuitionCost', 'tuitionCost');
+        .leftJoinAndSelect('university.tuitionCost', 'tuitionCost')
+        .leftJoinAndSelect('university.worksheet', 'worksheet');
 
     if (country) {
         queryBuilder.andWhere('country.id = :countryId', { countryId: country });
@@ -100,7 +101,7 @@ export async function getUniversitiesToLanding(country, faculty, degree, search,
     // Get a subset of the modifiedResponse using the calculated indices
     const paginatedResponse = modifiedResponse.slice(startIndex, endIndex);
 
-    return paginatedResponse;
+    return filteredUniversities;
 
 
 }
