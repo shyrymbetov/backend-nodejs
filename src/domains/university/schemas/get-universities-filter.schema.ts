@@ -16,7 +16,7 @@ export const GetUniversitiesFilterSchema = z.object({
           .transform((val) => val ? (val as TopRatingEnum) : undefined),
       scholarshipType: z.enum(['NEED_BASED', 'MERIT', 'GOVERNMENT']).optional()
         .transform((val) => val ? (val as ScholarshipEnum) : undefined),
-        minFee: z.number().positive().optional(),
+      minFee: z.number().positive().optional(),
       maxFee: z.number().positive().optional(),
       degree: z.enum(['BACHELOR', 'MASTERS_DEGREE', 'LANGUAGE_PROGRAM', 'FOUNDATION', 'DEGREE_PREPARATION',]).optional()
           .transform((val) => val ? (val as EduDegreeEnum) : undefined),

@@ -38,8 +38,12 @@ export class UniversityEntity {
     @Column()
     universityName!: string
 
+    @Column('uuid')
+    countryId!: string
+
+
     @ManyToOne(() => UniversityCountryEntity)
-    @JoinColumn({ name: 'countryId' }) // Correct the join column name to 'universityId'
+    @JoinColumn({ name: 'country_id' }) // Correct the join column name to 'universityId'
     country!: UniversityCountryEntity;
 
     @Column({nullable: true})
