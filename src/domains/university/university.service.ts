@@ -93,6 +93,22 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto) 
         conditionString += 'and LOWER(eduDegrees.degree) like LOWER(:degree) '
         conditionParameters['degree'] = `%${filter.degree}%`
     }
+    if (filter.scholarshipType) {
+        conditionString += 'and LOWER(university.scholarshipType) = LOWER(:scholarshipType) '
+        conditionParameters['scholarshipType'] = filter.scholarshipType.toString()
+    }
+    if (filter.rating) {
+        conditionString += 'and LOWER(university.rating) = LOWER(:facultyName) '
+        conditionParameters['rating'] = filter.rating.toString()
+    }
+    if (filter.minFee) {
+        conditionString += 'and tuitionCost.tuitionCost >= :minFee '
+        conditionParameters['minFee'] = filter.minFee
+    }
+    if (filter.maxFee) {
+        conditionString += 'and tuitionCost.tuitionCost <= :maxFee '
+        conditionParameters['maxFee'] = filter.maxFee
+    }
 
     if (filter.search) {
         conditionString += 'and (' +

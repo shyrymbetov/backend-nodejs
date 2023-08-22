@@ -21,7 +21,7 @@ export async function getUniversitiesHandler(req: Request, res: Response) {
 
 export async function getUniversitiesToLandingHandler(req: Request, res: Response) {
   const {query} = GetUniversitiesFilterSchema.parse(req);
-  return res.send(await getUniversities(query));
+  return res.send(await getUniversitiesToLanding(query));
 }
 
 export async function createUniversityHandler(req: Request, res: Response) {

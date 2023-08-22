@@ -107,6 +107,7 @@ export async function getUserStudents(userId: string, filter: GetUserStudentsPar
       totalCount: totalCount
   }
 }
+
 function generateConditionsForGetUserStudents(userId: string, filter: GetUserStudentsParamsDto) {
     let conditionString = 'students.role IN (:...roles) ' +
         'and ((students.orientatorId in (:...managerIds))' +
