@@ -23,20 +23,20 @@ export class UniversityAdmissionEntity {
     @JoinColumn({name: 'universityId'}) // Correct the join column name to 'universityId'
     university!: UniversityEntity;
 
-    @Column({nullable: true})
-    genTitle!: string
+    @Column({type: 'varchar', nullable: true})
+    genTitle!: string | null
 
-    @Column({nullable: true})
-    genDescription!: string
+    @Column({type: 'varchar', nullable: true})
+    genDescription!: string | null
 
     @Column({type: 'json'})
     admissionSteps!: AdmissionStepsType[]
 
-    @Column({nullable: true})
-    reqTitle!: string
+    @Column({type: 'varchar', nullable: true})
+    reqTitle!: string | null
 
-    @Column({nullable: true})
-    reqDescription!: string
+    @Column({type: 'varchar', nullable: true})
+    reqDescription!: string | null
 
     @Column({ type: 'json' })
     certificates!: AdmissionCertificatesType[]

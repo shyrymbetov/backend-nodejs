@@ -22,8 +22,6 @@ import {WorksheetEntity} from "../../worksheet/model/worksheet.entity";
 import {UniversityCountryEntity} from "../data/model/university-country.entity";
 import {StudyLanguageEnum} from "../types/study-language.enum";
 import {ApplicationEntity} from "../../application/model/application.entity";
-import {nullable} from "zod";
-import {worksheetRouter} from "../../worksheet/worksheet.router";
 
 @Entity({schema: env.DB_SCHEMA})
 export class UniversityEntity {
@@ -48,14 +46,14 @@ export class UniversityEntity {
     @JoinColumn({ name: 'country_id' }) // Correct the join column name to 'universityId'
     country!: UniversityCountryEntity;
 
-    @Column({nullable: true})
-    state!: string;
+    @Column({type:'varchar', nullable: true})
+    state!: string | null
 
     @Column()
     city!: string
 
-    @Column({nullable: true})
-    description!: string
+    @Column({type:'varchar', nullable: true})
+    description!: string | null
 
     @Column({type: 'uuid', nullable: true})
     logo!: string | null

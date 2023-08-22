@@ -3,8 +3,8 @@ import {isValidUUID} from "../../../shared/util.service";
 
 export const UniversityAdmissionSchema = z.object({
     id: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
-    genTitle: z.string().optional(),
-    genDescription: z.string().optional(),
+    genTitle: z.string().nullable().optional().transform((val) => val ? val: undefined),
+    genDescription: z.string().nullable().optional().transform((val) => val ? val: undefined),
     admissionSteps: z.array(
         z.object({
             index: z.number().positive(),
@@ -12,8 +12,8 @@ export const UniversityAdmissionSchema = z.object({
             description: z.string().optional()
         })
     ).optional().transform((val) => val ?? []),
-    reqTitle: z.string().optional(),
-    reqDescription: z.string().optional(),
+    reqTitle: z.string().nullable().optional().transform((val) => val ? val: undefined),
+    reqDescription: z.string().nullable().optional().transform((val) => val ? val: undefined),
     certificates: z.array(
         z.object({
             certificateType: z.string().optional(),

@@ -3,10 +3,10 @@ import {isValidUUID} from "../../../shared/util.service";
 
 export const UniversityTuitionCostSchema = z.object({
     id: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
-    title: z.string().optional(),
-    description: z.string().optional(),
-    tuitionCost: z.number().positive().optional(),
-    fullCost: z.number().positive().optional(),
+    title: z.string().nullable().optional().transform((val) => val ? val: undefined),
+    description: z.string().nullable().optional().transform((val) => val ? val: undefined),
+    tuitionCost: z.number().positive().nullable().optional().transform((val) => val ? val: undefined),
+    fullCost: z.number().positive().nullable().optional().transform((val) => val ? val: undefined),
     additionalCost: z.array(
         z.object({
             name: z.string().optional(),

@@ -19,11 +19,11 @@ export class UniversityDiscountScholarshipsEntity {
     @JoinColumn({ name: 'universityId' }) // Correct the join column name to 'universityId'
     university!: UniversityEntity;
 
-    @Column({nullable: true})
-    title!: string
+    @Column({type: 'varchar',nullable: true})
+    title!: string | null
 
-    @Column({nullable: true})
-    description!: string
+    @Column({type: 'varchar',nullable: true})
+    description!: string | null
 
     @Column({ type: 'json' })
     programCost!: CostProgramType[]
