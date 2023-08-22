@@ -38,10 +38,10 @@ export async function getUniversities(filter: any): Promise<any> {
     }
 }
 
-export async function getUniversitiesToLanding(filter): Promise<any> {
+export async function getUniversitiesToLanding(filter: any): Promise<any> {
     const {conditionString, conditionParameters} = generateConditionsForGetUniversities(filter)
 
-    const queryBuilder = universityRepository.createQueryBuilder('university')
+    const data = universityRepository.createQueryBuilder('university')
         .leftJoinAndSelect('university.country', 'country')
         .leftJoinAndSelect('university.eduDegrees', 'eduDegrees')
         .leftJoinAndSelect('eduDegrees.faculties', 'faculties')
@@ -49,28 +49,24 @@ export async function getUniversitiesToLanding(filter): Promise<any> {
         .leftJoinAndSelect('university.worksheet', 'worksheet')
         .select([
             'university.id as id',
-            'university.logo as logo',
             'university.universityName as universityName',
-            'tuition.tuitionCost as tuitionCost',
-            'university.isVisible as isVisible',
-            'university.canApply as canApply',
-            'worksheet.id as worksheetId',
+            'country.name as universityCountry',
+            'university.state as universityState',
+            'university.city as universityCity',
+            'university.logo as logo',
+            'university.color as color',
+            'university.ratingInformation as ratingInformation',
+            'university.topRating as topRating',
+            'tuitionCost.tuitionCost as cost',
         ])
+        .where(conditionString, conditionParameters)
+        .skip((filter.page - 1) * filter.size)
+        .take(filter.size)
+        .getRawMany();
+    // there
+    const totalCount = 0 // there Total count
 
-    const filteredUniversities = await queryBuilder.skip(filter.page).take(filter.size).getMany();
-
-    return filteredUniversities.map(university => ({
-        id: university.id,
-        universityName: university.universityName,
-        universityCountry: university.country.name,
-        universityState: university.state,
-        universityCity: university.city,
-        logo: university.logo,
-        color: university.color,
-        ratingInformation: university.ratingInformation,
-        topRating: university.topRating,
-        cost: university.tuitionCost.tuitionCost
-    }));
+    return data;
 
 }
 
@@ -104,27 +100,6 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto) 
             'OR CAST(eduDegrees.degree AS TEXT) ILIKE :search' +
             'OR faculties.name ILIKE :search ) '
         conditionParameters['search'] = `%${filter.search}%`
-    }
-
-    return {
-        conditionString: conditionString,
-        conditionParameters: conditionParameters,
-    };
-}
-
-function generateConditionsForGetUniversitiesToLanding(filter: GetUniversitiesFilterDto) {
-
-
-    let conditionString = 'true '
-    let conditionParameters = {}
-    if (filter.country) {
-        conditionString += 'and university.country = :country '
-        conditionParameters['country'] = filter.country
-    }
-
-    if (filter.search) {
-        conditionString += 'and LOWER(university.universityName) like LOWER(:universityName) '
-        conditionParameters['universityName'] = `%${filter.search}%`
     }
 
     return {
