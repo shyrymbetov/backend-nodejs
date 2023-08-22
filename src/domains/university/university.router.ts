@@ -19,7 +19,7 @@ universityRouter.route('/')
     .post(createUniversityHandler) // make obratno isauth and is admin
 ;
 
-universityRouter.route('/for-landing')
+universityRouter.route('/landing')
     .get(getUniversitiesToLandingHandler)
 ;
 

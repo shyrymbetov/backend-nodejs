@@ -23,6 +23,7 @@ import {UniversityCountryEntity} from "../data/model/university-country.entity";
 import {StudyLanguageEnum} from "../types/study-language.enum";
 import {ApplicationEntity} from "../../application/model/application.entity";
 import {nullable} from "zod";
+import {worksheetRouter} from "../../worksheet/worksheet.router";
 
 @Entity({schema: env.DB_SCHEMA})
 export class UniversityEntity {
@@ -146,15 +147,6 @@ export class UniversityEntity {
     @OneToOne(() => WorksheetEntity, { nullable: true })
     @JoinColumn({ name: 'worksheetId' }) // Correct the join column name to 'worksheetId'
     worksheet!: WorksheetEntity;
-
-    // @Column('uuid')
-    // worksheetId!: string
-    //
-    //
-    // @OneToOne(() => WorksheetEntity)
-    // @JoinColumn({ name: 'worksheet_id' }) // Correct the join column name to 'universityId'
-    // worksheet!: WorksheetEntity;
-
 
     @OneToMany(() => ApplicationEntity, application => application.university)
     applications!: ApplicationEntity[];

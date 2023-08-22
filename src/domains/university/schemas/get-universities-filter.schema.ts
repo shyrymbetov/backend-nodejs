@@ -8,6 +8,7 @@ export const GetUniversitiesFilterSchema = z.object({
   query: z.object({
       page: z.string().regex(/^\d+$/).transform(Number),
       size: z.string().regex(/^\d+$/).transform(Number),
+      universityName: z.string().optional(),
       search: z.string().optional(),
       country: z.string().optional(),
       faculty: z.string().optional(),

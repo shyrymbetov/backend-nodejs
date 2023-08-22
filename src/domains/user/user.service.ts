@@ -264,6 +264,8 @@ async function sendReferralLinkToNewUser(userId: string) {
 }
 
 export async function createUser(userToCreate: CreateUserType) {
-    return await userRepository.save(userToCreate);
+    const newUser = await userRepository.save(userToCreate);
+    newUser.hashedPassword = ''
+    return newUser
 }
 
