@@ -4,7 +4,7 @@ import {
     deleteUser,
     editCurrentUser,
     editUser,
-    getUserById, getUserManagersForFilter,
+    getUserById,
     getUsers,
     getUserStudents
 } from './user.service';
@@ -31,11 +31,6 @@ export async function getUsersHandler(req: Request, res: Response) {
 export async function getUserStudentsHandler(req: Request, res: Response) {
     const {params,query} = GetUserStudentsFilterSchema.parse(req);
     return res.send(await getUserStudents(params.id, query));
-}
-
-export async function getUserManagersForFilterHandler(req: Request, res: Response) {
-    const { id } = req.params
-    return res.send(await getUserManagersForFilter(id));
 }
 
 export async function createUserHandler(req: Request, res: Response) {

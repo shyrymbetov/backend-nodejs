@@ -3,7 +3,7 @@ import {
     createUserHandler,
     deleteUserHandler, editCurrentUserHandler,
     editUserHandler, getCurrentUserHandler,
-    getUserHandler, getUserManagersForFilterHandler,
+    getUserHandler,
     getUsersHandler, getUserStudentsHandler
 } from './user.controller';
 import { isAuthenticatedMiddleware } from '../../middlewares/is-authenticated.middleware';
@@ -28,10 +28,6 @@ userRouter.route('/:id')
 
 userRouter.route('/students/:id')
   .get(isAuthenticatedMiddleware, getUserStudentsHandler)
-
-userRouter.route('/managers/:id')
-  .get(isAuthenticatedMiddleware, getUserManagersForFilterHandler)
-;
 
 
 
