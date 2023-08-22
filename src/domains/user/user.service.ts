@@ -170,6 +170,7 @@ export async function createNewUser(userDto: CreateUserDto) {
     }
 
     const newUser = await createUser({
+        avatar: userDto.avatar ?? undefined,
         email: userDto.email,
         firstName: userDto.firstName,
         lastName: userDto.lastName,
@@ -193,6 +194,7 @@ export async function editUser(id: string, userDto: CreateUserDto) {
     if (masterExpert && masterExpert == id) {
         // Master Expert role email will not be change
         userEditInfo = {
+            avatar: userDto.avatar,
             firstName: userDto.firstName,
             lastName: userDto.lastName,
             birthDate: new Date(Date.parse(userDto.birthDate)),
@@ -205,6 +207,7 @@ export async function editUser(id: string, userDto: CreateUserDto) {
         return;
     } else {
         userEditInfo = {
+            avatar: userDto.avatar,
             email: userDto.email,
             firstName: userDto.firstName,
             lastName: userDto.lastName,
@@ -223,6 +226,7 @@ export async function editCurrentUser(id: string, userDto: EditCurrentUserDto) {
     let userEditInfo
 
     userEditInfo = {
+        avatar: userDto.avatar,
         firstName: userDto.firstName,
         lastName: userDto.lastName,
         birthDate: new Date(Date.parse(userDto.birthDate)),

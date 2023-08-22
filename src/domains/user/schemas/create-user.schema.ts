@@ -5,7 +5,7 @@ export const CreateUserSchema = z.object({
   body: z
     .object({
       id: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
-      avatar: z.string().nullable().default(null).optional(),
+      avatar: z.string().nullable().default(null).optional().transform((val) => val ?? undefined),
       email: z.string(),
       firstName: z.string(),
       lastName: z.string(),
