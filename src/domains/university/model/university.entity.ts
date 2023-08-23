@@ -136,8 +136,7 @@ export class UniversityEntity {
     scholarships!: UniversityDiscountScholarshipsEntity;
 
 
-    @OneToOne(() => WorksheetEntity, { nullable: true, cascade: true })
-    @JoinColumn({ name: 'id', referencedColumnName: 'universityId' }) // Correct the join column name to 'worksheetId'
+    @OneToOne(() => WorksheetEntity, worksheet => worksheet.university, { nullable: true })
     worksheet!: WorksheetEntity;
 
     @OneToMany(() => ApplicationEntity, application => application.university)

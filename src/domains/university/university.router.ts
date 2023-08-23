@@ -26,7 +26,7 @@ universityRouter.route('/landing')
 universityRouter.route('/:id')
   .get(getUniversityHandler) // make obratno isauth and is admin
   .patch(isAuthenticatedMiddleware, isAdminMiddleware, editUniversityHandler)
-  .delete(deleteUniversityHandler)
+  .delete(isAuthenticatedMiddleware, isAdminMiddleware, deleteUniversityHandler)
 ;
 
 universityRouter.route('/actions/:id')

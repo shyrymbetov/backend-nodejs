@@ -3,6 +3,7 @@ import {UniversityEntity} from './model/university.entity';
 import {CreateUniversityDto} from "./dtos/create-university.dto";
 import {GetUniversitiesFilterDto} from "./dtos/get-univerties-params.dto";
 import {UniversityActionsDto} from "./dtos/university-actions.dto";
+import {BadGateway} from "http-errors";
 
 const universityRepository = dataSource.getRepository(UniversityEntity);
 
@@ -147,7 +148,7 @@ export async function createUniversity(universityDto: CreateUniversityDto) {
 }
 
 export async function editUniversity(id: string, universityDto: CreateUniversityDto) {
-    return await universityRepository.update(id, universityDto);
+    return await universityRepository.save({id, ...universityDto});
 }
 
 export async function editUniversityActions(id: string, universityDto: UniversityActionsDto) {
