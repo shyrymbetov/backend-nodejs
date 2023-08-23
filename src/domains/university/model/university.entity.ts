@@ -142,8 +142,11 @@ export class UniversityEntity {
     //     { nullable: true })
     // worksheet!: WorksheetEntity;
 
-    @OneToOne(() => WorksheetEntity, { nullable: true })
-    @JoinColumn({ name: 'worksheetId' }) // Correct the join column name to 'worksheetId'
+    @Column('uuid', {nullable: true})
+    worksheetId!: string
+
+    @OneToOne(() => WorksheetEntity, { nullable: true, cascade: true })
+    @JoinColumn({ name: 'id', referencedColumnName: 'universityId' }) // Correct the join column name to 'worksheetId'
     worksheet!: WorksheetEntity;
 
     @OneToMany(() => ApplicationEntity, application => application.university)

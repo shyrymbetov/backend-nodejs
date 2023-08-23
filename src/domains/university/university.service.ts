@@ -125,7 +125,21 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto) 
 }
 
 export async function getUniversityById(id: string): Promise<UniversityEntity | null> {
-    return await universityRepository.findOneBy({id: id});
+    const university = await universityRepository
+        .createQueryBuilder('university')
+        .leftJoinAndSelect('university.country', 'country')
+        .leftJoinAndSelect('university.importantDates', 'importantDates')
+        .leftJoinAndSelect('university.admission', 'admission')
+        .leftJoinAndSelect('university.campusInformation', 'campusInformation')
+        .leftJoinAndSelect('university.scholarships', 'scholarships')
+        .leftJoinAndSelect('university.eduDegrees', 'eduDegrees')
+        .leftJoinAndSelect('eduDegrees.faculties', 'faculties')
+        .leftJoinAndSelect('university.tuitionCost', 'tuitionCost')
+        .leftJoinAndSelect('university.worksheet', 'worksheet')
+        .where('university.id = :id', {id})
+        .getOne();
+
+    return university
 }
 
 export async function createUniversity(universityDto: CreateUniversityDto) {

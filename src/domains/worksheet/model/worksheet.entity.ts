@@ -19,7 +19,7 @@ export class WorksheetEntity {
     @Column('uuid')
     universityId!: string
 
-    @OneToOne(() => UniversityEntity)
+    @OneToOne(() => UniversityEntity, { "eager": true, "cascade": true })
     @JoinColumn({ name: 'university_id' }) // Correct the join column name to 'universityId'
     university!: UniversityEntity;
 
