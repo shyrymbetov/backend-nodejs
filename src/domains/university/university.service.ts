@@ -148,7 +148,8 @@ export async function createUniversity(universityDto: CreateUniversityDto) {
 }
 
 export async function editUniversity(id: string, universityDto: CreateUniversityDto) {
-    return await universityRepository.save({id, ...universityDto});
+    universityDto.id = id
+    return await universityRepository.save(universityDto);
 }
 
 export async function editUniversityActions(id: string, universityDto: UniversityActionsDto) {
