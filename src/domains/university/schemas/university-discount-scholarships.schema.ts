@@ -7,11 +7,11 @@ export const UniversityDiscountScholarshipsSchema = z.object({
     description: z.string().nullable().optional().transform((val) => val ? val: undefined),
     programCost: z.array(
         z.object({
-            title: z.string().optional(),
+            title: z.string().optional().nullable().transform((val) => val ?? undefined),
             fields: z.array(
                 z.object({
-                    name: z.string().optional(),
-                    cost: z.string().optional(),
+                    name: z.string().optional().nullable().transform((val) => val ?? undefined),
+                    cost: z.string().optional().nullable().transform((val) => val ?? undefined),
                 })
             )
         })

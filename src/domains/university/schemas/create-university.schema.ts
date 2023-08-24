@@ -16,28 +16,36 @@ export const CreateUniversitySchema = z.object({
   body: z
     .object({
         id: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
-        isVisible: z.boolean().optional(),
-        canApply: z.boolean().optional(),
+        isVisible: z.boolean().optional()
+            .nullable().transform((val) => val ? val: undefined),
+        canApply: z.boolean().optional()
+            .nullable().transform((val) => val ? val: undefined),
         universityName: z.string(),
         countryId: z.string(),
         state: z.string().nullable().optional(),
         city: z.string(),
         description: z.string().optional(),
         logo: z.string().nullable().default(null).optional().transform((val) => val ? val: undefined),
-        fullDescription: z.string().optional(),
-        color: z.string().optional(),
+        fullDescription: z.string().nullable().optional()
+            .transform((val) => val ?? undefined),
+        color: z.string().optional()
+            .nullable().transform((val) => val ? val: undefined),
         gallery: z.array(z.string()).optional().transform((val) => val ?? []),
         keyFacts: z.array(KeyFactsSchema).optional().transform((val) => val ?? []),
         ratingInformation: z.array(RatingInformationSchema).optional().transform((val) => val ?? []),
-        topRating: z.enum(['TOP_100', 'TOP_200', 'TOP_500']).optional().transform((val) => val ? (val as TopRatingEnum) : undefined),
-        studyLanguage: z.enum(['ENGLISH', 'GOVERNMENT']).optional().transform((val) => val ? (val as StudyLanguageEnum) : undefined),
-        importantDates: z.array(UniversityImportantDateSchema).optional().transform((val) => val ?? []),
-        scholarshipType: z.enum(['NEED_BASED', 'MERIT', 'GOVERNMENT']).optional().transform((val) => val ? (val as ScholarshipEnum) : undefined),
+        topRating: z.enum(['TOP_100', 'TOP_200', 'TOP_500']).optional()
+            .nullable().transform((val) => val ? (val as TopRatingEnum) : undefined),
+        studyLanguage: z.enum(['ENGLISH', 'GOVERNMENT']).optional()
+            .nullable().transform((val) => val ? (val as StudyLanguageEnum) : undefined),
+        importantDates: z.array(UniversityImportantDateSchema).optional()
+            .nullable().transform((val) => val ?? []),
+        scholarshipType: z.enum(['NEED_BASED', 'MERIT', 'GOVERNMENT']).optional()
+            .nullable().transform((val) => val ? (val as ScholarshipEnum) : undefined),
         eduDegrees: z.array(UniversityDegreeSchema).optional().transform((val) => val ?? []),
         admission: UniversityAdmissionSchema.nullable().optional().transform((val) => val ? val: undefined),
         tuitionCost: UniversityTuitionCostSchema.nullable().optional().transform((val) => val ? val: undefined),
         campusInformation: z.array(UniversityCampusInformationSchema).optional().transform((val) => val ?? []),
-        scholarships: UniversityDiscountScholarshipsSchema.nullable().optional().transform((val) => val ? val: undefined),
+        scholarships: UniversityDiscountScholarshipsSchema.optional().transform((val) => val ? val: undefined),
     })
     .strict(),
   query: z.object({}).strict(),

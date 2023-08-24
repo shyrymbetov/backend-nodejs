@@ -8,25 +8,25 @@ export const UniversityAdmissionSchema = z.object({
     admissionSteps: z.array(
         z.object({
             index: z.number().positive(),
-            name: z.string().optional(),
-            description: z.string().optional()
+            name: z.string().optional().nullable().transform((val) => val ?? undefined),
+            description: z.string().optional().nullable().transform((val) => val ?? undefined)
         })
     ).optional().transform((val) => val ?? []),
     reqTitle: z.string().nullable().optional().transform((val) => val ? val: undefined),
     reqDescription: z.string().nullable().optional().transform((val) => val ? val: undefined),
     certificates: z.array(
         z.object({
-            certificateType: z.string().optional(),
-            grade: z.string().optional(),
+            certificateType: z.string().optional().nullable().transform((val) => val ?? undefined),
+            grade: z.string().optional().nullable().transform((val) => val ?? undefined),
         })
     ).optional().transform((val) => val ?? []),
     requirements: z.array(
         z.object({
-            title: z.string().optional(),
+            title: z.string().optional().nullable().transform((val) => val ?? undefined),
             fields: z.array(
                 z.object({
-                    name: z.string().optional(),
-                    grade: z.string().optional(),
+                    name: z.string().optional().nullable().transform((val) => val ?? undefined),
+                    grade: z.string().optional().nullable().transform((val) => val ?? undefined),
                 })
             )
         })
