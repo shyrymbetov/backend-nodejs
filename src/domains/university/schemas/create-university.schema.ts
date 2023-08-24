@@ -17,14 +17,14 @@ export const CreateUniversitySchema = z.object({
     .object({
         id: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
         isVisible: z.boolean().optional()
-            .nullable().transform((val) => val ? val: undefined),
+            .nullable().transform((val) => val ?? true),
         canApply: z.boolean().optional()
-            .nullable().transform((val) => val ? val: undefined),
+            .nullable().transform((val) => val ?? false),
         universityName: z.string(),
         countryId: z.string(),
         state: z.string().nullable().optional(),
         city: z.string(),
-        description: z.string().optional(),
+        description: z.string().nullable().optional().transform((val) => val ?? undefined),
         logo: z.string().nullable().default(null).optional().transform((val) => val ? val: undefined),
         fullDescription: z.string().nullable().optional()
             .transform((val) => val ?? undefined),
@@ -46,8 +46,7 @@ export const CreateUniversitySchema = z.object({
         tuitionCost: UniversityTuitionCostSchema.nullable().optional().transform((val) => val ? val: undefined),
         campusInformation: z.array(UniversityCampusInformationSchema).optional().transform((val) => val ?? []),
         scholarships: UniversityDiscountScholarshipsSchema.optional().transform((val) => val ? val: undefined),
-    })
-    .strict(),
+    }),
   query: z.object({}).strict(),
   params: z.object({
       id: z.string().optional(),
