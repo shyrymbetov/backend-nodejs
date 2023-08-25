@@ -1,10 +1,21 @@
 import { Request, Response } from 'express';
 import {CreateWorksheetSchema} from "./schemas/create-worksheet.schema";
-import {createWorksheet, deleteWorksheet, editWorksheet, getWorksheetById} from "./worksheet.service";
+import {
+    createWorksheet,
+    deleteWorksheet,
+    editWorksheet,
+    getWorksheetById,
+    getWorksheetForLanding
+} from "./worksheet.service";
 
 export async function getWorksheetHandler(req: Request, res: Response) {
     let { id } = req.params
     return res.send(await getWorksheetById(id));
+}
+
+export async function getWorksheetForLandingHandler(req: Request, res: Response) {
+    let { id } = req.params
+    return res.send(await getWorksheetForLanding(id));
 }
 
 export async function createWorksheetHandler(req: Request, res: Response) {

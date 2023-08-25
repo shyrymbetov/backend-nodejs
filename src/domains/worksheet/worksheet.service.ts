@@ -10,6 +10,13 @@ export async function getWorksheetById(id: string): Promise<WorksheetEntity | nu
     return await worksheetRepository.findOneBy({ id: id });
 }
 
+export async function getWorksheetForLanding(id: string): Promise<WorksheetEntity | null> {
+    return await worksheetRepository.findOne({
+        where: {id: id},
+        relations: ['university.canApply'],
+    });
+}
+
 export async function createWorksheet(universityDto: CreateWorksheetDto) {
     return await worksheetRepository.save(universityDto);
 }

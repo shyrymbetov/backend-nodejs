@@ -2,7 +2,7 @@ import {Router} from 'express';
 import {
     createWorksheetHandler,
     deleteWorksheetHandler,
-    editWorksheetHandler,
+    editWorksheetHandler, getWorksheetForLandingHandler,
     getWorksheetHandler
 } from './worksheet.controller';
 import {isAuthenticatedMiddleware} from '../../middlewares/is-authenticated.middleware';
@@ -13,9 +13,13 @@ export const worksheetRouter = Router();
 worksheetRouter.route('/').post(createWorksheetHandler);
 
 worksheetRouter.route('/:id')
-  .get(getWorksheetHandler)
+  .get(isAuthenticatedMiddleware,isAdminMiddleware, getWorksheetHandler)
   .patch(isAuthenticatedMiddleware, isAdminMiddleware, editWorksheetHandler)
   .delete(isAuthenticatedMiddleware, isAdminMiddleware, deleteWorksheetHandler)
+;
+
+worksheetRouter.route('/landing/:id')
+  .get(isAuthenticatedMiddleware, getWorksheetForLandingHandler)
 ;
 
 

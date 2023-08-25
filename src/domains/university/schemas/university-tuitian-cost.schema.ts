@@ -2,7 +2,7 @@ import z from 'zod';
 import {isValidUUID} from "../../../shared/util.service";
 
 export const UniversityTuitionCostSchema = z.object({
-    id: z.string().transform((val) => isValidUUID(val) ? val: undefined),
+    id: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
     title: z.string().nullable().optional().transform((val) => val ? val: undefined),
     description: z.string().nullable().optional().transform((val) => val ? val: undefined),
     tuitionCost: z.number().positive().nullable().optional().transform((val) => val ? val: undefined),
