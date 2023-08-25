@@ -13,7 +13,6 @@ export async function getFileHandler(req: Request, res: Response) {
     if (!file) {
         throw BadRequest("File not exists");
     }
-    console.log(file);
 
     const filePath = path.join(file.fullPath);
     const stat = fileSystem.statSync(filePath);
