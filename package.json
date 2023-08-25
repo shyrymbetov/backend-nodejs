@@ -1,6 +1,7 @@
 {
   "name": "nova-back",
   "version": "0.0.0",
+  "author": "Nurzhan Kongratbayev kongratbayevn@gmail.com",
   "scripts": {
     "build": "tsc",
     "start": "node dist/app",

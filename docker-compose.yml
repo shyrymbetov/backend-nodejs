@@ -7,7 +7,7 @@ services:
       dockerfile: ./docker/postgres/Dockerfile
     container_name: nova_postgres
     ports:
-      - 5438:5432
+      - 4682:5432
     environment:
       POSTGRES_DB: '${DB_NAME}'
       DB_NAME: '${DB_NAME}'
@@ -23,6 +23,25 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    networks:
+      - default
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    ports:
+      - "3003:3003"
+    env_file:
+      - .env
+    volumes:
+      - $EXTERNAL_PATH/files:$FILE_PATH
+    depends_on:
+      - postgres
+    links:
+      - postgres
     networks:
       - default
 

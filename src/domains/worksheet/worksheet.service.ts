@@ -22,7 +22,8 @@ export async function createWorksheet(universityDto: CreateWorksheetDto) {
 }
 
 export async function editWorksheet(id: string, universityDto: CreateWorksheetDto) {
-    return await worksheetRepository.update(id, universityDto);
+    universityDto.id = id
+    return await worksheetRepository.save(universityDto);
 }
 
 export async function deleteWorksheet(id: string) {
