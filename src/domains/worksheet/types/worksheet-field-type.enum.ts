@@ -10,4 +10,5 @@ export enum WorksheetFieldEnum {
   FILE = 'FILE',
   QUANTITY = 'QUANTITY',
   EDUCATION_FORM = 'EDUCATION_FORM',
+  TEXT = 'TEXT',
 }

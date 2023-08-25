@@ -5,7 +5,7 @@ import {FieldAnswerTypeEnum} from "../types/field-answer-type.enum";
 
 export const WorksheetFieldSchema = z.object({
     id: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
-    type: z.enum(['NAME', 'EMAIL', 'PHONE', 'DATE', 'DROPDOWN', 'LIMITATION', 'SURVEY', 'CHECK', 'FILE', 'QUANTITY', 'EDUCATION_FORM',])
+    type: z.enum(['NAME', 'EMAIL', 'PHONE', 'DATE', 'DROPDOWN', 'LIMITATION', 'SURVEY', 'CHECK', 'FILE', 'QUANTITY', 'EDUCATION_FORM','TEXT'])
         .transform((val) => val ? (val as WorksheetFieldEnum) : undefined) ,
     placeholder: z.string().optional(),
     description: z.string().optional(),
