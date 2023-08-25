@@ -160,6 +160,9 @@ export async function editUniversityActions(id: string, universityDto: Universit
 }
 
 export async function deleteUniversity(id: string) {
-    return await universityRepository.delete(id);
+    const deleted = await universityRepository.update(id, {
+        deactivatedAt: new Date(),
+    });
+    return !!deleted;
 }
 
