@@ -74,6 +74,7 @@ export class UniversityEntity {
     @Column({
         type: 'enum',
         enum: TopRatingEnum,
+        nullable: true
     })
     topRating!: TopRatingEnum
 
