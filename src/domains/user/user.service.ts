@@ -264,7 +264,6 @@ export async function deleteUser(id: string) {
 async function sendReferralLinkToNewUser(userId: string) {
     const changePasswordLink = createChangePasswordLink(userId);
     // sendMail()
-    console.log(changePasswordLink)
     return "generated";
 }
 

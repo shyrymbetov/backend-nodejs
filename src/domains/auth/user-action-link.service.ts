@@ -33,13 +33,10 @@ export async function sendMailChangePasswordLink(email: string, changePasswordLi
 export async function deactivatePasswordChangeLink(pwdChangeId: string) {
     const link = await passwordChangeRepository.findOneBy({id: pwdChangeId})
 
-    console.log('here')
     const now = new Date();
     if (!link || link.used || now >= link.expiredDate) { //check to change
-        console.log('here not changed')
         return;
     }
-    console.log('here changed')
 
     return link.userId;
 }
@@ -48,7 +45,6 @@ export async function createChangePasswordLink(userId: string) {
     const now = new Date().getTime()
     const expiresIn = 3600000 //1 hour in ms
     const expiredDate = new Date(now + expiresIn)
-    console.log(expiredDate);
     const link = await passwordChangeRepository.save({
         userId: userId,
         active: true,

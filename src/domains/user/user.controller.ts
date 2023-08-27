@@ -52,6 +52,5 @@ export async function editCurrentUserHandler(req: Request, res: Response) {
 
 export async function deleteUserHandler(req: Request, res: Response) {
     const {id} = req.params
-    console.log(id);
     return res.send(await deleteUser(id));
 }
