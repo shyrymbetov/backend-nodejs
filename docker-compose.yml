@@ -2,21 +2,23 @@ version: '3.8'
 
 services:
   postgres:
-    build:
-      context: .
-      dockerfile: ./docker/postgres/Dockerfile
+    image: postgres:13-alpine
+#    build:
+#      context: .
+#      dockerfile: ./docker/postgres/Dockerfile
     container_name: nova_postgres
     ports:
       - 4682:5432
     environment:
-      POSTGRES_DB: '${DB_NAME}'
-      DB_NAME: '${DB_NAME}'
-      DB_SCHEMA: '${DB_SCHEMA}'
-      DB_APP_USER: '${DB_APP_USER}'
-      DB_APP_PASS: '${DB_APP_PASS}'
-      DB_MIGRATOR_USER: '${DB_MIGRATOR_USER}'
-      DB_MIGRATOR_PASS: '${DB_MIGRATOR_PASS}'
-      POSTGRES_PASSWORD: '${DB_MIGRATOR_PASS}'
+      POSTGRES_DB: $DB_NAME
+      DB_NAME: $DB_NAME
+      DB_SCHEMA: $DB_SCHEMA
+      DB_APP_USER: $DB_APP_USER
+      DB_APP_PASS: $DB_APP_PASS
+      DB_MIGRATOR_USER: $DB_MIGRATOR_USER
+      DB_MIGRATOR_PASS: $DB_MIGRATOR_PASS
+      POSTGRES_USER: $DB_APP_USER
+      POSTGRES_PASSWORD: $DB_APP_PASS
     restart: always
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres']
@@ -24,14 +26,13 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - ./postgres1:/var/lib/postgresql/data
+      - ./docker/postgres:/docker-entrypoint-initdb.d/
     networks:
       - default
 
   backend:
-    build:
-      context: .
-      dockerfile: ./docker/backend/Dockerfile
+    build: .
     ports:
       - "3003:3003"
     env_file:
@@ -39,8 +40,6 @@ services:
     volumes:
       - $EXTERNAL_PATH/files:$FILE_PATH
     depends_on:
-      - postgres
-    links:
       - postgres
     networks:
       - default
