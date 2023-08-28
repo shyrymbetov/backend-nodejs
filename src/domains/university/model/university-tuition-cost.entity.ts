@@ -23,14 +23,11 @@ export class UniversityTuitionCostEntity {
     @Column({type: 'varchar', nullable: true})
     title!: string | null
 
-    @Column({type: 'varchar',  nullable: true})
+    @Column({type: 'text',  nullable: true})
     description!: string | null
 
     @Column({type: 'integer', nullable: true})
     tuitionCost!: number | null
-
-    @Column({type: 'integer', nullable: true})
-    fullCost!: number| null
 
     @Column({ type: 'json',nullable: true })
     additionalCost!: CostAdditionalType[]

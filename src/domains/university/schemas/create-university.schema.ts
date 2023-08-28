@@ -5,7 +5,7 @@ import {KeyFactsSchema} from "./key-facts.schema";
 import {RatingInformationSchema} from "./rating-information.schema";
 import {UniversityImportantDateSchema} from "./university-important-date.schema";
 import {UniversityAdmissionSchema} from "./university-addmission.schema";
-import {UniversityTuitionCostSchema} from "./university-tuitian-cost.schema";
+import {UniversityTuitionCostSchema} from "./university-tuition-cost.schema";
 import {UniversityCampusInformationSchema} from "./university-campus-information.schema";
 import {UniversityDiscountScholarshipsSchema} from "./university-discount-scholarships.schema";
 import {UniversityDegreeSchema} from "./university-degrees.schema";

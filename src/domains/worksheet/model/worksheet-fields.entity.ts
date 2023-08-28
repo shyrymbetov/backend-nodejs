@@ -26,16 +26,19 @@ export class WorksheetFieldsEntity {
     type!: WorksheetFieldEnum
 
     @Column({type:'varchar', nullable: true})
-    placeholder!: string
+    placeholder!: string | null
 
-    @Column({type:'varchar',nullable: true})
-    description!: string
+    @Column({type:'text',nullable: true})
+    description!: string | null
 
     @Column({type:'varchar',nullable: true})
     title!: string | null
 
     @Column({default: false})
     required!: boolean
+
+    @Column({default: 0})
+    index!: number
 
     @Column({type:'boolean',nullable: true})
     isMultipleUpload!: boolean | null

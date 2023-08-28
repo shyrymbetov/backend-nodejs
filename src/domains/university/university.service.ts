@@ -3,7 +3,7 @@ import {UniversityEntity} from './model/university.entity';
 import {CreateUniversityDto} from "./dtos/create-university.dto";
 import {GetUniversitiesFilterDto} from "./dtos/get-univerties-params.dto";
 import {UniversityActionsDto} from "./dtos/university-actions.dto";
-import {BadGateway} from "http-errors";
+import {duplicateWorksheet} from "../worksheet/worksheet.service";
 
 const universityRepository = dataSource.getRepository(UniversityEntity);
 
@@ -82,7 +82,7 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto) 
 
     if (filter.universityName) {
         conditionString += 'and LOWER(university.universityName) like LOWER(:universityName) '
-        conditionParameters['universityName'] = `%${filter.search}%`
+        conditionParameters['universityName'] = `%${filter.universityName}%`
     }
 
     if (filter.faculty) {
@@ -142,6 +142,13 @@ export async function getUniversityById(id: string): Promise<UniversityEntity | 
 
     return university
 }
+export async function getUniversityShortDataById(id: string): Promise<UniversityEntity | null> {
+    return await universityRepository
+        .createQueryBuilder('university')
+        .leftJoinAndSelect('university.country', 'country')
+        .where('university.id = :id', {id})
+        .getOne()
+}
 
 export async function createUniversity(universityDto: CreateUniversityDto) {
     return await universityRepository.save(universityDto);
@@ -150,6 +157,26 @@ export async function createUniversity(universityDto: CreateUniversityDto) {
 export async function editUniversity(id: string, universityDto: CreateUniversityDto) {
     universityDto.id = id
     return await universityRepository.save(universityDto);
+}
+export async function duplicateUniversity(id: string) {
+    const duplicateUniversity = await getUniversityById(id)
+    if (!duplicateUniversity) {
+        throw new DOMException("University not exists")
+    }
+    const duplicateWorksheetId = duplicateUniversity.worksheet?.id
+    // @ts-ignore
+    delete duplicateUniversity['id']
+    duplicateUniversity.universityName += " duplicate"
+    duplicateUniversity.isVisible = false
+    duplicateUniversity.canApply = false
+    duplicateUniversity.worksheet = undefined
+
+    const savedUni = await universityRepository.save(duplicateUniversity);
+    if (duplicateWorksheetId && savedUni) {
+        await duplicateWorksheet(duplicateWorksheetId, savedUni.id)
+    }
+
+    return savedUni
 }
 
 export async function editUniversityActions(id: string, universityDto: UniversityActionsDto) {

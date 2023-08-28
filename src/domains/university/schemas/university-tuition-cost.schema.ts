@@ -6,7 +6,6 @@ export const UniversityTuitionCostSchema = z.object({
     title: z.string().nullable().optional().transform((val) => val ? val: undefined),
     description: z.string().nullable().optional().transform((val) => val ? val: undefined),
     tuitionCost: z.number().positive().nullable().optional().transform((val) => val ? val: undefined),
-    fullCost: z.number().positive().nullable().optional().transform((val) => val ? val: undefined),
     additionalCost: z.array(
         z.object({
             name: z.string().optional().nullable().transform((val) => val ?? undefined),

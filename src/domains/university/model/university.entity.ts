@@ -52,7 +52,7 @@ export class UniversityEntity {
     @Column()
     city!: string
 
-    @Column({type:'varchar', nullable: true})
+    @Column({type:'text', nullable: true})
     description!: string | null
 
     @Column({type: 'uuid', nullable: true})
@@ -78,7 +78,7 @@ export class UniversityEntity {
     })
     topRating!: TopRatingEnum
 
-    @Column({nullable: true})
+    @Column({type: 'text', nullable: true})
     fullDescription!: string
 
     @OneToMany(
@@ -138,7 +138,7 @@ export class UniversityEntity {
 
 
     @OneToOne(() => WorksheetEntity, worksheet => worksheet.university, { nullable: true })
-    worksheet!: WorksheetEntity;
+    worksheet!: WorksheetEntity | undefined;
 
     @OneToMany(() => ApplicationEntity, application => application.university)
     applications!: ApplicationEntity[];

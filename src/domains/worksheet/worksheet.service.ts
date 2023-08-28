@@ -2,6 +2,7 @@ import {UniversityEntity} from "../university/model/university.entity";
 import {CreateWorksheetDto} from "./dtos/create-worksheet.dto";
 import {dataSource} from "../../database";
 import {WorksheetEntity} from "./model/worksheet.entity";
+import {getUniversityById} from "../university/university.service";
 
 const worksheetRepository = dataSource.getRepository(WorksheetEntity);
 
@@ -24,6 +25,19 @@ export async function createWorksheet(universityDto: CreateWorksheetDto) {
 export async function editWorksheet(id: string, universityDto: CreateWorksheetDto) {
     universityDto.id = id
     return await worksheetRepository.save(universityDto);
+}
+
+export async function duplicateWorksheet(id: string, universityId: string) {
+    const duplicateWorksheet = await getWorksheetById(id)
+    if (!duplicateWorksheet) {
+        throw new DOMException("Worksheet not exists")
+    }
+    // @ts-ignore
+    delete duplicateWorksheet['id']
+    duplicateWorksheet.universityId = universityId
+
+    const savedWorksheet = await worksheetRepository.save(duplicateWorksheet);
+    return await worksheetRepository.save(savedWorksheet);
 }
 
 export async function deleteWorksheet(id: string) {

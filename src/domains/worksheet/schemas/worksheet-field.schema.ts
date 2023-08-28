@@ -7,9 +7,10 @@ export const WorksheetFieldSchema = z.object({
     id: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
     type: z.enum(['NAME', 'EMAIL', 'PHONE', 'DATE', 'DROPDOWN', 'LIMITATION', 'SURVEY', 'CHECK', 'FILE', 'QUANTITY', 'EDUCATION_FORM','TEXT'])
         .transform((val) => val ? (val as WorksheetFieldEnum) : undefined) ,
-    placeholder: z.string().optional(),
-    description: z.string().optional(),
+    placeholder: z.string().nullable().optional(),
+    description: z.string().nullable().optional(),
     title: z.string().nullable().optional(),
+    index: z.number(),
     required: z.boolean(),
     isFirstOptionEmpty: z.boolean().nullable().optional(),
     isCheckedByDefault: z.boolean().nullable().optional(),

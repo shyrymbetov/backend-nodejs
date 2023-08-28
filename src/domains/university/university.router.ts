@@ -6,7 +6,7 @@ import {
     editUniversityHandler,
     deleteUniversityHandler,
     editUniversityActionsHandler,
-    getUniversitiesToLandingHandler
+    getUniversitiesToLandingHandler, getUniversityShortDataHandler, duplicateUniversityHandler
 } from './university.controller';
 import {isAuthenticatedMiddleware} from '../../middlewares/is-authenticated.middleware';
 import {isAdminMiddleware} from '../../middlewares/is-admin.middleware';
@@ -15,8 +15,8 @@ import {universityDataRouter} from "./data/university-data.router";
 
 export const universityRouter = Router();
 universityRouter.route('/')
-    .get(getUniversitiesHandler) // make obratno isauth and is admin
-    .post(createUniversityHandler) // make obratno isauth and is admin
+    .get(isAuthenticatedMiddleware, getUniversitiesHandler)
+    .post(isAuthenticatedMiddleware, isAdminMiddleware, createUniversityHandler)
 ;
 
 universityRouter.route('/landing')
@@ -28,12 +28,16 @@ universityRouter.route('/:id')
   .patch(isAuthenticatedMiddleware, isAdminMiddleware, editUniversityHandler)
   .delete(isAuthenticatedMiddleware, isAdminMiddleware, deleteUniversityHandler)
 ;
+universityRouter.route('/duplicate/:id')
+  .put(isAuthenticatedMiddleware, isAdminMiddleware, duplicateUniversityHandler)
+;
+universityRouter.route('/short/:id')
+  .get(getUniversityShortDataHandler) // make obratno isauth and is admin
+;
 
 universityRouter.route('/actions/:id')
   .patch(isAuthenticatedMiddleware, isAdminMiddleware, editUniversityActionsHandler)
 ;
-
-
 
 universityRouter.use('/data', universityDataRouter);
 

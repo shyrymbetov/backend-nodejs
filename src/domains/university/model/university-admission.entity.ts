@@ -26,7 +26,7 @@ export class UniversityAdmissionEntity {
     @Column({type: 'varchar', nullable: true})
     genTitle!: string | null
 
-    @Column({type: 'varchar', nullable: true})
+    @Column({type: 'text', nullable: true})
     genDescription!: string | null
 
     @Column({type: 'json'})
@@ -35,7 +35,7 @@ export class UniversityAdmissionEntity {
     @Column({type: 'varchar', nullable: true})
     reqTitle!: string | null
 
-    @Column({type: 'varchar', nullable: true})
+    @Column({type: 'text', nullable: true})
     reqDescription!: string | null
 
     @Column({ type: 'json' })

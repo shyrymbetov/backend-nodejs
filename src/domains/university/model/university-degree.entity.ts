@@ -27,7 +27,7 @@ export class UniversityDegreeEntity {
     })
     degree!: EduDegreeEnum
 
-    @Column({nullable: true})
+    @Column({type: 'text', nullable: true})
     description!: string
 
     @OneToMany(() => UniversityFacultyEntity, faculty => faculty.degree, {cascade: true})

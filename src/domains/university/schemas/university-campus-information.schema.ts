@@ -6,7 +6,7 @@ export const UniversityCampusInformationSchema = z.object({
     title: z.string().optional().nullable().transform((val) => val ?? undefined),
     description: z.string().optional().nullable().transform((val) => val ?? undefined),
     additionalDescription: z.string().optional().nullable().transform((val) => val ?? undefined),
-    gallery: z.array(z.string()).optional().transform((val) => val ?? []),
+    image: z.string().nullable().default(null).optional().transform((val) => val ? val: undefined),
     additionalInformation: z.array(
         z.object({
             title: z.string().optional().nullable().transform((val) => val ?? undefined),
