@@ -135,6 +135,7 @@ export async function getUniversityById(id: string): Promise<UniversityEntity | 
         .leftJoinAndSelect('university.scholarships', 'scholarships')
         .leftJoinAndSelect('university.eduDegrees', 'eduDegrees')
         .leftJoinAndSelect('eduDegrees.faculties', 'faculties')
+        .leftJoinAndSelect('faculties.specialities', 'specialities')
         .leftJoinAndSelect('university.tuitionCost', 'tuitionCost')
         .leftJoinAndSelect('university.worksheet', 'worksheet')
         .where('university.id = :id', {id})
