@@ -7,18 +7,21 @@ import {
     DeleteDateColumn, ManyToOne,
 } from 'typeorm';
 import {env} from '../../../env';
-import {ApplicationEntity} from "./application.entity";
 import {WorksheetFieldEnum} from "../../worksheet/types/worksheet-field-type.enum";
 import {TextLimitationType} from "../../worksheet/types/text-limitation.type";
 import {FieldAnswerTypeEnum} from "../../worksheet/types/field-answer-type.enum";
 import {QuantityType} from "../../worksheet/types/quantity.type";
+import {ApplicationEntity} from "./application.entity";
 
 @Entity({schema: env.DB_SCHEMA})
-export class ApplicationOtherFieldsEntity {
+export class ApplicationFieldsEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @Column({ type: 'text', nullable: true })
+    @Column({type: 'uuid', nullable : true})
+    worksheetFieldId!: string
+
+    @Column({type: 'text', nullable : true})
     fieldValue!: string
 
     //Academic Information
@@ -29,16 +32,22 @@ export class ApplicationOtherFieldsEntity {
     type!: WorksheetFieldEnum
 
     @Column({type:'varchar', nullable: true})
-    placeholder!: string
+    placeholder!: string | null
 
-    @Column({type:'varchar',nullable: true})
-    description!: string
+    @Column({type:'text',nullable: true})
+    description!: string | null
 
     @Column({type:'varchar',nullable: true})
     title!: string | null
 
     @Column({default: false})
     required!: boolean
+
+    @Column({default: 0})
+    index!: number
+
+    @Column({type:'boolean',nullable: true})
+    isMultipleUpload!: boolean | null
 
     @Column({type:'boolean',nullable: true})
     isFirstOptionEmpty!: boolean | null
@@ -71,8 +80,29 @@ export class ApplicationOtherFieldsEntity {
     @Column({type: 'text', nullable: true})
     content!: string | null
 
+    @ManyToOne(() => ApplicationEntity, application => application.profileFields)
+    profile!: ApplicationEntity;
+
+    @ManyToOne(() => ApplicationEntity, application => application.contactsFields)
+    contacts!: ApplicationEntity;
+
+    @ManyToOne(() => ApplicationEntity, application => application.educationFields)
+    education!: ApplicationEntity;
+
+    @ManyToOne(() => ApplicationEntity, application => application.languagesFields)
+    languages!: ApplicationEntity;
+
+    @ManyToOne(() => ApplicationEntity, application => application.recommendationsFields)
+    recommendations!: ApplicationEntity;
+
+    @ManyToOne(() => ApplicationEntity, application => application.motivationFields)
+    motivation!: ApplicationEntity;
+
+    @ManyToOne(() => ApplicationEntity, application => application.documentsFields)
+    documents!: ApplicationEntity;
+
     @ManyToOne(() => ApplicationEntity, application => application.otherFields)
-    application!: ApplicationEntity;
+    other!: ApplicationEntity;
 
     @CreateDateColumn()
     createdAt!: Date;

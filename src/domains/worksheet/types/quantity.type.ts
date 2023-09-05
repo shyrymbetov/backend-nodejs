@@ -1,7 +1,7 @@
 
 export type QuantityType = {
-  defaultValue: number;
-  min: number;
-  max: number;
-  step: number;
+  defaultValue?: number | null;
+  min?: number | null;
+  max?: number | null;
+  step?: number | null;
 };

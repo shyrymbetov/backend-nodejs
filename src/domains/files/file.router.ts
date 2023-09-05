@@ -8,4 +8,4 @@ const upload = multer({ dest: "uploads" });
 export const fileRouter = Router();
 fileRouter.route('/single').post(isAuthenticatedMiddleware, upload.single("file"), uploadFileHandler);
 fileRouter.route('/multi').post(isAuthenticatedMiddleware, upload.array("files"), uploadFilesHandler);
-fileRouter.route('/:id').get(isAuthenticatedMiddleware, getFileHandler);
+fileRouter.route('/:id').get(getFileHandler);
