@@ -3,6 +3,7 @@ import {ApplicationEntity} from "./model/application.entity";
 import {GetApplicationsParamsDto} from "./dto/get-applications-params.dto";
 import {CreateApplicationDto} from "./dto/create-application.dto";
 import {ApplicationActionsDto} from "./dto/application-actions.dto";
+import {UserEntity} from "../user/model/user.entity";
 
 const applicationRepository = dataSource.getRepository(ApplicationEntity);
 
@@ -13,6 +14,11 @@ export async function getApplication(id: string): Promise<ApplicationEntity | nu
         .where('university.id = :id', {id})
         .getOne();
 }
+
+export async function getApplicationById(id: string): Promise<ApplicationEntity | null> {
+    return await applicationRepository.findOneBy({ id: id });
+}
+
 export async function getApplications(filter: GetApplicationsParamsDto): Promise<any> {
 
     const { conditionString, conditionParameters } = generateConditionsForGetUser(filter)
@@ -52,14 +58,12 @@ function generateConditionsForGetUser(filter: GetApplicationsParamsDto) {
 }
 
 export async function createApplication(application: CreateApplicationDto) {
-    // return await applicationRepository.save(application);
-    return 200
+    return await applicationRepository.save(application);
 }
 
 export async function editApplication(id: string, application: CreateApplicationDto) {
     application.id = id
-    // return await applicationRepository.save(application);
-    return 200
+    return await applicationRepository.save(application);
 }
 
 export async function editApplicationActions(id: string, universityDto: ApplicationActionsDto) {

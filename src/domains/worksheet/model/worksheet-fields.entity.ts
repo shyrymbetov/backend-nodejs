@@ -47,6 +47,9 @@ export class WorksheetFieldsEntity {
     isFirstOptionEmpty!: boolean | null
 
     @Column({type:'boolean',nullable: true})
+    isDescription!: boolean | null
+
+    @Column({type:'boolean',nullable: true})
     isCheckedByDefault!: boolean | null
 
     @Column({ type: 'json', nullable: true })

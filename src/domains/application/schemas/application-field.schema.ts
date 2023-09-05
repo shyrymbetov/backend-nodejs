@@ -19,6 +19,7 @@ export const ApplicationFieldSchema = z.object({
     required: z.boolean(),
     isMultipleUpload: z.boolean().nullable().optional(),
     isFirstOptionEmpty: z.boolean().nullable().optional(),
+    isDescription: z.boolean().nullable().optional(),
     isCheckedByDefault: z.boolean().nullable().optional(),
     textLimitation: z.object({
         minWords: z.number().optional(),

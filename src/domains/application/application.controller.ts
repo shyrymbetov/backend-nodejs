@@ -29,20 +29,22 @@ export async function getApplicationsByUserHandler(req: Request, res: Response) 
 export async function createApplicationHandler(req: Request, res: Response) {
   const studentId = req.user?.id ?? ''
   const { body } = CreateApplicationSchema.parse(req);
+  // return res.send(studentId);
   return res.send(await createApplication({...body, studentId: studentId}));
 }
 
 export async function editApplicationHandler(req: Request, res: Response) {
   let { id } = req.params
   const { body } = CreateApplicationSchema.parse(req);
-  return res.send(await editApplication(id, body));
-}
 
-export async function editApplicationStatusHandler(req: Request, res: Response) {
-  let { id } = req.params
-  const { body } = CreateApplicationSchema.parse(req);
   return res.send(await editApplication(id, body));
 }
+//
+// export async function editApplicationStatusHandler(req: Request, res: Response) {
+//   let { id } = req.params
+//   const { body } = CreateApplicationSchema.parse(req);
+//   return res.send(await editApplication(id, body));
+// }
 
 export async function deleteApplicationHandler(req: Request, res: Response) {
   let { id } = req.params

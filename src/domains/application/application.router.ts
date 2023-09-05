@@ -3,11 +3,12 @@ import {
     createApplicationHandler,
     deleteApplicationHandler,
     editApplicationHandler,
-    editApplicationStatusHandler,
+    // editApplicationStatusHandler,
     getApplicationHandler, getApplicationsByUserHandler,
     getApplicationsHandler
 } from './application.controller';
-import {isAuthenticatedMiddleware} from '../../middlewares/is-authenticated.middleware';
+import { isAuthenticatedMiddleware } from '../../middlewares/is-authenticated.middleware';
+import { isAbleToEditApplication } from '../../middlewares/is-able-to-edit-application.middleware';
 
 export const applicationRouter = Router();
 applicationRouter.route('/')
@@ -20,12 +21,12 @@ applicationRouter.route('/user/:id')
 
 applicationRouter.route('/:id')
   .get(isAuthenticatedMiddleware, getApplicationHandler)
-  .patch(isAuthenticatedMiddleware, editApplicationHandler)
+  .patch(isAuthenticatedMiddleware, isAbleToEditApplication, editApplicationHandler)
   .delete(isAuthenticatedMiddleware, deleteApplicationHandler)
 ;
 
 applicationRouter.route('/:id')
-    .patch(isAuthenticatedMiddleware, editApplicationStatusHandler)
+    // .patch(isAuthenticatedMiddleware, editApplicationStatusHandler)
 ;
 
 
