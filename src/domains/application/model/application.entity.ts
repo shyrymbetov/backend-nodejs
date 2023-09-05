@@ -44,6 +44,7 @@ export class ApplicationEntity {
     @Column({default: false, nullable: true})
     isArchived!: boolean
 
+
     @Column({
         type: 'enum',
         enum: ApplicationStatusEnum,

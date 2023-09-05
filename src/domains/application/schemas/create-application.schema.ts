@@ -8,8 +8,8 @@ export const CreateApplicationSchema = z.object({
   body: z
     .object({
         id: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
-        studentId: z.string().nullable().optional().transform((val) => undefined as string | undefined),
-        universityId: z.string().nullable().optional().transform((val) => undefined as string | undefined),
+        studentId: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
+        universityId: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
         specialityType: ApplicationSpecialitySchema.optional(),
         applicationStatus: z.enum(['DRAFT', 'APPLICATION_RECEIVED'])
             .transform((val) => val ? (val as ApplicationStatusEnum) : undefined),

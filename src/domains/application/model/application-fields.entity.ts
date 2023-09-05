@@ -16,13 +16,13 @@ import {ApplicationEntity} from "./application.entity";
 @Entity({schema: env.DB_SCHEMA})
 export class ApplicationFieldsEntity {
     @PrimaryGeneratedColumn('uuid')
-    id!: string;
+    id?: string;
 
     @Column({type: 'uuid', nullable : true})
-    worksheetFieldId!: string
+    worksheetFieldId?: string | undefined
 
     @Column({type: 'text', nullable : true})
-    fieldValue!: string
+    fieldValue!: string | null
 
     //Academic Information
     @Column({
