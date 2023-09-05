@@ -22,15 +22,8 @@ import {WorksheetFieldsEntity} from "./domains/worksheet/model/worksheet-fields.
 import {ApplicationEntity} from "./domains/application/model/application.entity";
 import {ChatEntity} from "./domains/chat/model/chat.entity";
 import {ChatMessagesEntity} from "./domains/chat/model/chat-messages.entity";
-import {ApplicationContactsFieldsEntity} from "./domains/application/model/application-contact-fields.entity";
-import {ApplicationEducationFieldsEntity} from "./domains/application/model/application-education-fields.entity";
-import {ApplicationLanguagesFieldsEntity} from "./domains/application/model/application-language-fields.entity";
-import {ApplicationRecommendationsFieldsEntity} from "./domains/application/model/application-recomandations-fields.entity";
-import {ApplicationMotivationFieldsEntity} from "./domains/application/model/application-motivation-fields.entity";
-import {ApplicationDocumentsFieldsEntity} from "./domains/application/model/application-documents-fields.entity";
-import {ApplicationOtherFieldsEntity} from "./domains/application/model/application-other-fields.entity";
-import {ApplicationProfileFieldsEntity} from "./domains/application/model/application-profile-fields.entity";
 import {UniversityAdmissionEntity} from "./domains/university/model/university-admission.entity";
+import {ApplicationFieldsEntity} from "./domains/application/model/application-fields.entity";
 
 const entities = [
   UserEntity,
@@ -52,17 +45,10 @@ const entities = [
   UniversityCountryEntity,
   WorksheetEntity,
   WorksheetFieldsEntity,
-  ApplicationEntity,
   ChatEntity,
   ChatMessagesEntity,
-  ApplicationContactsFieldsEntity,
-  ApplicationEducationFieldsEntity,
-  ApplicationLanguagesFieldsEntity,
-  ApplicationRecommendationsFieldsEntity,
-  ApplicationMotivationFieldsEntity,
-  ApplicationDocumentsFieldsEntity,
-  ApplicationOtherFieldsEntity,
-  ApplicationProfileFieldsEntity,
+  ApplicationEntity,
+  ApplicationFieldsEntity
 ]
 
 const dataSourceConfig: PostgresConnectionOptions = {
@@ -82,7 +68,8 @@ const dataSourceConfig: PostgresConnectionOptions = {
 export const config = {
   db: dataSourceConfig,
   api: {
-    port: env.API_PORT,
+    socket_port: env.API_PORT,
+    port: env.SOCKET_PORT,
     cors: {
       origin: env.CORS_ORIGIN,
       credentials: true,

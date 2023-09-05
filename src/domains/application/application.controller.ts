@@ -1,23 +1,50 @@
 import { Request, Response } from 'express';
+import {GetApplicationsFilterSchema} from "./schemas/get-applications-filter.schema";
+import {
+  createApplication,
+  deleteApplication,
+  editApplication,
+  getApplication,
+  getApplications
+} from "./application.service";
+import {CreateApplicationSchema} from "./schemas/create-application.schema";
 
 export async function getApplicationHandler(req: Request, res: Response) {
   let { id } = req.params
-  return res.send(200);
+  return res.send(await getApplication(id));
 }
 
 export async function getApplicationsHandler(req: Request, res: Response) {
-  return res.send(200);
+  const id = req.user?.id ?? ''
+  const {query} = GetApplicationsFilterSchema.parse(req);
+  return res.send(await getApplications(query));
+}
+
+export async function getApplicationsByUserHandler(req: Request, res: Response) {
+  const id = req.user?.id ?? ''
+  const {query} = GetApplicationsFilterSchema.parse(req);
+  return res.send(await getApplications(query));
 }
 
 export async function createApplicationHandler(req: Request, res: Response) {
-  return res.send(200);
+  const studentId = req.user?.id ?? ''
+  const { body } = CreateApplicationSchema.parse(req);
+  return res.send(await createApplication({...body, studentId: studentId}));
 }
 
 export async function editApplicationHandler(req: Request, res: Response) {
-  return res.send(200);
+  let { id } = req.params
+  const { body } = CreateApplicationSchema.parse(req);
+  return res.send(await editApplication(id, body));
+}
+
+export async function editApplicationStatusHandler(req: Request, res: Response) {
+  let { id } = req.params
+  const { body } = CreateApplicationSchema.parse(req);
+  return res.send(await editApplication(id, body));
 }
 
 export async function deleteApplicationHandler(req: Request, res: Response) {
-  const { id } = req.params
-  return res.send(200);
+  let { id } = req.params
+  return res.send(await deleteApplication(id));
 }

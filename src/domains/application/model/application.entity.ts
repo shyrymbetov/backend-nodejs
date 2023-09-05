@@ -14,35 +14,34 @@ import {ChatEntity} from "../../chat/model/chat.entity";
 import {ApplicationSpecialityType} from "../type/application-speciality.type";
 import {ApplicationStatusEnum} from "../type/application-status.enum";
 import {ApplicationActionStatusEnum} from "../type/application-action-status.enum";
-import {ApplicationContactsFieldsEntity} from "./application-contact-fields.entity";
-import {ApplicationEducationFieldsEntity} from "./application-education-fields.entity";
-import {ApplicationLanguagesFieldsEntity} from "./application-language-fields.entity";
-import {ApplicationRecommendationsFieldsEntity} from "./application-recomandations-fields.entity";
-import {ApplicationMotivationFieldsEntity} from "./application-motivation-fields.entity";
-import {ApplicationDocumentsFieldsEntity} from "./application-documents-fields.entity";
-import {ApplicationOtherFieldsEntity} from "./application-other-fields.entity";
-import {ApplicationProfileFieldsEntity} from "./application-profile-fields.entity";
+import {ApplicationFieldsEntity} from "./application-fields.entity";
 
 @Entity({schema: env.DB_SCHEMA})
 export class ApplicationEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @ManyToOne(() => UserEntity, user => user.applications)
-    @JoinColumn({name: 'studentId'}) // Correct the join column name to 'universityId'
+    @Column('uuid')
+    studentId!: string
+
+    @ManyToOne(() => UserEntity, user => user.applications, {nullable: true})
+    @JoinColumn({name: 'student_id'}) // Correct the join column name to 'universityId'
     student!: UserEntity;
 
-    @ManyToOne(() => UniversityEntity, university => university.applications)
-    @JoinColumn({name: 'universityId'}) // Correct the join column name to 'universityId'
-    university!: UniversityEntity;
+    @Column('uuid')
+    universityId!: string
 
-    @Column({type: 'json'})
+    @ManyToOne(() => UniversityEntity, {nullable: true})
+    @JoinColumn({ name: 'university_id' }) // Correct the join column name to 'universityId'
+    university?: UniversityEntity;
+
+    @Column({type: 'json', nullable: true})
     specialityType!: ApplicationSpecialityType
 
     @OneToOne(() => ChatEntity, chat => chat.application)
     chat!: UniversityEntity;
 
-    @Column()
+    @Column({default: false, nullable: true})
     isArchived!: boolean
 
     @Column({
@@ -56,46 +55,31 @@ export class ApplicationEntity {
         enum: ApplicationActionStatusEnum,
         nullable: true
     })
-    actionsStatus!: ApplicationActionStatusEnum
+    actionsStatus!: ApplicationActionStatusEnum | null
 
-    @OneToMany(() => ApplicationProfileFieldsEntity,
-        field => field.application, {eager: true, cascade: true})
-    profileFields!: ApplicationProfileFieldsEntity[];
+    @OneToMany(() => ApplicationFieldsEntity, date => date.profile, {eager: true, cascade: true})
+    profileFields!: ApplicationFieldsEntity[];
 
-    @OneToMany(() => ApplicationContactsFieldsEntity,
-        field => field.application,
-        {eager: true, cascade: true})
-    contactsFields!: ApplicationContactsFieldsEntity[];
+    @OneToMany(() => ApplicationFieldsEntity, date => date.contacts, {eager: true, cascade: true})
+    contactsFields!: ApplicationFieldsEntity[];
 
-    @OneToMany(() => ApplicationEducationFieldsEntity,
-        field => field.application,
-        {eager: true, cascade: true})
-    educationFields!: ApplicationEducationFieldsEntity[];
+    @OneToMany(() => ApplicationFieldsEntity, date => date.education, {eager: true, cascade: true})
+    educationFields!: ApplicationFieldsEntity[];
 
-    @OneToMany(() => ApplicationLanguagesFieldsEntity,
-        field => field.application,
-        {eager: true, cascade: true})
-    languagesFields!: ApplicationLanguagesFieldsEntity[];
+    @OneToMany(() => ApplicationFieldsEntity, date => date.languages, {eager: true, cascade: true})
+    languagesFields!: ApplicationFieldsEntity[];
 
-    @OneToMany(() => ApplicationRecommendationsFieldsEntity,
-        field => field.application,
-        {eager: true, cascade: true})
-    recommendationsFields!: ApplicationRecommendationsFieldsEntity[];
+    @OneToMany(() => ApplicationFieldsEntity, date => date.recommendations, {eager: true, cascade: true})
+    recommendationsFields!: ApplicationFieldsEntity[];
 
-    @OneToMany(() => ApplicationMotivationFieldsEntity,
-        field => field.application,
-        {eager: true, cascade: true})
-    motivationFields!: ApplicationMotivationFieldsEntity[];
+    @OneToMany(() => ApplicationFieldsEntity, date => date.motivation, {eager: true, cascade: true})
+    motivationFields!: ApplicationFieldsEntity[];
 
-    @OneToMany(() => ApplicationDocumentsFieldsEntity,
-        field => field.application,
-        {eager: true, cascade: true})
-    documentsFields!: ApplicationDocumentsFieldsEntity[];
+    @OneToMany(() => ApplicationFieldsEntity, date => date.documents, {eager: true, cascade: true})
+    documentsFields!: ApplicationFieldsEntity[];
 
-    @OneToMany(() => ApplicationOtherFieldsEntity,
-        field => field.application,
-        {eager: true, cascade: true})
-    otherFields!: ApplicationOtherFieldsEntity[];
+    @OneToMany(() => ApplicationFieldsEntity, date => date.other, {eager: true, cascade: true})
+    otherFields!: ApplicationFieldsEntity[];
 
     @CreateDateColumn()
     createdAt!: Date;

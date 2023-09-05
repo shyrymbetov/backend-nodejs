@@ -1,7 +1,7 @@
 
 export type TextLimitationType = {
-  minWords: number;
-  maxWords: number;
-  minChar: number;
-  maxChar: number;
+  minWords?: number | null;
+  maxWords?: number | null;
+  minChar?: number | null;
+  maxChar?: number | null;
 };

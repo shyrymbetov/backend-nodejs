@@ -8,7 +8,6 @@ export const chatRouter = Router();
 
 chatRouter.route('/:id')
   .get(isAuthenticatedMiddleware, getChatMessagesHandler)
-  // .post(isAuthenticatedMiddleware, sendMessageToChatHandler)
 ;
 
 

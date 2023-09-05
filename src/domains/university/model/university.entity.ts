@@ -140,9 +140,6 @@ export class UniversityEntity {
     @OneToOne(() => WorksheetEntity, worksheet => worksheet.university, { nullable: true })
     worksheet!: WorksheetEntity | undefined;
 
-    @OneToMany(() => ApplicationEntity, application => application.university)
-    applications!: ApplicationEntity[];
-
     @CreateDateColumn()
     createdAt!: Date;
 
