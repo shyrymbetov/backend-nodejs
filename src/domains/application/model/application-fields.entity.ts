@@ -81,35 +81,35 @@ export class ApplicationFieldsEntity {
     content!: string | null
 
     @ManyToOne(() => ApplicationEntity, application => application.profileFields)
-    profile!: ApplicationEntity;
+    profile?: ApplicationEntity;
 
     @ManyToOne(() => ApplicationEntity, application => application.contactsFields)
-    contacts!: ApplicationEntity;
+    contacts?: ApplicationEntity;
 
     @ManyToOne(() => ApplicationEntity, application => application.educationFields)
-    education!: ApplicationEntity;
+    education?: ApplicationEntity;
 
     @ManyToOne(() => ApplicationEntity, application => application.languagesFields)
-    languages!: ApplicationEntity;
+    languages?: ApplicationEntity;
 
     @ManyToOne(() => ApplicationEntity, application => application.recommendationsFields)
-    recommendations!: ApplicationEntity;
+    recommendations?: ApplicationEntity;
 
     @ManyToOne(() => ApplicationEntity, application => application.motivationFields)
-    motivation!: ApplicationEntity;
+    motivation?: ApplicationEntity;
 
     @ManyToOne(() => ApplicationEntity, application => application.documentsFields)
-    documents!: ApplicationEntity;
+    documents?: ApplicationEntity;
 
     @ManyToOne(() => ApplicationEntity, application => application.otherFields)
-    other!: ApplicationEntity;
+    other?: ApplicationEntity;
 
     @CreateDateColumn()
-    createdAt!: Date;
+    createdAt?: Date;
 
     @UpdateDateColumn()
-    updatedAt!: Date;
+    updatedAt?: Date;
 
     @DeleteDateColumn()
-    deactivatedAt!: Date;
+    deactivatedAt?: Date;
 }

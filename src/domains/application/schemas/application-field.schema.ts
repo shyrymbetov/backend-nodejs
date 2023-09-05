@@ -7,7 +7,7 @@ import {TextLimitationType} from "../../worksheet/types/text-limitation.type";
 import {QuantityType} from "../../worksheet/types/quantity.type";
 
 export const ApplicationFieldSchema = z.object({
-    id: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
+    id: z.string().optional(),
     worksheetFieldId: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
     type: z.enum(['NAME', 'EMAIL', 'PHONE', 'DATE', 'DROPDOWN', 'LIMITATION', 'SURVEY', 'CHECK', 'FILE', 'QUANTITY', 'EDUCATION_FORM','TEXT'])
         .transform((val) => (val as WorksheetFieldEnum)) ,

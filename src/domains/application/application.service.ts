@@ -52,12 +52,14 @@ function generateConditionsForGetUser(filter: GetApplicationsParamsDto) {
 }
 
 export async function createApplication(application: CreateApplicationDto) {
-    return await applicationRepository.save(application);
+    // return await applicationRepository.save(application);
+    return 200
 }
 
 export async function editApplication(id: string, application: CreateApplicationDto) {
     application.id = id
-    return await applicationRepository.save(application);
+    // return await applicationRepository.save(application);
+    return 200
 }
 
 export async function editApplicationActions(id: string, universityDto: ApplicationActionsDto) {

@@ -48,7 +48,7 @@ const entities = [
   ChatEntity,
   ChatMessagesEntity,
   ApplicationEntity,
-  ApplicationFieldsEntity
+  ApplicationFieldsEntity,
 ]
 
 const dataSourceConfig: PostgresConnectionOptions = {
