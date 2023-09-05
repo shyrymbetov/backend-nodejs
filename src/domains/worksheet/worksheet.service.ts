@@ -12,10 +12,18 @@ export async function getWorksheetById(id: string): Promise<WorksheetEntity | nu
 }
 
 export async function getWorksheetForLanding(id: string): Promise<WorksheetEntity | null> {
-    return await worksheetRepository.findOne({
-        where: {id: id},
-        relations: ['university.canApply'],
-    });
+    return await worksheetRepository.createQueryBuilder('worksheet')
+        .leftJoin('worksheet.university', 'university')
+        .leftJoinAndSelect('worksheet.profileFields', 'profileFields')
+        .leftJoinAndSelect('worksheet.contactsFields', 'contactsFields')
+        .leftJoinAndSelect('worksheet.educationFields', 'educationFields')
+        .leftJoinAndSelect('worksheet.languagesFields', 'languagesFields')
+        .leftJoinAndSelect('worksheet.recommendationsFields', 'recommendationsFields')
+        .leftJoinAndSelect('worksheet.motivationFields', 'motivationFields')
+        .leftJoinAndSelect('worksheet.documentsFields', 'documentsFields')
+        .leftJoinAndSelect('worksheet.otherFields', 'otherFields')
+        .where('worksheet.id = :id AND university.canApply', { id })
+        .getOne();
 }
 
 export async function createWorksheet(universityDto: CreateWorksheetDto) {
