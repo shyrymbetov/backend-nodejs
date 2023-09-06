@@ -14,5 +14,5 @@ export const GetApplicationsFilterSchema = z.object({
       fall: z.string().optional(),
       status: z.string().optional(),
   }),
-  params: z.object({}).strict(),
+  params: z.object({}),
 });

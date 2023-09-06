@@ -47,7 +47,7 @@ export async function isAbleToEditApplication(
     } catch (err) {
         console.error(err);
 
-        throw new BadRequest('Invalid authorization token');
+        throw new BadRequest('something get wrong');
     }
 
     return next();
