@@ -50,6 +50,40 @@ export async function getStudents(filter: GetStudentsParamsDto): Promise<any> {
     }
 }
 
+export async function getStudentsByMasterOrOrientatorIdWithApplications(filter: GetStudentsParamsDto, id: String) {
+    const data = await userRepository
+        .createQueryBuilder('user')
+        .leftJoin('user.applications', 'applications')
+        .leftJoin('applications.university', 'university')
+        .select([
+            'user.id',
+            'user.firstName',
+            'user.lastName',
+            'user.email',
+            'user.avatar',
+            'applications.id',
+            'applications.applicationStatus',
+            'applications.actionsStatus',
+            'university.universityName'
+        ])
+        .where('applications.applicationStatus != :status AND (user.masterId = :id OR user.orientatorId = :id)', { status: 'DRAFT', id: id })
+        .skip((filter.page - 1) * filter.size)
+        .take(filter.size)
+        .getMany();
+
+    const totalCount = await userRepository
+        .createQueryBuilder('user')
+        .leftJoin('user.applications', 'applications')
+        .leftJoin('applications.university', 'university')
+        .where('applications.applicationStatus != :status AND (user.masterId = :id OR user.orientatorId = :id)', { status: 'DRAFT', id: id })
+        .getCount();
+
+    return {
+        data: data,
+        totalCount: totalCount
+    }
+}
+
 function generateConditionsForGetStudents(filter: GetStudentsParamsDto) {
     let conditionString = 'students.role IN (:...roles) '
     let conditionParameters = {

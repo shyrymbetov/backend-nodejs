@@ -8,7 +8,8 @@ import {
     getApplicationsByUserHandler,
     getApplicationsHandler,
     getMyApplicationHandler,
-    getMyStudentApplicationHandler
+    getMyStudentApplicationByIdHandler,
+    getMyStudentsApplicationsHandler
 } from './application.controller';
 import { isAuthenticatedMiddleware } from '../../middlewares/is-authenticated.middleware';
 import { isAbleToEditApplication } from '../../middlewares/is-able-to-edit-application.middleware';
@@ -27,14 +28,19 @@ applicationRouter.route('/my')
 // .patch(isAuthenticatedMiddleware, editApplicationStatusHandler)
 ;
 
+applicationRouter.route('/my-students')
+    .get(isAuthenticatedMiddleware, getMyStudentsApplicationsHandler)
+
 applicationRouter.route('/my/:id')
-    .get(isAuthenticatedMiddleware, getMyStudentApplicationHandler)
+    .get(isAuthenticatedMiddleware, getMyStudentApplicationByIdHandler)
 
 applicationRouter.route('/:id')
   .get(isAuthenticatedMiddleware, getApplicationHandler)
   .patch(isAuthenticatedMiddleware, isAbleToEditApplication, editApplicationHandler)
   .delete(isAuthenticatedMiddleware, deleteApplicationHandler)
 ;
+
+
 
 
 

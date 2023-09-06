@@ -7,7 +7,8 @@ import {
   getApplication,
   getApplications,
   getStudentApllicationById,
-  getStudentApllicationByIdWithPagination
+  getStudentApplicationByIdWithPagination,
+  getMyStudentsApplicationsWithPagination
 } from "./application.service";
 import {CreateApplicationSchema} from "./schemas/create-application.schema";
 
@@ -33,13 +34,17 @@ export async function getMyApplicationHandler(req: Request, res: Response) {
   return res.send(await getStudentApllicationById(id));
 }
 
-export async function getMyStudentApplicationHandler(req: Request, res: Response) {
+export async function getMyStudentApplicationByIdHandler(req: Request, res: Response) {
   const id = req.params.id
   const {query} = GetApplicationsFilterSchema.parse(req);
-  console.log(query)
-  return res.send(await getStudentApllicationByIdWithPagination(query, id));
+  return res.send(await getStudentApplicationByIdWithPagination(query, id));
 }
 
+export async function getMyStudentsApplicationsHandler(req: Request, res: Response) {
+  const id = req.user?.id ?? ''
+  const {query} = GetApplicationsFilterSchema.parse(req);
+  return res.send(await getMyStudentsApplicationsWithPagination(query, id));
+}
 
 
 

@@ -3,6 +3,7 @@ import {ApplicationEntity} from "./model/application.entity";
 import {GetApplicationsParamsDto} from "./dto/get-applications-params.dto";
 import {CreateApplicationDto} from "./dto/create-application.dto";
 import {ApplicationActionsDto} from "./dto/application-actions.dto";
+import {getStudentsByMasterOrOrientatorIdWithApplications} from "../students/student.service"
 
 const applicationRepository = dataSource.getRepository(ApplicationEntity);
 
@@ -54,9 +55,7 @@ export async function getStudentApllicationById(studentId: string): Promise<any>
         .getRawMany()
 }
 
-export async function getStudentApllicationByIdWithPagination(filter: GetApplicationsParamsDto, studentId: string): Promise<any> {
-
-    // const { conditionString, conditionParameters } = generateConditionsForGetUser(filter)
+export async function getStudentApplicationByIdWithPagination(filter: GetApplicationsParamsDto, studentId: string): Promise<any> {
 
     const data = await applicationRepository.createQueryBuilder('application')
         .where('application.student_id = :id', { id: studentId })
@@ -79,6 +78,10 @@ export async function getStudentApllicationByIdWithPagination(filter: GetApplica
     }
 }
 
+export async function getMyStudentsApplicationsWithPagination(filter: GetApplicationsParamsDto, expertId: string): Promise<any> {
+
+    return await getStudentsByMasterOrOrientatorIdWithApplications(filter, expertId)
+}
 
 
 function generateConditionsForGetUser(filter: GetApplicationsParamsDto) {
