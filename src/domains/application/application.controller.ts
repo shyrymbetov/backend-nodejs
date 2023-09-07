@@ -8,7 +8,8 @@ import {
   getApplications,
   getStudentApllicationById,
   getStudentApplicationByIdWithPagination,
-  getMyStudentsApplicationsWithPagination
+  getMyStudentsApplicationsWithPagination,
+  getMyStudentsApplicationsDraft
 } from "./application.service";
 import {CreateApplicationSchema} from "./schemas/create-application.schema";
 
@@ -37,13 +38,19 @@ export async function getMyApplicationHandler(req: Request, res: Response) {
 export async function getMyStudentApplicationByIdHandler(req: Request, res: Response) {
   const id = req.params.id
   const {query} = GetApplicationsFilterSchema.parse(req);
+
   return res.send(await getStudentApplicationByIdWithPagination(query, id));
 }
 
 export async function getMyStudentsApplicationsHandler(req: Request, res: Response) {
   const id = req.user?.id ?? ''
   const {query} = GetApplicationsFilterSchema.parse(req);
-  return res.send(await getMyStudentsApplicationsWithPagination(query, id));
+  const isDraft = (req.query.isdraft)
+  if (isDraft == "true"){
+    return res.send(await getMyStudentsApplicationsDraft(id))
+  } else {
+    return res.send(await getMyStudentsApplicationsWithPagination(query, id));
+  }
 }
 
 

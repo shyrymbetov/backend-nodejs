@@ -3,8 +3,14 @@ import {CreateCountrySchema} from "./schemas/create-country.schema";
 import {
   createUniversitiesCountry,
   deleteUniversitiesCountry,
-  getUniversitiesCountry, getUniversitiesFaculty, getUniversitiesSpecialities,
-  getUniversitiesState
+  getUniversitiesCountry,
+  getUniversitiesFaculty,
+  getUniversitiesSpecialities,
+  getUniversitiesState,
+  getEduDegreeById,
+  getFacultyById,
+  getImportantDayById,
+  getSpecialityById
 } from "./university-data.service";
 import {GetUniversityCountryFilterSchema} from "./schemas/get-university-country.schema";
 
@@ -36,5 +42,29 @@ export async function getUniversitiesSpecialitiesHandler(req: Request, res: Resp
   const {query} = GetUniversityCountryFilterSchema.parse(req);
   return res.send(await getUniversitiesSpecialities(query));
 }
+
+export async function getEduDegreeByIdHandler(req: Request, res: Response) {
+  const id = req.params.id
+  return res.send(await getEduDegreeById(id))
+}
+
+export async function getFacultyByIdHandler(req: Request, res: Response) {
+  const id = req.params.id
+  return res.send(await getFacultyById(id))
+}
+
+export async function getImportantDayByIdHandler(req: Request, res: Response) {
+  const id = req.params.id
+  return res.send(await getImportantDayById(id))
+}
+
+export async function getSpecialityByIdHandler(req: Request, res: Response) {
+  const id = req.params.id
+  return res.send(await getSpecialityById(id))
+}
+
+
+
+
 
 

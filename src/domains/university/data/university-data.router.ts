@@ -6,6 +6,10 @@ import {
     getUniversitiesFacultyHandler,
     getUniversitiesSpecialitiesHandler,
     getUniversitiesStateHandler,
+    getEduDegreeByIdHandler,
+    getFacultyByIdHandler,
+    getImportantDayByIdHandler,
+    getSpecialityByIdHandler
 } from './university-data.controller';
 import {isAuthenticatedMiddleware} from "../../../middlewares/is-authenticated.middleware";
 import {isAdminMiddleware} from "../../../middlewares/is-admin.middleware";
@@ -23,4 +27,14 @@ universityDataRouter.route('/state').get(getUniversitiesStateHandler);
 universityDataRouter.route('/faculty').get(getUniversitiesFacultyHandler);
 universityDataRouter.route('/specialities').get(getUniversitiesSpecialitiesHandler);
 
+universityDataRouter.route('/edu-degree/:id')
+    .get(isAuthenticatedMiddleware, getEduDegreeByIdHandler)
 
+universityDataRouter.route('/faculty/:id')
+    .get(isAuthenticatedMiddleware, getFacultyByIdHandler)
+
+universityDataRouter.route('/important-day/:id')
+    .get(isAuthenticatedMiddleware, getImportantDayByIdHandler)
+
+universityDataRouter.route('/speciality/:id')
+    .get(isAuthenticatedMiddleware, getSpecialityByIdHandler)

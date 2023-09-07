@@ -83,6 +83,37 @@ export async function getMyStudentsApplicationsWithPagination(filter: GetApplica
     return await getStudentsByMasterOrOrientatorIdWithApplications(filter, expertId)
 }
 
+export async function getMyStudentsApplicationsDraft(expertId: string): Promise<any> {
+    const data = await applicationRepository
+        .createQueryBuilder('application')
+        .leftJoinAndSelect('application.student', 'student')
+        .leftJoinAndSelect('application.university', 'university')
+        .addSelect([
+            'application.specialityType->\'eduDegreeId\' AS eduDegreeId',
+            'application.specialityType->\'facultyId\' AS facultyId',
+            'application.specialityType->\'specialityId\' AS specialityId',
+            'application.specialityType->\'importantDayId\' AS importantDayId',
+        ])
+        .select([
+            'application.id',
+            'application.createdAt',
+            'application.specialityType',
+            'university.universityName',
+            'student.lastName',
+            'student.firstName',
+            'student.avatar',
+            'application.applicationStatus',
+            'application.actionsStatus',
+        ])
+        .where('student.orientatorId = :id OR student.masterId = :id', { id: expertId })
+        .getMany()
+
+
+    return data
+}
+
+
+
 
 function generateConditionsForGetUser(filter: GetApplicationsParamsDto) {
     let conditionString = 'true '
