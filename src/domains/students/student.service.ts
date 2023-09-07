@@ -5,6 +5,7 @@ import {createUser, getMasterExpert, getRoleByType, getUserById} from "../user/u
 import {CreateStudentDto} from "./dtos/create-student.dto";
 import {GetStudentsParamsDto} from "./dtos/get-student-params.dto";
 import {EditStudentManagerDto} from "./dtos/edit-student-manager.dto";
+import {GetApplicationsParamsDto} from "../application/dto/get-applications-params.dto";
 
 const userRepository = dataSource.getRepository(UserEntity);
 
@@ -51,6 +52,9 @@ export async function getStudents(filter: GetStudentsParamsDto): Promise<any> {
 }
 
 export async function getStudentsByMasterOrOrientatorIdWithApplications(filter: GetStudentsParamsDto, id: String) {
+
+    let {conditionString, conditionParameters} = generateConditionsForGetStudentsWithApplication(filter, id)
+
     const data = await userRepository
         .createQueryBuilder('user')
         .leftJoin('user.applications', 'applications')
@@ -66,7 +70,7 @@ export async function getStudentsByMasterOrOrientatorIdWithApplications(filter: 
             'applications.actionsStatus',
             'university.universityName'
         ])
-        .where('applications.applicationStatus != :status AND (user.masterId = :id OR user.orientatorId = :id)', { status: 'DRAFT', id: id })
+        .where(conditionString, conditionParameters)
         .skip((filter.page - 1) * filter.size)
         .take(filter.size)
         .getMany();
@@ -75,7 +79,7 @@ export async function getStudentsByMasterOrOrientatorIdWithApplications(filter: 
         .createQueryBuilder('user')
         .leftJoin('user.applications', 'applications')
         .leftJoin('applications.university', 'university')
-        .where('applications.applicationStatus != :status AND (user.masterId = :id OR user.orientatorId = :id)', { status: 'DRAFT', id: id })
+        .where(conditionString, conditionParameters)
         .getCount();
 
     return {
@@ -83,6 +87,52 @@ export async function getStudentsByMasterOrOrientatorIdWithApplications(filter: 
         totalCount: totalCount
     }
 }
+
+function generateConditionsForGetStudentsWithApplication(filter: GetApplicationsParamsDto, id: String) {
+
+    let conditionString = 'true '
+    let conditionParameters = {}
+    if (filter.country) {
+        conditionString += 'and university.countryId = :country '
+        conditionParameters['country'] = filter.country
+    }
+
+    if (filter.university) {
+        conditionString += 'and university_id = :university '
+        conditionParameters['university'] = filter.university
+    }
+
+    if (filter.semester) {
+        conditionString += "and applications.specialityType ->> 'importantDayId' = :semester "
+        conditionParameters['semester'] = filter.semester
+    }
+
+    if (filter.school) {
+        conditionString += 'and student.school = :school '
+        conditionParameters['school'] = filter.school
+    }
+    if (filter.expert) {
+        conditionString += 'and student.masterId = :expert '
+        conditionParameters['expert'] = filter.expert
+    }
+
+    if (filter.orientator) {
+        conditionString += 'and student.orientatorId = :orientator '
+        conditionParameters['orientator'] = filter.orientator
+    }
+
+    conditionString += 'and applications.applicationStatus != :status AND (user.masterId = :id OR user.orientatorId = :id) '
+    conditionParameters['status'] = 'DRAFT'
+    conditionParameters['id'] = id
+
+    return {
+        conditionString: conditionString,
+        conditionParameters: conditionParameters,
+    };
+
+
+}
+
 
 function generateConditionsForGetStudents(filter: GetStudentsParamsDto) {
     let conditionString = 'students.role IN (:...roles) '

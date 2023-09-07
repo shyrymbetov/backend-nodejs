@@ -21,29 +21,15 @@ export async function isAbleToEditApplication(
         application = await getApplicationById(req.params.id)
         applicationStatus = application.applicationStatus
 
-        if (applicationStatus == "DRAFT"){
-            if (role == "orientator"){
-                return next()
-            }
-            else if (["student", "schoolboy"].includes(role)){
-                if (user.id == application.studentId){
-                    return next()
-                } else {
-                    return res.status(405).send('Method Not Allowed');
-                }
-            } else {
-                return res.status(405).send('Method Not Allowed');
-            }
-        } else {
-            if (["admin", "expert", "master-expert"].includes(role)) {
-                return next()
-            } else {
-                res.status(405).send('Method Not Allowed');
-            }
+        if (applicationStatus != "DRAFT" && ["admin", "expert", "master-expert"].includes(role)){
+            return next()
+        } else if (role == "orientator"){
+            return next()
+        } else if (["student", "schoolboy"].includes(role) && user.id == application.studentId){
+            return next()
         }
 
-        console.log(applicationStatus)
-
+        return res.status(405).send('Method Not Allowed');
     } catch (err) {
         console.error(err);
 

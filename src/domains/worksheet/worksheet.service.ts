@@ -3,6 +3,7 @@ import {CreateWorksheetDto} from "./dtos/create-worksheet.dto";
 import {dataSource} from "../../database";
 import {WorksheetEntity} from "./model/worksheet.entity";
 import {getUniversityById} from "../university/university.service";
+import {editApplicationAfterWorkSheetChange} from "../application/application.service";
 
 const worksheetRepository = dataSource.getRepository(WorksheetEntity);
 
@@ -32,6 +33,7 @@ export async function createWorksheet(universityDto: CreateWorksheetDto) {
 
 export async function editWorksheet(id: string, universityDto: CreateWorksheetDto) {
     universityDto.id = id
+    // await editApplicationAfterWorkSheetChange(universityDto.universityId, universityDto)
     return await worksheetRepository.save(universityDto);
 }
 

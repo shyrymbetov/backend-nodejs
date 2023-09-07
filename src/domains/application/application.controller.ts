@@ -9,9 +9,10 @@ import {
   getStudentApllicationById,
   getStudentApplicationByIdWithPagination,
   getMyStudentsApplicationsWithPagination,
-  getMyStudentsApplicationsDraft
+  getMyStudentsApplicationsDraft, editApplicationActions
 } from "./application.service";
 import {CreateApplicationSchema} from "./schemas/create-application.schema";
+import {ApplicationActionsSchema} from "./schemas/application-actions.schema";
 
 export async function getApplicationHandler(req: Request, res: Response) {
   let { id } = req.params
@@ -37,20 +38,21 @@ export async function getMyApplicationHandler(req: Request, res: Response) {
 
 export async function getMyStudentApplicationByIdHandler(req: Request, res: Response) {
   const id = req.params.id
-  const {query} = GetApplicationsFilterSchema.parse(req);
+  return res.send(await getStudentApllicationById(id));
+}
 
-  return res.send(await getStudentApplicationByIdWithPagination(query, id));
+export async function getMyStudentsApplicationsDraftHandler(req: Request, res: Response) {
+  const id = req.user?.id ?? ''
+  const {query} = GetApplicationsFilterSchema.parse(req);
+  return res.send(await getMyStudentsApplicationsDraft(query, id));
+
 }
 
 export async function getMyStudentsApplicationsHandler(req: Request, res: Response) {
   const id = req.user?.id ?? ''
   const {query} = GetApplicationsFilterSchema.parse(req);
-  const isDraft = (req.query.isdraft)
-  if (isDraft == "true"){
-    return res.send(await getMyStudentsApplicationsDraft(id))
-  } else {
-    return res.send(await getMyStudentsApplicationsWithPagination(query, id));
-  }
+  return res.send(await getMyStudentsApplicationsWithPagination(query, id));
+
 }
 
 
@@ -65,15 +67,14 @@ export async function createApplicationHandler(req: Request, res: Response) {
 export async function editApplicationHandler(req: Request, res: Response) {
   let { id } = req.params
   const { body } = CreateApplicationSchema.parse(req);
-
   return res.send(await editApplication(id, body));
 }
 //
-// export async function editApplicationStatusHandler(req: Request, res: Response) {
-//   let { id } = req.params
-//   const { body } = CreateApplicationSchema.parse(req);
-//   return res.send(await editApplication(id, body));
-// }
+export async function editApplicationStatusHandler(req: Request, res: Response) {
+  let { id } = req.params
+  const { body } = ApplicationActionsSchema.parse(req);
+  return res.send(await editApplicationActions(id, body));
+}
 
 export async function deleteApplicationHandler(req: Request, res: Response) {
   let { id } = req.params

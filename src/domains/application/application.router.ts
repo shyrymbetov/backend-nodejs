@@ -2,13 +2,13 @@ import {Router} from 'express';
 import {
     createApplicationHandler,
     deleteApplicationHandler,
-    editApplicationHandler,
+    editApplicationHandler, editApplicationStatusHandler,
     // editApplicationStatusHandler,
     getApplicationHandler,
     getApplicationsByUserHandler,
     getApplicationsHandler,
     getMyApplicationHandler,
-    getMyStudentApplicationByIdHandler,
+    getMyStudentApplicationByIdHandler, getMyStudentsApplicationsDraftHandler,
     getMyStudentsApplicationsHandler
 } from './application.controller';
 import { isAuthenticatedMiddleware } from '../../middlewares/is-authenticated.middleware';
@@ -31,13 +31,19 @@ applicationRouter.route('/my')
 applicationRouter.route('/my-students')
     .get(isAuthenticatedMiddleware, getMyStudentsApplicationsHandler)
 
-applicationRouter.route('/my/:id')
+applicationRouter.route('/my-students-draft')
+    .get(isAuthenticatedMiddleware, getMyStudentsApplicationsDraftHandler)
+
+applicationRouter.route('/my-students/:id')
     .get(isAuthenticatedMiddleware, getMyStudentApplicationByIdHandler)
 
 applicationRouter.route('/:id')
   .get(isAuthenticatedMiddleware, getApplicationHandler)
   .patch(isAuthenticatedMiddleware, isAbleToEditApplication, editApplicationHandler)
   .delete(isAuthenticatedMiddleware, deleteApplicationHandler)
+;
+applicationRouter.route('/status/:id')
+  .patch(isAuthenticatedMiddleware, editApplicationStatusHandler)
 ;
 
 

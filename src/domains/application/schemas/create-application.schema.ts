@@ -3,6 +3,7 @@ import {isValidUUID} from "../../../shared/util.service";
 import {ApplicationFieldSchema} from "./application-field.schema";
 import {ApplicationSpecialitySchema} from "./application-speciality.schema";
 import {ApplicationStatusEnum} from "../type/application-status.enum";
+import {ApplicationActionStatusEnum} from "../type/application-action-status.enum";
 
 export const CreateApplicationSchema = z.object({
   body: z
