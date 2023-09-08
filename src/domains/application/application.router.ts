@@ -2,13 +2,15 @@ import {Router} from 'express';
 import {
     createApplicationHandler,
     deleteApplicationHandler,
-    editApplicationHandler, editApplicationStatusHandler,
+    editApplicationHandler,
+    editApplicationStatusHandler,
     // editApplicationStatusHandler,
     getApplicationHandler,
     getApplicationsByUserHandler,
     getApplicationsHandler,
     getMyApplicationHandler,
-    getMyStudentApplicationByIdHandler, getMyStudentsApplicationsDraftHandler,
+    getMyStudentApplicationByIdHandler,
+    getMyStudentsApplicationsDraftHandler,
     getMyStudentsApplicationsHandler
 } from './application.controller';
 import { isAuthenticatedMiddleware } from '../../middlewares/is-authenticated.middleware';
@@ -25,7 +27,6 @@ applicationRouter.route('/user/:id')
 
 applicationRouter.route('/my')
     .get(isAuthenticatedMiddleware, getMyApplicationHandler)
-// .patch(isAuthenticatedMiddleware, editApplicationStatusHandler)
 ;
 
 applicationRouter.route('/my-students')
