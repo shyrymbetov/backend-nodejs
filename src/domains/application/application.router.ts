@@ -25,13 +25,12 @@ applicationRouter.route('/user/:id')
 
 applicationRouter.route('/my')
     .get(isAuthenticatedMiddleware, getMyApplicationHandler)
-// .patch(isAuthenticatedMiddleware, editApplicationStatusHandler)
 ;
 
 applicationRouter.route('/my-students')
     .get(isAuthenticatedMiddleware, getMyStudentsApplicationsHandler)
 
-applicationRouter.route('/my/:id')
+applicationRouter.route('/my-students/:id')
     .get(isAuthenticatedMiddleware, getMyStudentApplicationByIdHandler)
 
 applicationRouter.route('/:id')
