@@ -91,16 +91,16 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto) 
     }
 
     if (filter.degree) {
-        conditionString += 'and LOWER(eduDegrees.degree) like LOWER(:degree) '
-        conditionParameters['degree'] = `%${filter.degree}%`
+        conditionString += 'and eduDegrees.degree = :degree '
+        conditionParameters['degree'] = filter.degree
     }
     if (filter.scholarshipType) {
-        conditionString += 'and LOWER(university.scholarshipType) = LOWER(:scholarshipType) '
-        conditionParameters['scholarshipType'] = filter.scholarshipType.toString()
+        conditionString += 'and university.scholarshipType = :scholarshipType '
+        conditionParameters['scholarshipType'] = filter.scholarshipType
     }
     if (filter.rating) {
-        conditionString += 'and LOWER(university.rating) = LOWER(:facultyName) '
-        conditionParameters['rating'] = filter.rating.toString()
+        conditionString += 'and university.topRating = :rating '
+        conditionParameters['rating'] = filter.rating
     }
     if (filter.minFee) {
         conditionString += 'and tuitionCost.tuitionCost >= :minFee '
@@ -112,11 +112,13 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto) 
     }
 
     if (filter.search) {
-        conditionString += 'and (' +
-            'country.name ILIKE :search ' +
-            'OR CAST(eduDegrees.degree AS TEXT) ILIKE :search' +
-            'OR faculties.name ILIKE :search ) '
-        conditionParameters['search'] = `%${filter.search}%`
+        conditionString += ' AND (' + // Start of the AND clause
+            'country.name ILIKE :search OR ' +
+            'CAST(eduDegrees.degree AS TEXT) ILIKE :search OR ' +
+            'faculties.name ILIKE :search ' +
+            ')'; // End of the AND clause
+
+        conditionParameters['search'] = filter.search;
     }
 
     return {

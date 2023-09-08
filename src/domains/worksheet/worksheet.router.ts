@@ -2,7 +2,8 @@ import {Router} from 'express';
 import {
     createWorksheetHandler,
     deleteWorksheetHandler,
-    editWorksheetHandler, getWorksheetForLandingHandler,
+    editWorksheetHandler,
+    getWorksheetForLandingHandler,
     getWorksheetHandler
 } from './worksheet.controller';
 import {isAuthenticatedMiddleware} from '../../middlewares/is-authenticated.middleware';

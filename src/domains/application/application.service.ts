@@ -221,12 +221,21 @@ export async function editApplication(id: string, application: CreateApplication
 }
 // TODO application isArchived need to be false to change
 export async function editApplicationAfterWorkSheetChange(universityId: string, worksheet: WorksheetEntity) {
-    const applications = await applicationRepository.find({ where: { universityId: universityId } })
-    applications.forEach(application => {
-        application
-    })
-    // await applicationRepository.save(application)
-    return ;
+    const applications = await applicationRepository.find({ where: { universityId: universityId } });
+
+    for (const application of applications) {
+        // Check if the application's isArchived property is true
+        if (application.isArchived) {
+            // Modify the application based on the worksheet data
+            // application.someProperty = worksheet.someProperty; // Replace with the actual property to modify
+            // // ...
+            //
+            // // Save the updated application
+            // await applicationRepository.save(application);
+        }
+    }
+
+    // Return if needed
 }
 
 export async function editApplicationActions(id: string, universityDto: ApplicationActionsDto) {
