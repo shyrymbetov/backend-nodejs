@@ -192,7 +192,7 @@ export async function duplicateUniversity(id: string) {
     if (duplicateUniversity.eduDegrees && duplicateUniversity.eduDegrees.length) {
         duplicateUniversity.eduDegrees.forEach(degree => {
             // @ts-ignore
-            delete date['id']
+            delete degree['id']
             degree.faculties.forEach(faculty => {
                 // @ts-ignore
                 delete faculty['id']
