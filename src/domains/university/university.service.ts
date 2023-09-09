@@ -4,6 +4,15 @@ import {CreateUniversityDto} from "./dtos/create-university.dto";
 import {GetUniversitiesFilterDto} from "./dtos/get-univerties-params.dto";
 import {UniversityActionsDto} from "./dtos/university-actions.dto";
 import {duplicateWorksheet} from "../worksheet/worksheet.service";
+import {Column, OneToMany, OneToOne} from "typeorm";
+import {UniversityImportantDatesEntity} from "./model/university-important-dates.entity";
+import {ScholarshipEnum} from "./types/scholarship.enum";
+import {StudyLanguageEnum} from "./types/study-language.enum";
+import {UniversityDegreeEntity} from "./model/university-degree.entity";
+import {UniversityAdmissionEntity} from "./model/university-admission.entity";
+import {UniversityTuitionCostEntity} from "./model/university-tuition-cost.entity";
+import {UniversityCampusInformationEntity} from "./model/university-campus-information.entity";
+import {UniversityDiscountScholarshipsEntity} from "./model/university-discount-scholarships.entity";
 
 const universityRepository = dataSource.getRepository(UniversityEntity);
 
@@ -173,6 +182,47 @@ export async function duplicateUniversity(id: string) {
     duplicateUniversity.isVisible = false
     duplicateUniversity.canApply = false
     duplicateUniversity.worksheet = undefined
+
+    if (duplicateUniversity.importantDates && duplicateUniversity.importantDates.length) {
+        duplicateUniversity.importantDates.forEach(date => {
+            // @ts-ignore
+            delete date['id']
+        })
+    }
+    if (duplicateUniversity.eduDegrees && duplicateUniversity.eduDegrees.length) {
+        duplicateUniversity.eduDegrees.forEach(degree => {
+            // @ts-ignore
+            delete date['id']
+            degree.faculties.forEach(faculty => {
+                // @ts-ignore
+                delete faculty['id']
+                faculty.specialities.forEach(speciality => {
+                    // @ts-ignore
+                    delete speciality['id']
+                })
+            })
+        })
+    }
+
+    if (duplicateUniversity.campusInformation && duplicateUniversity.campusInformation.length) {
+        duplicateUniversity.campusInformation.forEach(campus => {
+            // @ts-ignore
+            delete campus['id']
+        })
+    }
+    if (duplicateUniversity.admission) {
+        // @ts-ignore
+        delete duplicateUniversity.admission['id']
+    }
+
+    if (duplicateUniversity.tuitionCost) {
+        // @ts-ignore
+        delete duplicateUniversity.tuitionCost['id']
+    }
+    if (duplicateUniversity.scholarships) {
+        // @ts-ignore
+        delete duplicateUniversity.scholarships['id']
+    }
 
     const savedUni = await universityRepository.save(duplicateUniversity);
     if (duplicateWorksheetId && savedUni) {
