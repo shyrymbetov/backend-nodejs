@@ -68,8 +68,8 @@ const dataSourceConfig: PostgresConnectionOptions = {
 export const config = {
   db: dataSourceConfig,
   api: {
-    socket_port: env.API_PORT,
-    port: env.SOCKET_PORT,
+    socket_port: env.SOCKET_PORT,
+    port: env.API_PORT,
     cors: {
       origin: env.CORS_ORIGIN,
       credentials: true,
