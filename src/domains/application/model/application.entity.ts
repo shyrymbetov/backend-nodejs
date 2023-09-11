@@ -39,7 +39,7 @@ export class ApplicationEntity {
     specialityType!: ApplicationSpecialityType
 
     @OneToOne(() => ChatEntity, chat => chat.application)
-    chat!: UniversityEntity;
+    chat!: ChatEntity;
 
     @Column({default: false, nullable: true})
     isArchived!: boolean

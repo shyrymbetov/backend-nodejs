@@ -6,8 +6,11 @@ import {ApplicationActionsDto} from "./dto/application-actions.dto";
 import {getStudentsByMasterOrOrientatorIdWithApplications} from "../students/student.service"
 import z from "zod";
 import {WorksheetEntity} from "../worksheet/model/worksheet.entity";
+import {createApplicationChat} from "../chat/chat.service";
+import {CreateWorksheetDto} from "../worksheet/dtos/create-worksheet.dto";
 
 const applicationRepository = dataSource.getRepository(ApplicationEntity);
+const fieldKeys = ['profileFields', 'contactsFields', 'educationFields', 'languagesFields', 'recommendationsFields', 'motivationFields', 'documentsFields', 'otherFields',];
 
 export async function getApplication(id: string): Promise<ApplicationEntity | null> {
     return await applicationRepository
@@ -49,36 +52,13 @@ export async function getApplications(filter: GetApplicationsParamsDto): Promise
     }
 }
 
-export async function getStudentApllicationById(studentId: string): Promise<any> {
+export async function getStudentApplicationById(studentId: string): Promise<any> {
 
     return await applicationRepository.createQueryBuilder('application')
         .leftJoinAndSelect('application.student', 'student')
         .leftJoinAndSelect('student.applications', 'applications')
         .where('application.student_id = :id', {id: studentId})
         .getMany()
-}
-
-export async function getStudentApplicationByIdWithPagination(filter: GetApplicationsParamsDto, studentId: string): Promise<any> {
-
-    const data = await applicationRepository.createQueryBuilder('application')
-        .where('application.student_id = :id', {id: studentId})
-
-        // .where(conditionString, conditionParameters)
-        .orderBy('created_at', 'DESC')
-        .skip((filter.page - 1) * filter.size)
-        .take(filter.size)
-        .getRawMany();
-
-    const totalCount = await applicationRepository
-        .createQueryBuilder('application')
-        .where('application.student_id = :id', {id: studentId})
-        .getCount();
-
-
-    return {
-        data: data,
-        totalCount: totalCount
-    }
 }
 
 export async function getMyStudentsApplicationsWithPagination(filter: GetApplicationsParamsDto, expertId: string): Promise<any> {
@@ -212,27 +192,41 @@ function generateConditionsForGetApplicationForDraft(filter: GetApplicationsPara
 }
 
 export async function createApplication(application: CreateApplicationDto) {
-    return await applicationRepository.save(application);
+    const applicationSaved = await applicationRepository.save(application);
+    await createApplicationChat(applicationSaved)
+    return applicationSaved
 }
 
 export async function editApplication(id: string, application: CreateApplicationDto) {
     application.id = id
     return await applicationRepository.save(application);
 }
+
 // TODO application isArchived need to be false to change
-export async function editApplicationAfterWorkSheetChange(universityId: string, worksheet: WorksheetEntity) {
-    const applications = await applicationRepository.find({ where: { universityId: universityId } });
+export async function editApplicationAfterWorkSheetChange(universityId: string, worksheet: CreateWorksheetDto) {
+    // Check if the application's isArchived property is false
+    const applications = await applicationRepository.find({where: {universityId: universityId, isArchived: false}});
 
     for (const application of applications) {
-        // Check if the application's isArchived property is true
-        if (application.isArchived) {
-            // Modify the application based on the worksheet data
-            // application.someProperty = worksheet.someProperty; // Replace with the actual property to modify
-            // // ...
-            //
-            // // Save the updated application
-            // await applicationRepository.save(application);
+        for (const fieldsKey of fieldKeys) {
+            const applicationFields = application[fieldsKey]
+                .reduce((acc, obj) => {
+                    acc.set(obj.worksheetFieldId, obj);
+                    return acc;
+                }, new Map());
+            const newApplicationFields: any[] = []
+            worksheet[fieldsKey].forEach(field => {
+                const newField = JSON.parse(JSON.stringify(field))
+                delete newField['id']
+                newField['worksheetFieldId'] = field.id
+                if(applicationFields[field.id]) {
+                    newField['fieldValue'] = applicationFields[field.id].fieldValue
+                }
+                newApplicationFields.push(newField)
+            })
+            application[fieldsKey] = newApplicationFields
         }
+        await applicationRepository.save(application);
     }
 
     // Return if needed

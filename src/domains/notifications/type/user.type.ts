@@ -1,7 +1,7 @@
 
 export type UserType = {
-  id: string;
-  fullName: string
-  fileFormat: string
-  size: number
+  id?: string;
+  email?: string
+  fullName?: string
+  avatar?: string
 };

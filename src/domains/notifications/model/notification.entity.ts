@@ -7,18 +7,26 @@ import {
     DeleteDateColumn, OneToMany, JoinColumn, OneToOne, ManyToOne,
 } from 'typeorm';
 import {env} from '../../../env';
-
-import {UniversityEntity} from "../../university/model/university.entity";
-import {ApplicationEntity} from "../../application/model/application.entity";
-import {ChatMessagesEntity} from "./chat-messages.entity";
+import {UserType} from "../type/user.type";
 
 @Entity({schema: env.DB_SCHEMA})
-export class ChatEntity {
+export class NotificationEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @OneToMany(() => ChatMessagesEntity, message => message.chat)
-    messages!: ChatMessagesEntity[];
+    header!: string;
+
+    @Column({type: 'text'})
+    content!: string;
+
+    @Column({default: false})
+    read!: boolean;
+
+    @Column('uuid')
+    userId!: string
+
+    @Column({ type: 'json' })
+    sender!: UserType;
 
     @CreateDateColumn()
     createdAt!: Date;

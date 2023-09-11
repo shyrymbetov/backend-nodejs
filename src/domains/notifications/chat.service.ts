@@ -1,2 +1,0 @@
-import {dataSource} from '../../database';
-

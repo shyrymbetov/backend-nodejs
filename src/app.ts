@@ -11,6 +11,10 @@ import { connectToDatabase } from './database';
 import { errorHandlerMiddleware } from './middlewares/error-handler.middleware';
 import * as http from "http";
 import {WebSocket} from 'ws';
+import * as websocket from './sockets/websocket.service';
+import {Request} from "express";
+import {isAuthenticatedMiddleware} from "./middlewares/is-authenticated.middleware";
+import {isAuthenticated} from "./middlewares/is-authenticated";
 
 const app = express();
 
@@ -22,11 +26,15 @@ addRoutes(app);
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
-export { wss };
-
 const PORT = config.api.socket_port || 3333;
 server.listen(PORT, () => {
   console.log(`⚡️[ws]: Socket Server is running on port ${PORT}`);
+});
+
+wss.on('connection', (ws) => {
+  console.log('WebSocket connection established');
+
+  websocket.addUserOnline(ws);
 });
 
 app.use(errorHandlerMiddleware);

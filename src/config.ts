@@ -24,6 +24,7 @@ import {ChatEntity} from "./domains/chat/model/chat.entity";
 import {ChatMessagesEntity} from "./domains/chat/model/chat-messages.entity";
 import {UniversityAdmissionEntity} from "./domains/university/model/university-admission.entity";
 import {ApplicationFieldsEntity} from "./domains/application/model/application-fields.entity";
+import {NotificationEntity} from "./domains/notifications/model/notification.entity";
 
 const entities = [
   UserEntity,
@@ -49,6 +50,7 @@ const entities = [
   ChatMessagesEntity,
   ApplicationEntity,
   ApplicationFieldsEntity,
+  NotificationEntity,
 ]
 
 const dataSourceConfig: PostgresConnectionOptions = {

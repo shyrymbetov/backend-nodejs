@@ -33,7 +33,7 @@ export async function createWorksheet(universityDto: CreateWorksheetDto) {
 
 export async function editWorksheet(id: string, universityDto: CreateWorksheetDto) {
     universityDto.id = id
-    // await editApplicationAfterWorkSheetChange(universityDto.universityId, universityDto)
+    await editApplicationAfterWorkSheetChange(universityDto.universityId, universityDto)
     return await worksheetRepository.save(universityDto);
 }
 

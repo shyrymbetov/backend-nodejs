@@ -8,6 +8,7 @@ import {CreateUserType} from "./types/create-user.type";
 import {EditCurrentUserDto} from "./dtos/edit-user.dto";
 import {GetUsersParamsDto} from "./dtos/get-user-params.dto";
 import {GetUserStudentsParamsDto} from "./dtos/get-user-student-params.dto";
+import {sendMailMessage} from "../mail/mail.service";
 
 const userRepository = dataSource.getRepository(UserEntity);
 
@@ -182,7 +183,7 @@ export async function createNewUser(userDto: CreateUserDto) {
         localId: userDto.localId
     });
 
-    await sendReferralLinkToNewUser(newUser.id)
+    await sendReferralLinkToNewUser(newUser.email, newUser.id)
 
     return newUser
 }
@@ -261,9 +262,15 @@ export async function deleteUser(id: string) {
     return await userRepository.delete(id);
 }
 
-async function sendReferralLinkToNewUser(userId: string) {
+async function sendReferralLinkToNewUser(email:string, userId: string) {
     const changePasswordLink = createChangePasswordLink(userId);
-    // sendMail()
+
+    await sendMailMessage({
+        to: email,
+        subject: 'Password Change Link',
+        html: `/generate-pwd/${changePasswordLink}`
+    })
+    console.log(changePasswordLink)
     return "generated";
 }
 

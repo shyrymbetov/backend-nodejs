@@ -8,9 +8,8 @@ import {
 } from 'typeorm';
 import {env} from '../../../env';
 
-import {FileType} from "../type/file.type";
 import {ChatEntity} from "./chat.entity";
-import {UserType} from "../type/user.type";
+import {UserType} from "../../notifications/type/user.type";
 
 @Entity({schema: env.DB_SCHEMA})
 export class ChatMessagesEntity {
