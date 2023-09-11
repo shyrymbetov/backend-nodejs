@@ -9,14 +9,14 @@ import {
   getStudentApllicationById,
   getStudentApplicationByIdWithPagination,
   getMyStudentsApplicationsWithPagination,
-  getMyStudentsApplicationsDraft, editApplicationActions
+  getMyStudentsApplicationsDraft, editApplicationActions, getApplicationById
 } from "./application.service";
 import {CreateApplicationSchema} from "./schemas/create-application.schema";
 import {ApplicationActionsSchema} from "./schemas/application-actions.schema";
 
 export async function getApplicationHandler(req: Request, res: Response) {
   let { id } = req.params
-  return res.send(await getApplication(id));
+  return res.send(await getApplicationById(id));
 }
 
 export async function getApplicationsHandler(req: Request, res: Response) {
