@@ -1,4 +1,4 @@
-import { wss } from '../../app';
+import { wss } from '../app';
 
 const chatRoomUsers: { [chatRoomId: string]: string[] } = {};
 
