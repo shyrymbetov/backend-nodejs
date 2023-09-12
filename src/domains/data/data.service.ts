@@ -19,5 +19,21 @@ export async function getSchools(localId: string): Promise<SchoolEntity[]> {
   return await schoolRepository.find({where: {localId: localId}});
 }
 
+export async function getRegionById(id: string): Promise<RegionEntity | null> {
+  return await regionRepository.findOneBy({ id: id });
+}
+
+export async function getLocalById(id: string): Promise<LocalAreaEntity | null> {
+  return await localRepository.findOneBy({ id: id });
+}
+
+
+export async function getSchoolById(id: string): Promise<SchoolEntity | null> {
+  return await schoolRepository.findOneBy({ id: id });
+}
+
+
+
+
 
 
