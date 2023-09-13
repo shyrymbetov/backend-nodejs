@@ -17,5 +17,7 @@ export const RegisterUserSchema = z.object({
     })
     .strict(),
   query: z.object({}).strict(),
-  params: z.object({}).strict(),
+  params: z.object({
+      userId: z.string().optional()
+  }).strict(),
 });
