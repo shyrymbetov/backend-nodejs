@@ -8,6 +8,7 @@ import {studentRouter} from "./domains/students/student.router";
 import {universityRouter} from "./domains/university/university.router";
 import {worksheetRouter} from "./domains/worksheet/worksheet.router";
 import {applicationRouter} from "./domains/application/application.router";
+import {notificationRouter} from "./domains/notifications/notification.router";
 
 export function addRoutes(app: Express) {
   app.use('/auth', authRouter);
@@ -18,4 +19,5 @@ export function addRoutes(app: Express) {
   app.use('/students', studentRouter);
   app.use('/data', dataRouter);
   app.use('/files', fileRouter);
+  app.use('/notification', notificationRouter);
 }

@@ -14,9 +14,10 @@ export class NotificationEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
+    @Column({type: 'text', nullable: true})
     header!: string;
 
-    @Column({type: 'text'})
+    @Column({type: 'text', nullable: true})
     content!: string;
 
     @Column({default: false})
@@ -25,7 +26,7 @@ export class NotificationEntity {
     @Column('uuid')
     userId!: string
 
-    @Column({ type: 'json' })
+    @Column({ type: 'json',nullable: true })
     sender!: UserType;
 
     @CreateDateColumn()
