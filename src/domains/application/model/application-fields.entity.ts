@@ -74,6 +74,9 @@ export class ApplicationFieldsEntity {
     @Column({type:'varchar',nullable: true})
     dateFormat!: string | null
 
+    @Column({type:'boolean',nullable: true})
+    isDescription!: boolean | null
+
     @Column({ type: 'json', nullable: true })
     quantity!: QuantityType | null
 

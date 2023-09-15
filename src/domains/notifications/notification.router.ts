@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import {
+    createNotificationHandler,
     deleteNotificationHandler,
     getMyNotificationsHandler, getNotificationByIdHandler, readNotificationHandler
 } from './notification.controller';
@@ -9,6 +10,7 @@ export const notificationRouter = Router();
 
 notificationRouter.route('/')
   .get(isAuthenticatedMiddleware, getMyNotificationsHandler)
+  .post(createNotificationHandler)
 ;
 
 notificationRouter.route('/:id')

@@ -59,7 +59,7 @@ async function broadcastToApplication(userId: string, message: any) {
     }
 }
 
-async function sendNotificationCount(userId: string) {
+export async function sendNotificationCount(userId: string) {
     const count = await getCountUnreadNotificationsByUserId(userId)
     if (!count) {
         return;

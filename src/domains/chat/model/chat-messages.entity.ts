@@ -19,7 +19,7 @@ export class ChatMessagesEntity {
     @Column({type: 'text', nullable: true})
     content!: string;
 
-    @Column({ type: 'json' })
+    @Column({ type: 'json', nullable: true})
     user!: UserType;
 
     @ManyToOne(() => ChatEntity, university => university.messages)

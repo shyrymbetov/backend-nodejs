@@ -2,9 +2,6 @@ import z from 'zod';
 import {isValidUUID} from "../../../shared/util.service";
 import {WorksheetFieldEnum} from "../../worksheet/types/worksheet-field-type.enum";
 import {FieldAnswerTypeEnum} from "../../worksheet/types/field-answer-type.enum";
-import {Column, PrimaryGeneratedColumn} from "typeorm";
-import {TextLimitationType} from "../../worksheet/types/text-limitation.type";
-import {QuantityType} from "../../worksheet/types/quantity.type";
 
 export const ApplicationFieldSchema = z.object({
     id: z.string().optional(),
