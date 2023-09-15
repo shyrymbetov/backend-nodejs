@@ -22,8 +22,8 @@ export async function getUsers(filter: GetUsersParamsDto): Promise<any> {
         .select([
             'managers.id as id',
             'managers.avatar as avatar',
-            'managers.firstName as firstName',
-            'managers.lastName as lastName',
+            'managers.firstName as "firstName"',
+            'managers.lastName as "lastName"',
             'managers.active as active',
             'managers.role as role',
             '(COUNT(orientatorStudents.id) + COUNT(masterStudents.id)) as stuCount',
@@ -84,8 +84,8 @@ export async function getUserStudents(userId: string, filter: GetUserStudentsPar
         .select([
             'students.id as id',
             'students.avatar as avatar',
-            'students.firstName as firstName',
-            'students.lastName as lastName',
+            'students.firstName as "firstName"',
+            'students.lastName as "lastName"',
             'students.role as role',
             'orientator.id as orientatorId',
             'master.id as masterId',
