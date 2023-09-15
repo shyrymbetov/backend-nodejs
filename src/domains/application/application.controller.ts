@@ -13,6 +13,7 @@ import {
 } from "./application.service";
 import {CreateApplicationSchema} from "./schemas/create-application.schema";
 import {ApplicationActionsSchema} from "./schemas/application-actions.schema";
+import {GetMyApplicationsFilterSchema} from "./schemas/get-my-applications-filter.schema";
 
 export async function getApplicationHandler(req: Request, res: Response) {
     let {id} = req.params
@@ -33,12 +34,14 @@ export async function getApplicationsByUserHandler(req: Request, res: Response) 
 
 export async function getMyApplicationHandler(req: Request, res: Response) {
     const id = req.user?.id ?? ''
-    return res.send(await getStudentApplicationById(id));
+    const {query} = GetMyApplicationsFilterSchema.parse(req);
+    return res.send(await getStudentApplicationById(query, id));
 }
 
 export async function getMyStudentApplicationByIdHandler(req: Request, res: Response) {
     const id = req.params.id
-    return res.send(await getStudentApplicationById(id));
+    const {query} = GetMyApplicationsFilterSchema.parse(req);
+    return res.send(await getStudentApplicationById(query, id));
 }
 
 export async function getMyStudentsApplicationsDraftHandler(req: Request, res: Response) {

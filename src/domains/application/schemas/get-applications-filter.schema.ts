@@ -1,4 +1,5 @@
 import z from 'zod';
+import {ApplicationStatusEnum} from "../type/application-status.enum";
 
 export const GetApplicationsFilterSchema = z.object({
   body: z.object({}).strict(),
@@ -14,6 +15,8 @@ export const GetApplicationsFilterSchema = z.object({
       orientator: z.string().optional(),
       fall: z.string().optional(),
       status: z.string().optional(),
+      applicationStatus: z.enum(['APPLICATION_RECEIVED', 'UNDER_CONSIDERATION', 'OFFER_RECEIVED', 'CONFIRMED', 'DEPARTURE'])
+          .transform((val) => val ? (val as ApplicationStatusEnum) : undefined).optional(),
   }).strict(),
   params: z.object({}),
 });
