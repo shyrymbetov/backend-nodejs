@@ -121,7 +121,12 @@ function generateConditionsForGetStudentsWithApplication(filter: GetApplications
         conditionParameters['orientator'] = filter.orientator
     }
 
-    conditionString += 'and applications.applicationStatus != :status AND (user.masterId = :id OR user.orientatorId = :id) '
+    if (filter.applicationStatus) {
+        conditionString += 'and applications.applicationStatus != :applicationStatus '
+        conditionParameters['applicationStatus'] = filter.applicationStatus
+    }
+
+    conditionString += 'and applications.applicationStatus = :status AND (user.masterId = :id OR user.orientatorId = :id) '
     conditionParameters['status'] = 'DRAFT'
     conditionParameters['id'] = id
 

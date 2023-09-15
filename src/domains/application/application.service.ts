@@ -4,10 +4,9 @@ import {GetApplicationsParamsDto} from "./dto/get-applications-params.dto";
 import {CreateApplicationDto} from "./dto/create-application.dto";
 import {ApplicationActionsDto} from "./dto/application-actions.dto";
 import {getStudentsByMasterOrOrientatorIdWithApplications} from "../students/student.service"
-import z from "zod";
-import {WorksheetEntity} from "../worksheet/model/worksheet.entity";
 import {createApplicationChat} from "../chat/chat.service";
 import {CreateWorksheetDto} from "../worksheet/dtos/create-worksheet.dto";
+import {GetMyApplicationsParamsDto} from "./dto/get-my-applications-params.dto";
 
 const applicationRepository = dataSource.getRepository(ApplicationEntity);
 const fieldKeys = ['profileFields', 'contactsFields', 'educationFields', 'languagesFields', 'recommendationsFields', 'motivationFields', 'documentsFields', 'otherFields',];
@@ -52,13 +51,34 @@ export async function getApplications(filter: GetApplicationsParamsDto): Promise
     }
 }
 
-export async function getStudentApplicationById(studentId: string): Promise<any> {
+export async function getStudentApplicationById(filter: GetMyApplicationsParamsDto, studentId: string): Promise<any> {
+
+    let {conditionString, conditionParameters} = generateConditionsForGetStudentApplication(filter, studentId)
 
     return await applicationRepository.createQueryBuilder('application')
         .leftJoinAndSelect('application.student', 'student')
         .leftJoinAndSelect('student.applications', 'applications')
-        .where('application.student_id = :id', {id: studentId})
+        .where(conditionString, conditionParameters)
         .getMany()
+}
+
+function generateConditionsForGetStudentApplication(filter: GetMyApplicationsParamsDto, studentId: string) {
+
+    let conditionString = 'true '
+    let conditionParameters = {}
+    if (filter.applicationStatus) {
+        conditionString += 'and application.applicationStatus = :applicationStatus '
+        conditionParameters['applicationStatus'] = filter.applicationStatus
+    }
+
+    conditionString += "and application.student_id = :studentId "
+    conditionParameters['studentId'] = studentId
+
+
+    return {
+        conditionString: conditionString,
+        conditionParameters: conditionParameters,
+    };
 }
 
 export async function getMyStudentsApplicationsWithPagination(filter: GetApplicationsParamsDto, expertId: string): Promise<any> {
