@@ -20,6 +20,6 @@ export const env = parseEnv(process.env, {
   API_PORT: port(),
   SOCKET_PORT: port(),
   NODE_ENV: z.enum(['development', 'production']).default('development'),
-  CORS_ORIGIN: z.string().min(1),
+  CORS_ORIGIN: z.string().min(1).transform((val) => val.split(',')),
   FILE_PATH: z.string()
 });

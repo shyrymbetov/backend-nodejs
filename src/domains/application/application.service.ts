@@ -62,6 +62,7 @@ export async function getStudentApplicationById(studentId: string): Promise<any>
 }
 
 export async function getMyStudentsApplicationsWithPagination(filter: GetApplicationsParamsDto, expertId: string): Promise<any> {
+    console.log(expertId)
     return await getStudentsByMasterOrOrientatorIdWithApplications(filter, expertId)
 }
 
