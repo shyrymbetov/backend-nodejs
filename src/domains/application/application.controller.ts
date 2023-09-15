@@ -60,8 +60,9 @@ export async function getMyStudentsApplicationsHandler(req: Request, res: Respon
 export async function createApplicationHandler(req: Request, res: Response) {
     const studentId = req.user?.id ?? ''
     const {body} = CreateApplicationSchema.parse(req);
+    body.studentId = body.studentId ?? studentId
     // return res.send(studentId);
-    return res.send(await createApplication({...body, studentId: studentId}));
+    return res.send(await createApplication(body));
 }
 
 export async function editApplicationHandler(req: Request, res: Response) {
