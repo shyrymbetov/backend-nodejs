@@ -4,14 +4,19 @@ import {
     deleteApplicationHandler,
     editApplicationHandler,
     editApplicationStatusHandler,
-    // editApplicationStatusHandler,
     getApplicationHandler,
     getApplicationsByUserHandler,
     getApplicationsHandler,
     getMyApplicationHandler,
     getMyStudentApplicationByIdHandler,
     getMyStudentsApplicationsDraftHandler,
-    getMyStudentsApplicationsHandler
+    getMyStudentsApplicationsHandler,
+    getAvailableCountriesHandler,
+    getAvailableUniversitiesHandler,
+    getAvailableSemestersHandler,
+    getAvailableSchoolsHandler,
+    getAvailableOrientatorsHandler,
+    getAvailableExpertsHandler
 } from './application.controller';
 import { isAuthenticatedMiddleware } from '../../middlewares/is-authenticated.middleware';
 import { isAbleToEditApplication } from '../../middlewares/is-able-to-edit-application.middleware';
@@ -34,6 +39,24 @@ applicationRouter.route('/my-students')
 
 applicationRouter.route('/my-students-draft')
     .get(isAuthenticatedMiddleware, getMyStudentsApplicationsDraftHandler)
+
+applicationRouter.route('/available-countries')
+    .get(getAvailableCountriesHandler)
+
+applicationRouter.route('/available-universities')
+    .get(getAvailableUniversitiesHandler)
+
+applicationRouter.route('/available-semesters')
+    .get(getAvailableSemestersHandler)
+
+applicationRouter.route('/available-schools')
+    .get(getAvailableSchoolsHandler)
+
+applicationRouter.route('/available-orientators')
+    .get(getAvailableOrientatorsHandler)
+
+applicationRouter.route('/available-experts')
+    .get(getAvailableExpertsHandler)
 
 applicationRouter.route('/my-students/:id')
     .get(isAuthenticatedMiddleware, getMyStudentApplicationByIdHandler)

@@ -8,6 +8,7 @@ import {createApplicationChat} from "../chat/chat.service";
 import {CreateWorksheetDto} from "../worksheet/dtos/create-worksheet.dto";
 import {GetMyApplicationsParamsDto} from "./dto/get-my-applications-params.dto";
 
+
 const applicationRepository = dataSource.getRepository(ApplicationEntity);
 const fieldKeys = ['profileFields', 'contactsFields', 'educationFields', 'languagesFields', 'recommendationsFields', 'motivationFields', 'documentsFields', 'otherFields',];
 
@@ -265,3 +266,69 @@ export async function deleteApplication(id: string) {
     });
     return !!deleted;
 }
+
+
+
+export async function getAvailableCountries() {
+
+    return await applicationRepository
+        .createQueryBuilder('application')
+        .innerJoin('application.university', 'university')
+        .innerJoin('university.country', 'country')
+        .select('DISTINCT country.id, country.name')
+        .getRawMany();
+}
+
+export async function getAvailableUniversities() {
+
+    return await applicationRepository
+        .createQueryBuilder('application')
+        .innerJoin('application.university', 'university')
+        .select('DISTINCT university.id, university.universityName')
+        .getRawMany();
+}
+
+export async function getAvailableSemesters() {
+
+    return await applicationRepository
+        .createQueryBuilder('application')
+        .innerJoin('application.university', 'university')
+        .select("DISTINCT  application.specialityType ->> 'importantDayId', application.specialityType ->> 'importantDayId'")
+        .getRawMany();
+
+}
+
+
+export async function getAvailableSchools() {
+
+    return await applicationRepository
+        .createQueryBuilder('application')
+        .innerJoinAndSelect('application.student', 'student')
+        .where('student.school IS NOT NULL')
+        .select('DISTINCT student.school')
+        .getRawMany();
+}
+
+export async function getAvailableOrientators() {
+
+    return await applicationRepository
+        .createQueryBuilder('application')
+        .innerJoinAndSelect('application.student', 'student')
+        .innerJoinAndSelect('student.orientator', 'orientator')
+        .where('student.orientatorId IS NOT NULL')
+        .select('DISTINCT orientator.id, orientator.firstName, orientator.lastName')
+        .getRawMany();
+}
+
+export async function getAvailableExperts() {
+
+    return await applicationRepository
+        .createQueryBuilder('application')
+        .innerJoinAndSelect('application.student', 'student')
+        .innerJoinAndSelect('student.master', 'master')
+        .where('student.masterId IS NOT NULL')
+        .select('DISTINCT master.id, master.firstName, master.lastName')
+        .getRawMany();
+}
+
+
