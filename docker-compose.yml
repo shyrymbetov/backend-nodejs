@@ -3,9 +3,9 @@ version: '3.8'
 services:
   postgres:
     image: postgres:13-alpine
-#    build:
-#      context: .
-#      dockerfile: ./docker/postgres/Dockerfile
+    #    build:
+    #      context: .
+    #      dockerfile: ./docker/postgres/Dockerfile
     container_name: nova_postgres
     ports:
       - 4682:5432
@@ -51,6 +51,7 @@ services:
       - ../data/nginx/config/nginx_brotli.conf:/etc/nginx/nginx.conf:ro
       - ../data/nginx/conf.d:/etc/nginx/conf.d
       - ../data/public/angular:/var/www/angular
+      - ../data/public/admin:/var/www/admin
       - ../data/certbot/conf:/etc/letsencrypt
       - ../data/certbot/www:/var/www/certbot
       - ../data/logs/nginx:/var/log/nginx

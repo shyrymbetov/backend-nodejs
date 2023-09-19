@@ -5,4 +5,5 @@ export type CreateNotificationType = {
     content?: string;
     sender?: UserType;
     userId: string;
+    link?: string;
 };
