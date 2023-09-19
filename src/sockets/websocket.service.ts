@@ -1,6 +1,6 @@
 import {WebSocket} from 'ws';
 import {isAuthenticated} from "../middlewares/is-authenticated";
-import {getCountUnreadNotificationsByUserId} from "../domains/notifications/notification.service";
+import {createNotification, getCountUnreadNotificationsByUserId} from "../domains/notifications/notification.service";
 import {UserType} from "../domains/notifications/type/user.type";
 import {getUserById} from "../domains/user/user.service";
 import {sendMailMessage} from "../domains/mail/mail.service";
@@ -10,13 +10,16 @@ const userConnections = new Map();
 
 export function addUserOnline(ws: InstanceType<typeof WebSocket.WebSocket>) {
     ws.on('message', async (message) => {
+        console.log("front: " + message.toString())
         const parsedMessage = JSON.parse(message.toString());
         const userId = isAuthenticated(parsedMessage.token)
         if (parsedMessage.type === 'auth-connect') {
             handleUserJoin(ws, userId);
             await sendNotificationCount(userId);
-        } else if (parsedMessage.type === 'send_message') {
-            broadcastToApplication(userId, parsedMessage).then();
+        } else if (parsedMessage.type === 'chat_message') {
+            console.log('chat_message')
+            await broadcastToApplication(userId, parsedMessage)
+            await sendNotification(userId, message)
         } else if (parsedMessage.type === 'logout') {
             handleUserClose(ws, userId);
         }
@@ -37,25 +40,46 @@ function handleUserClose(socket, userId: string) {
 }
 
 async function broadcastToApplication(userId: string, message: any) {
-    const users = await getApplicationUsersByChatId(message['chatId'])
-    if (!users) {
+
+    const chat = await getApplicationUsersByChatId(message['applicationId'])
+    if (!chat) {
         return;
     }
     //Save Chat Message
     const sender = await getUserType(userId)
+    sender['university'] = message['university']
     const newChatMessage = {
-        chatId: message['chatId'],
+        chatId: chat.chatId,
         content: message.content,
         user: sender
     }
 
     await createChatMessage(newChatMessage)
+    newChatMessage['type']= 'chat_message'
 
-    for (const user of users) {
+    for (const user of chat.userIds) {
         await sendMailNotification(userId, message.content)
 
         if (user == userId) continue;
         await sendToUser(user, JSON.stringify(newChatMessage));
+    }
+}
+async function sendNotification(userId: string, message: any) {
+
+    const chat = await getApplicationUsersByChatId(message['applicationId'])
+    //Save Chat Message
+    const sender = await getUserType(userId)
+    sender['university'] = message['university']
+    const newNotification: any = {
+        link: message['applicationId'],
+        content: message.content,
+        user: sender,
+    }
+
+    for (const user of chat.userIds) {
+        if (user == userId) continue;
+        newNotification['userId'] = user
+        await createNotification(newNotification)
     }
 }
 
@@ -73,6 +97,7 @@ export async function sendNotificationCount(userId: string) {
 
 async function sendToUser(userId: string, message: string) {
     const userSocket = userConnections[userId];
+    console.log(message);
     if (userSocket && userSocket.readyState === WebSocket.OPEN) {
         userSocket.send(message);
     } else {

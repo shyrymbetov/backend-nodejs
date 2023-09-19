@@ -3,10 +3,10 @@ import { Unauthorized, BadRequest } from 'http-errors';
 
 export function isAuthenticated(token: string| undefined) {
   if (!token) throw new Unauthorized();
-
   try {
     const { user } = getTokenPayload(token);
-    return user.id;
+    console.log(user)
+    return user['id'];
   } catch (err) {
     console.error(err);
     throw new BadRequest('Invalid authorization token');

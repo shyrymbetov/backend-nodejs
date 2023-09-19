@@ -23,12 +23,12 @@ export async function createApplicationChat(application: ApplicationEntity) {
     return await chatRepository.save(newChat)
 }
 
-export async function getApplicationUsersByChatId(chatId: string): Promise<(string)[] | null> {
+export async function getApplicationUsersByChatId(applId: string): Promise<any | null> {
     const chat = await chatRepository
         .createQueryBuilder('chat')
         .leftJoinAndSelect('chat.application', 'application')
         .leftJoinAndSelect('application.student', 'student')
-        .where('chat.id = :id', {chatId})
+        .where('application.id = :applId', {applId})
         .getOne();
 
     const userIds: string[] = []
@@ -41,7 +41,10 @@ export async function getApplicationUsersByChatId(chatId: string): Promise<(stri
     if (chat?.application?.student.orientatorId) {
         userIds.push(chat?.application?.student.orientatorId)
     }
-    return userIds
+    return {
+        chatId: chat?.id,
+        userIds: userIds
+    }
 }
 
 export async function createChatMessage(message: CreateChatMessageType) {

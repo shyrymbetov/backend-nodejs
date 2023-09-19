@@ -20,6 +20,9 @@ export class NotificationEntity {
     @Column({type: 'text', nullable: true})
     content!: string;
 
+    @Column({nullable: true})
+    link!: string;
+
     @Column({default: false})
     read!: boolean;
 
