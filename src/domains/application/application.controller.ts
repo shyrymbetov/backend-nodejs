@@ -9,7 +9,13 @@ import {
     getMyStudentsApplicationsDraft,
     editApplicationActions,
     getApplicationById,
-    getStudentApplicationById
+    getStudentApplicationById,
+    getAvailableCountries,
+    getAvailableUniversities,
+    getAvailableSemesters,
+    getAvailableSchools,
+    getAvailableOrientators,
+    getAvailableExperts
 } from "./application.service";
 import {CreateApplicationSchema} from "./schemas/create-application.schema";
 import {ApplicationActionsSchema} from "./schemas/application-actions.schema";
@@ -60,8 +66,9 @@ export async function getMyStudentsApplicationsHandler(req: Request, res: Respon
 export async function createApplicationHandler(req: Request, res: Response) {
     const studentId = req.user?.id ?? ''
     const {body} = CreateApplicationSchema.parse(req);
+    body.studentId = body.studentId ?? studentId
     // return res.send(studentId);
-    return res.send(await createApplication({...body, studentId: studentId}));
+    return res.send(await createApplication(body));
 }
 
 export async function editApplicationHandler(req: Request, res: Response) {
@@ -70,7 +77,7 @@ export async function editApplicationHandler(req: Request, res: Response) {
     return res.send(await editApplication(id, body));
 }
 
-//
+
 export async function editApplicationStatusHandler(req: Request, res: Response) {
     let {id} = req.params
     const {body} = ApplicationActionsSchema.parse(req);
@@ -81,3 +88,37 @@ export async function deleteApplicationHandler(req: Request, res: Response) {
     let {id} = req.params
     return res.send(await deleteApplication(id));
 }
+
+export async function getAvailableCountriesHandler(req: Request, res: Response) {
+    return res.send(await getAvailableCountries());
+}
+
+export async function getAvailableUniversitiesHandler(req: Request, res: Response) {
+    return res.send(await getAvailableUniversities());
+}
+
+export async function getAvailableSemestersHandler(req: Request, res: Response) {
+    return res.send(await getAvailableSemesters());
+}
+
+export async function getAvailableSchoolsHandler(req: Request, res: Response) {
+    return res.send(await getAvailableSchools());
+}
+
+export async function getAvailableOrientatorsHandler(req: Request, res: Response) {
+    return res.send(await getAvailableOrientators());
+}
+
+export async function getAvailableExpertsHandler(req: Request, res: Response) {
+    return res.send(await getAvailableExperts());
+}
+
+
+
+
+
+
+
+
+
+

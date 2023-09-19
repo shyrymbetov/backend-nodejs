@@ -4,4 +4,5 @@ export type UserType = {
   email?: string
   fullName?: string
   avatar?: string
+  university?: string
 };

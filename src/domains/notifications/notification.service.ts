@@ -1,8 +1,6 @@
 import {dataSource} from '../../database';
 import {NotificationEntity} from "./model/notification.entity";
-import {ApplicationEntity} from "../application/model/application.entity";
 import {CreateNotificationType} from "./type/notification.type";
-import {sendNotificationCount} from "../../sockets/websocket.service";
 
 const notificationRepository = dataSource.getRepository(NotificationEntity);
 
@@ -31,10 +29,9 @@ export async function getNotificationById(id: string): Promise<NotificationEntit
 }
 
 export async function createNotification(notification: CreateNotificationType) {
-    const newNotification = await notificationRepository.save(notification);
-    await sendNotificationCount(notification.userId);
+    // await sendNotificationCount(notification.userId);
 
-    return newNotification
+    return await notificationRepository.save(notification)
 }
 
 export async function readNotification(id: string) {
