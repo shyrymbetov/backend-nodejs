@@ -87,7 +87,8 @@ export async function login(userDto: LoginUserDto) {
 
     if (!user || !validatePassword(userDto.password, user.hashedPassword)) {
         throw new BadRequest('Wrong credentials');
-    } else if (!user.verified) {
+    }
+    else if (!user.verified) {
         throw new Forbidden('Email not verified');
     }
 
