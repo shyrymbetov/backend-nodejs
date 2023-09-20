@@ -49,7 +49,7 @@ export async function getUniversities(filter: any): Promise<any> {
 }
 
 export async function getUniversitiesToLanding(filter: any): Promise<any> {
-    const {conditionString, conditionParameters} = generateConditionsForGetUniversities(filter)
+    const {conditionString, conditionParameters} = generateConditionsForGetUniversities(filter, true)
 
     const data = universityRepository.createQueryBuilder('university')
         .leftJoinAndSelect('university.country', 'country')
@@ -59,6 +59,8 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
         .leftJoinAndSelect('university.worksheet', 'worksheet')
         .select([
             'university.id as id',
+            'university.isVisible as "isVisible"',
+            'university.canApply as "canApply"',
             'university.universityName as universityName',
             'country.name as universityCountry',
             'university.state as universityState',
@@ -68,6 +70,7 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
             'university.ratingInformation as ratingInformation',
             'university.topRating as topRating',
             'tuitionCost.tuitionCost as cost',
+            'worksheet.id as "worksheetId"',
         ])
         .where(conditionString, conditionParameters)
         .skip((filter.page - 1) * filter.size)
@@ -81,12 +84,15 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
 }
 
 
-function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto) {
+function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto, landing = false) {
     let conditionString = 'true '
     let conditionParameters = {}
     if (filter.country) {
         conditionString += 'and university.country = :country '
         conditionParameters['country'] = filter.country
+    }
+    if (landing) {
+        conditionString += 'and university.isVisible '
     }
 
     if (filter.universityName) {
