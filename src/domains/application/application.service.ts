@@ -83,6 +83,7 @@ function generateConditionsForGetStudentApplication(filter: GetMyApplicationsPar
 }
 
 export async function getMyStudentsApplicationsWithPagination(filter: GetApplicationsParamsDto, expertId: string): Promise<any> {
+    console.log(expertId)
     return await getStudentsByMasterOrOrientatorIdWithApplications(filter, expertId)
 }
 

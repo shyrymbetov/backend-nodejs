@@ -57,8 +57,8 @@ export async function getStudentsByMasterOrOrientatorIdWithApplications(filter: 
 
     const data = await userRepository
         .createQueryBuilder('user')
-        .leftJoin('user.applications', 'applications')
-        .leftJoin('applications.university', 'university')
+        .leftJoinAndSelect('user.applications', 'applications')
+        .leftJoinAndSelect('applications.university', 'university')
         .select([
             'user.id',
             'user.firstName',
