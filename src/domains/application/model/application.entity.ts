@@ -48,6 +48,7 @@ export class ApplicationEntity {
     @Column({
         type: 'enum',
         enum: ApplicationStatusEnum,
+        default: ApplicationStatusEnum.DRAFT,
     })
     applicationStatus!: ApplicationStatusEnum
 
