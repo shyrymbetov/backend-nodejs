@@ -12,7 +12,7 @@ export const CreateApplicationSchema = z.object({
         studentId: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
         universityId: z.string().optional().transform((val) => isValidUUID(val) ? val: undefined),
         specialityType: ApplicationSpecialitySchema.optional(),
-        applicationStatus: z.enum(['DRAFT', 'APPLICATION_RECEIVED'])
+        applicationStatus: z.enum(['DRAFT', 'APPLICATION_RECEIVED']).optional()
             .transform((val) => val ? (val as ApplicationStatusEnum) : undefined),
         profileFields: z.array(ApplicationFieldSchema).optional().transform((val) => val ?? []),
         contactsFields: z.array(ApplicationFieldSchema).optional().transform((val) => val ?? []),
