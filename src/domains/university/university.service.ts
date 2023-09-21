@@ -62,17 +62,18 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
             'university.isVisible as "isVisible"',
             'university.canApply as "canApply"',
             'university.universityName as universityName',
-            'country.name as universityCountry',
-            'university.state as universityState',
-            'university.city as universityCity',
+            'country.name as "universityCountry"',
+            'university.state as "universityState"',
+            'university.city as "universityCity"',
             'university.logo as logo',
             'university.color as color',
-            'university.ratingInformation as ratingInformation',
+            'university.ratingInformation as "ratingInformation"',
             'university.topRating as topRating',
             'tuitionCost.tuitionCost as cost',
             'worksheet.id as "worksheetId"',
         ])
         .where(conditionString, conditionParameters)
+        .groupBy("university.id, country.name, tuitionCost.tuitionCost, worksheet.id")
         .skip((filter.page - 1) * filter.size)
         .take(filter.size)
         .getRawMany();

@@ -2,7 +2,7 @@ import {dataSource} from '../../database';
 import {UserEntity} from './model/user.entity';
 import {UserRoleEnum} from "./types/user-role.enum";
 import {CreateUserDto} from "./dtos/create-user.dto";
-import {createChangePasswordLink} from "../auth/user-action-link.service";
+import {createChangePasswordLink, sendMailChangePasswordLink} from "../auth/user-action-link.service";
 import {ChangeUserPasswordType} from "./types/change-password.type";
 import {CreateUserType} from "./types/create-user.type";
 import {EditCurrentUserDto} from "./dtos/edit-user.dto";
@@ -263,14 +263,13 @@ export async function deleteUser(id: string) {
 }
 
 async function sendReferralLinkToNewUser(email:string, userId: string) {
-    const changePasswordLink = createChangePasswordLink(userId);
+    const changePasswordLink = await createChangePasswordLink(userId);
 
     await sendMailMessage({
         to: email,
         subject: 'Password Change Link',
         html: `/generate-pwd/${changePasswordLink}`
     })
-    console.log(changePasswordLink)
     return "generated";
 }
 
