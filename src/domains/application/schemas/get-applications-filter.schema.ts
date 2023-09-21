@@ -13,6 +13,8 @@ export const GetApplicationsFilterSchema = z.object({
       school: z.string().optional(),
       expert: z.string().optional(),
       orientator: z.string().optional(),
+      expertString: z.string().optional(),
+      orientatorString: z.string().optional(),
       fall: z.string().optional(),
       status: z.string().optional(),
       applicationStatus: z.enum(['APPLICATION_RECEIVED', 'UNDER_CONSIDERATION', 'OFFER_RECEIVED', 'CONFIRMED', 'DEPARTURE'])

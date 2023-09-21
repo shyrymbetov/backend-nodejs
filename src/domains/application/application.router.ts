@@ -41,22 +41,22 @@ applicationRouter.route('/my-students-draft')
     .get(isAuthenticatedMiddleware, getMyStudentsApplicationsDraftHandler)
 
 applicationRouter.route('/available-countries')
-    .get(getAvailableCountriesHandler)
+    .get(isAuthenticatedMiddleware, getAvailableCountriesHandler)
 
 applicationRouter.route('/available-universities')
-    .get(getAvailableUniversitiesHandler)
+    .get(isAuthenticatedMiddleware, getAvailableUniversitiesHandler)
 
 applicationRouter.route('/available-semesters')
-    .get(getAvailableSemestersHandler)
+    .get(isAuthenticatedMiddleware, getAvailableSemestersHandler)
 
 applicationRouter.route('/available-schools')
-    .get(getAvailableSchoolsHandler)
+    .get(isAuthenticatedMiddleware, getAvailableSchoolsHandler)
 
 applicationRouter.route('/available-orientators')
-    .get(getAvailableOrientatorsHandler)
+    .get(isAuthenticatedMiddleware, getAvailableOrientatorsHandler)
 
 applicationRouter.route('/available-experts')
-    .get(getAvailableExpertsHandler)
+    .get(isAuthenticatedMiddleware, getAvailableExpertsHandler)
 
 applicationRouter.route('/my-students/:id')
     .get(isAuthenticatedMiddleware, getMyStudentApplicationByIdHandler)

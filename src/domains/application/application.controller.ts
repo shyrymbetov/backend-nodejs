@@ -90,27 +90,33 @@ export async function deleteApplicationHandler(req: Request, res: Response) {
 }
 
 export async function getAvailableCountriesHandler(req: Request, res: Response) {
-    return res.send(await getAvailableCountries());
+    const id = req.user?.id ?? ''
+    return res.send(await getAvailableCountries(id));
 }
 
 export async function getAvailableUniversitiesHandler(req: Request, res: Response) {
-    return res.send(await getAvailableUniversities());
+    const id = req.user?.id ?? ''
+    return res.send(await getAvailableUniversities(id));
 }
 
 export async function getAvailableSemestersHandler(req: Request, res: Response) {
-    return res.send(await getAvailableSemesters());
+    const id = req.user?.id ?? ''
+    return res.send(await getAvailableSemesters(id));
 }
 
 export async function getAvailableSchoolsHandler(req: Request, res: Response) {
-    return res.send(await getAvailableSchools());
+    const id = req.user?.id ?? ''
+    return res.send(await getAvailableSchools(id));
 }
 
 export async function getAvailableOrientatorsHandler(req: Request, res: Response) {
-    return res.send(await getAvailableOrientators());
+    const id = req.user?.id ?? ''
+    return res.send(await getAvailableOrientators(id));
 }
 
 export async function getAvailableExpertsHandler(req: Request, res: Response) {
-    return res.send(await getAvailableExperts());
+    const id = req.user?.id ?? ''
+    return res.send(await getAvailableExperts(id));
 }
 
 

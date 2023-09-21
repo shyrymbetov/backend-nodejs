@@ -7,9 +7,15 @@ import {getStudentsByMasterOrOrientatorIdWithApplications} from "../students/stu
 import {createApplicationChat} from "../chat/chat.service";
 import {CreateWorksheetDto} from "../worksheet/dtos/create-worksheet.dto";
 import {GetMyApplicationsParamsDto} from "./dto/get-my-applications-params.dto";
+import {UniversityImportantDatesEntity} from "../university/model/university-important-dates.entity";
+import {In} from "typeorm";
+import {SchoolEntity} from "../data/model/school.entity";
 
 
 const applicationRepository = dataSource.getRepository(ApplicationEntity);
+const universityImportantDatesEntity = dataSource.getRepository(UniversityImportantDatesEntity)
+const schoolRepository = dataSource.getRepository(SchoolEntity)
+
 const fieldKeys = ['profileFields', 'contactsFields', 'educationFields', 'languagesFields', 'recommendationsFields', 'motivationFields', 'documentsFields', 'otherFields',];
 
 export async function getApplication(id: string): Promise<ApplicationEntity | null> {
@@ -207,6 +213,17 @@ function generateConditionsForGetApplicationForDraft(filter: GetApplicationsPara
         conditionParameters['orientator'] = filter.orientator
     }
 
+    if (filter.expertString) {
+        conditionString += 'and student.firstName = :expertString '
+        conditionParameters['expertString'] = filter.expertString
+    }
+
+    if (filter.orientatorString) {
+        conditionString += 'and student.firstName = :orientatorString '
+        conditionParameters['orientatorString'] = filter.orientatorString
+    }
+
+
     conditionString += "and application.applicationStatus = 'DRAFT' "
 
 
@@ -274,67 +291,116 @@ export async function deleteApplication(id: string) {
 }
 
 
+function getExactlyMy(managerId: string) {
+    let conditionString = 'true '
+    let conditionParameters = {}
 
-export async function getAvailableCountries() {
+    conditionString += "and (student.orientatorId = :id OR student.masterId = :id) ";
+    conditionParameters['id'] = managerId;
+
+
+    return {
+        conditionString: conditionString,
+        conditionParameters: conditionParameters,
+    };
+}
+
+export async function getAvailableCountries(managerId: string) {
+
+    console.log(managerId)
+
+    let {conditionString, conditionParameters} = getExactlyMy(managerId)
+
 
     return await applicationRepository
         .createQueryBuilder('application')
         .innerJoin('application.university', 'university')
         .innerJoin('university.country', 'country')
+        .innerJoin('application.student', 'student')
         .select('DISTINCT country.id, country.name')
+        .where(conditionString, conditionParameters)
         .getRawMany();
 }
 
-export async function getAvailableUniversities() {
+export async function getAvailableUniversities(managerId: string) {
+
+    let {conditionString, conditionParameters} = getExactlyMy(managerId)
 
     return await applicationRepository
         .createQueryBuilder('application')
         .innerJoin('application.university', 'university')
+        .innerJoin('application.student', 'student')
         .select('DISTINCT university.id, university.universityName')
+        .where(conditionString, conditionParameters)
         .getRawMany();
 }
 
-export async function getAvailableSemesters() {
+export async function getAvailableSemesters(managerId: string) {
 
-    return await applicationRepository
-        .createQueryBuilder('application')
-        .innerJoin('application.university', 'university')
-        .select("DISTINCT  application.specialityType ->> 'importantDayId', application.specialityType ->> 'importantDayId'")
-        .getRawMany();
+    let {conditionString, conditionParameters} = getExactlyMy(managerId)
 
+    return (await universityImportantDatesEntity.find({
+        where: {
+            id: In((await applicationRepository
+                .createQueryBuilder('application')
+                .innerJoin('application.university', 'university')
+                .innerJoin('application.student', 'student')
+                .select("DISTINCT  application.specialityType ->> 'importantDayId' as id")
+                .where(conditionString, conditionParameters)
+                .getRawMany()).map(item => item.id))
+        }
+    })).map(record => ({
+        id: record.id,
+        name: record.name
+    }));
 }
 
 
-export async function getAvailableSchools() {
+export async function getAvailableSchools(managerId: string) {
 
-    return await applicationRepository
-        .createQueryBuilder('application')
-        .innerJoinAndSelect('application.student', 'student')
-        .where('student.school IS NOT NULL')
-        .select('DISTINCT student.school')
-        .getRawMany();
+    let {conditionString, conditionParameters} = getExactlyMy(managerId)
+
+
+    return (await schoolRepository.find({
+        where: {
+            id: In((await applicationRepository
+                .createQueryBuilder('application')
+                .innerJoinAndSelect('application.student', 'student')
+                .where(conditionString + ' and student.school IS NOT NULL ', conditionParameters)
+                .select('DISTINCT student.school')
+                .getRawMany()).map(item => item.school))
+        }
+    })).map(record => ({
+        id: record.id,
+        nameKZ: record.nameKZ,
+        nameRU: record.nameRU
+    }));
+
 }
 
-export async function getAvailableOrientators() {
+export async function getAvailableOrientators(managerId: string) {
+
+    let {conditionString, conditionParameters} = getExactlyMy(managerId)
 
     return await applicationRepository
         .createQueryBuilder('application')
         .innerJoinAndSelect('application.student', 'student')
         .innerJoinAndSelect('student.orientator', 'orientator')
-        .where('student.orientatorId IS NOT NULL')
-        .select('DISTINCT orientator.id, orientator.firstName, orientator.lastName')
+        .where(conditionString + ' and student.orientatorId IS NOT NULL', conditionParameters)
+        .select('DISTINCT orientator.id as id, orientator.firstName as "firstName", orientator.lastName as "lastName"')
         .getRawMany();
 }
 
-export async function getAvailableExperts() {
+export async function getAvailableExperts(managerId: string) {
+
+    let {conditionString, conditionParameters} = getExactlyMy(managerId)
 
     return await applicationRepository
         .createQueryBuilder('application')
         .innerJoinAndSelect('application.student', 'student')
         .innerJoinAndSelect('student.master', 'master')
-        .where('student.masterId IS NOT NULL')
-        .select('DISTINCT master.id, master.firstName, master.lastName')
+        .where(conditionString + ' and student.masterId IS NOT NULL ', conditionParameters)
+        .select('DISTINCT master.id as id, master.firstName as "firstName", master.lastName as "lastName"')
         .getRawMany();
 }
-
 
