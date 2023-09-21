@@ -174,6 +174,10 @@ function generateConditionsForGetApplicationForDraft(filter: GetApplicationsPara
 
     let conditionString = 'true '
     let conditionParameters = {}
+
+    conditionString += "and (student.orientatorId = :id OR student.masterId = :id) ";
+    conditionParameters['id'] = expertId;
+
     if (filter.country) {
         conditionString += 'and university.countryId = :country '
         conditionParameters['country'] = filter.country
@@ -203,8 +207,9 @@ function generateConditionsForGetApplicationForDraft(filter: GetApplicationsPara
         conditionParameters['orientator'] = filter.orientator
     }
 
-    conditionString += "and student.orientatorId = :id OR student.masterId = :id"
-    conditionParameters['id'] = expertId
+    conditionString += "and application.applicationStatus = 'DRAFT' "
+
+
 
 
     return {
