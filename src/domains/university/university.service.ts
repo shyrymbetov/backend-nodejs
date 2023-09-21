@@ -57,22 +57,23 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
         .leftJoinAndSelect('eduDegrees.faculties', 'faculties')
         .leftJoinAndSelect('university.tuitionCost', 'tuitionCost')
         .leftJoinAndSelect('university.worksheet', 'worksheet')
-        .select(
-            'DISTINCT university.id as id,' +
-            'university.isVisible as "isVisible",' +
-            'university.canApply as "canApply",' +
-            'university.universityName as "universityName",' +
-            'country.name as "universityCountry",' +
-            'university.state as "universityState",' +
-            'university.city as "universityCity",' +
-            'university.logo as logo,' +
-            'university.color as color,' +
-            'university.ratingInformation as "ratingInformation",' +
-            'university.topRating as "topRating",' +
-            'tuitionCost.tuitionCost as "cost",' +
-            'worksheet.id as "worksheetId"'
-        )
+        .select([
+            'university.id as id',
+            'university.isVisible as "isVisible"',
+            'university.canApply as "canApply"',
+            'university.universityName as universityName',
+            'country.name as "universityCountry"',
+            'university.state as "universityState"',
+            'university.city as "universityCity"',
+            'university.logo as logo',
+            'university.color as color',
+            'university.ratingInformation as "ratingInformation"',
+            'university.topRating as topRating',
+            'tuitionCost.tuitionCost as cost',
+            'worksheet.id as "worksheetId"',
+        ])
         .where(conditionString, conditionParameters)
+        .groupBy("university.id, country.name, tuitionCost.tuitionCost, worksheet.id")
         .skip((filter.page - 1) * filter.size)
         .take(filter.size)
         .getRawMany();
