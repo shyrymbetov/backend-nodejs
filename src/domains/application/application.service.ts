@@ -330,7 +330,7 @@ export async function getAvailableUniversities(managerId: string) {
         .createQueryBuilder('application')
         .innerJoin('application.university', 'university')
         .innerJoin('application.student', 'student')
-        .select('DISTINCT university.id, university.universityName')
+        .select('DISTINCT university.id, university.universityName as "universityName')
         .where(conditionString, conditionParameters)
         .getRawMany();
 }

@@ -10,6 +10,7 @@ import {env} from '../../../env';
 
 import {ChatEntity} from "./chat.entity";
 import {UserType} from "../../notifications/type/user.type";
+import {UniversityEntity} from "../../university/model/university.entity";
 
 @Entity({schema: env.DB_SCHEMA})
 export class ChatMessagesEntity {
@@ -22,9 +23,13 @@ export class ChatMessagesEntity {
     @Column({ type: 'json', nullable: true})
     user!: UserType;
 
+    @Column('uuid')
+    chatId!: string
+
     @ManyToOne(() => ChatEntity, university => university.messages)
-    @JoinColumn({ name: 'chatId' }) // Correct the join column name to 'universityId'
+    @JoinColumn({ name: 'chat_id' }) // Correct the join column name to 'universityId'
     chat!: ChatEntity;
+
 
     @CreateDateColumn()
     createdAt!: Date;

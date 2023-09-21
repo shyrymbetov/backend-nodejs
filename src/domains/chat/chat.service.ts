@@ -15,6 +15,7 @@ export async function getChatMessages(chatId: string, filter: any): Promise<Chat
         .take(filter.size)
         .getMany();
 }
+
 export async function createApplicationChat(application: ApplicationEntity) {
     const  newChat = {
         application: application,

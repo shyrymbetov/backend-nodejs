@@ -5,8 +5,13 @@ import {UserType} from "../domains/notifications/type/user.type";
 import {getUserById} from "../domains/user/user.service";
 import {sendMailMessage} from "../domains/mail/mail.service";
 import {createChatMessage, getApplicationUsersByChatId} from "../domains/chat/chat.service";
+import {dataSource} from "../database";
+import {ChatEntity} from "../domains/chat/model/chat.entity";
+import {ChatMessagesEntity} from "../domains/chat/model/chat-messages.entity";
 
 const userConnections = new Map();
+const chatRepository = dataSource.getRepository(ChatEntity);
+const chatMessageRepository = dataSource.getRepository(ChatMessagesEntity);
 
 export function addUserOnline(ws: InstanceType<typeof WebSocket.WebSocket>) {
     ws.on('message', async (message) => {
@@ -42,26 +47,30 @@ function handleUserClose(socket, userId: string) {
 async function broadcastToApplication(userId: string, message: any) {
 
     const chat = await getApplicationUsersByChatId(message['applicationId'])
+    // If chat doesn't exist, then quit
     if (!chat) {
         return;
     }
-    //Save Chat Message
+
+    // Save Chat Message to DB
     const sender = await getUserType(userId)
     sender['university'] = message['university']
-    const newChatMessage = {
-        chatId: chat.chatId,
-        content: message.content,
-        user: sender
-    }
 
-    await createChatMessage(newChatMessage)
-    newChatMessage['type']= 'chat_message'
+    const newChatMessage = {
+        user: sender,
+        chatId: chat['chatId'],
+        content: message['content']
+    }
+    console.log("newChatMessage: ", newChatMessage)
+    // End Save Chat Message to DB
+
+    message['user']= sender
 
     for (const user of chat.userIds) {
-        await sendMailNotification(userId, message.content)
-
-        if (user == userId) continue;
-        await sendToUser(user, JSON.stringify(newChatMessage));
+        // await sendMailNotification(userId, message.content)
+        //
+        // if (user == userId) continue;
+        await sendToUser(user, JSON.stringify(message));
     }
 }
 async function sendNotification(userId: string, message: any) {
@@ -97,7 +106,7 @@ export async function sendNotificationCount(userId: string) {
 
 async function sendToUser(userId: string, message: string) {
     const userSocket = userConnections[userId];
-    console.log(message);
+    // console.log(message);
     if (userSocket && userSocket.readyState === WebSocket.OPEN) {
         userSocket.send(message);
     } else {
