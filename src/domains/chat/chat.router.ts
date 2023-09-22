@@ -3,7 +3,6 @@ import {
     getChatMessagesHandler,
 } from './chat.controller';
 import {isAuthenticatedMiddleware} from '../../middlewares/is-authenticated.middleware';
-import path from "path";
 
 export const chatRouter = Router();
 

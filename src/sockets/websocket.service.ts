@@ -4,7 +4,7 @@ import {createNotification, getCountUnreadNotificationsByUserId} from "../domain
 import {UserType} from "../domains/notifications/type/user.type";
 import {getUserById} from "../domains/user/user.service";
 import {sendMailMessage} from "../domains/mail/mail.service";
-import {createChatMessage, getApplicationUsersByChatId} from "../domains/chat/chat.service";
+import {getApplicationUsersByChatId, getChatMessages} from "../domains/chat/chat.service";
 import {dataSource} from "../database";
 import {ChatEntity} from "../domains/chat/model/chat.entity";
 import {ChatMessagesEntity} from "../domains/chat/model/chat-messages.entity";
@@ -15,7 +15,6 @@ const chatMessageRepository = dataSource.getRepository(ChatMessagesEntity);
 
 export function addUserOnline(ws: InstanceType<typeof WebSocket.WebSocket>) {
     ws.on('message', async (message) => {
-        console.log("front: " + message.toString())
         const parsedMessage = JSON.parse(message.toString());
         const userId = isAuthenticated(parsedMessage.token)
         if (parsedMessage.type === 'auth-connect') {
@@ -61,7 +60,7 @@ async function broadcastToApplication(userId: string, message: any) {
         chatId: chat['chatId'],
         content: message['content']
     }
-    console.log("newChatMessage: ", newChatMessage)
+    await chatMessageRepository.save(newChatMessage)
     // End Save Chat Message to DB
 
     message['user']= sender
@@ -121,6 +120,7 @@ async function getUserType(userId: string): Promise<UserType> {
         email: user?.email,
         fullName: (user?.firstName ?? '') + (user?.lastName ?? ''),
         avatar: user?.avatar,
+        role: user?.role
     }
 }
 

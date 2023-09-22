@@ -14,7 +14,7 @@ notificationRouter.route('/')
 ;
 
 notificationRouter.route('/:id')
-  .patch(isAuthenticatedMiddleware, getNotificationByIdHandler)
+  .get(isAuthenticatedMiddleware, getNotificationByIdHandler)
   .patch(isAuthenticatedMiddleware, readNotificationHandler)
   .delete(isAuthenticatedMiddleware, deleteNotificationHandler)
 ;

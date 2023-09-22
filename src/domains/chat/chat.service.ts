@@ -7,12 +7,12 @@ import {CreateChatMessageType} from "./type/chat-message.type";
 const chatRepository = dataSource.getRepository(ChatEntity);
 const chatMessageRepository = dataSource.getRepository(ChatMessagesEntity);
 
-export async function getChatMessages(chatId: string, filter: any): Promise<ChatMessagesEntity[] | null> {
+export async function getChatMessages(chatId: string): Promise<ChatMessagesEntity[] | null> {
     return await chatMessageRepository.createQueryBuilder('messages')
         .where('messages.chatId = :chatId', {chatId})
-        .orderBy('createdAt', 'DESC')
-        .skip((filter.page - 1) * filter.size)
-        .take(filter.size)
+        .orderBy('created_at', 'DESC')
+        // .skip((filter.page - 1) * filter.size)
+        // .take(filter.size)
         .getMany();
 }
 
