@@ -38,9 +38,7 @@ export class ApplicationEntity {
     @Column({type: 'json', nullable: true})
     specialityType!: ApplicationSpecialityType
 
-
     @OneToOne(() => ChatEntity, chat => chat.application)
-    @JoinColumn({name: 'chat_id'})
     chat!: ChatEntity;
 
     @Column({default: false, nullable: true})
