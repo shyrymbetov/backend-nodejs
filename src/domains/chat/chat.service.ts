@@ -6,11 +6,14 @@ import {CreateChatMessageType} from "./type/chat-message.type";
 
 const chatRepository = dataSource.getRepository(ChatEntity);
 const chatMessageRepository = dataSource.getRepository(ChatMessagesEntity);
+const applicationRepository = dataSource.getRepository(ApplicationEntity)
 
-export async function getChatMessages(chatId: string): Promise<ChatMessagesEntity[] | null> {
+export async function getChatMessages(applicationId: string): Promise<ChatMessagesEntity[]> {
     return await chatMessageRepository.createQueryBuilder('messages')
-        .where('messages.chatId = :chatId', {chatId})
-        .orderBy('created_at', 'DESC')
+        .leftJoin('messages.chat', 'chat')
+        .leftJoin('chat.application', 'application')
+        .where('application.id = :applicationId', {applicationId})
+        .orderBy('messages.created_at', 'DESC')
         // .skip((filter.page - 1) * filter.size)
         // .take(filter.size)
         .getMany();
