@@ -38,8 +38,6 @@ export class ApplicationEntity {
     @Column({type: 'json', nullable: true})
     specialityType!: ApplicationSpecialityType
 
-    @Column('uuid', {nullable: true})
-    chatId!: string
 
     @OneToOne(() => ChatEntity, chat => chat.application)
     @JoinColumn({name: 'chat_id'})
