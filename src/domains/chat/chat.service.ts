@@ -13,7 +13,7 @@ export async function getChatMessages(applicationId: string): Promise<ChatMessag
         .leftJoin('messages.chat', 'chat')
         .leftJoin('chat.application', 'application')
         .where('application.id = :applicationId', {applicationId})
-        .orderBy('messages.created_at', 'DESC')
+        .orderBy('messages.created_at', 'ASC')
         // .skip((filter.page - 1) * filter.size)
         // .take(filter.size)
         .getMany();
