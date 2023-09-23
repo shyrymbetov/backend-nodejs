@@ -10,6 +10,7 @@ import {GetMyApplicationsParamsDto} from "./dto/get-my-applications-params.dto";
 import {UniversityImportantDatesEntity} from "../university/model/university-important-dates.entity";
 import {In} from "typeorm";
 import {SchoolEntity} from "../data/model/school.entity";
+import {sendMailMessage} from "../mail/mail.service";
 
 
 const applicationRepository = dataSource.getRepository(ApplicationEntity);
@@ -89,7 +90,6 @@ function generateConditionsForGetStudentApplication(filter: GetMyApplicationsPar
 }
 
 export async function getMyStudentsApplicationsWithPagination(filter: GetApplicationsParamsDto, expertId: string): Promise<any> {
-    console.log(expertId)
     return await getStudentsByMasterOrOrientatorIdWithApplications(filter, expertId)
 }
 
@@ -246,7 +246,7 @@ export async function editApplication(id: string, application: CreateApplication
     return await applicationRepository.save(application);
 }
 
-// TODO application isArchived need to be false to change
+
 export async function editApplicationAfterWorkSheetChange(universityId: string, worksheet: CreateWorksheetDto) {
     // Check if the application's isArchived property is false
     const applications = await applicationRepository.find({where: {universityId: universityId, isArchived: false}});
@@ -277,6 +277,7 @@ export async function editApplicationAfterWorkSheetChange(universityId: string, 
 }
 
 export async function editApplicationActions(id: string, universityDto: ApplicationActionsDto) {
+    // TODO send notification to all participant except own
     return await applicationRepository.update(id, {
         applicationStatus: universityDto.applicationStatus,
         actionsStatus: universityDto.actionsStatus
@@ -330,7 +331,7 @@ export async function getAvailableUniversities(managerId: string) {
         .createQueryBuilder('application')
         .innerJoin('application.university', 'university')
         .innerJoin('application.student', 'student')
-        .select('DISTINCT university.id, university.universityName as "universityName')
+        .select('DISTINCT university.id, university.universityName as "universityName"')
         .where(conditionString, conditionParameters)
         .getRawMany();
 }

@@ -68,7 +68,7 @@ export async function getStudentsByMasterOrOrientatorIdWithApplications(filter: 
             'applications.id',
             'applications.applicationStatus',
             'applications.actionsStatus',
-            'university.universityName'
+            'university.universityName',
         ])
         .where(conditionString, conditionParameters)
         .skip((filter.page - 1) * filter.size)
@@ -108,17 +108,22 @@ function generateConditionsForGetStudentsWithApplication(filter: GetApplications
     }
 
     if (filter.school) {
-        conditionString += 'and student.school = :school '
+        conditionString += 'and user.school = :school '
         conditionParameters['school'] = filter.school
     }
     if (filter.expert) {
-        conditionString += 'and student.masterId = :expert '
+        conditionString += 'and user.masterId = :expert '
         conditionParameters['expert'] = filter.expert
     }
 
     if (filter.orientator) {
-        conditionString += 'and student.orientatorId = :orientator '
+        conditionString += 'and user.orientatorId = :orientator '
         conditionParameters['orientator'] = filter.orientator
+    }
+
+    if (filter.studentName) {
+        conditionString += 'AND (user.firstName ILIKE :studentName OR user.lastName ILIKE :studentName) ';
+        conditionParameters['studentName'] = `%${filter.studentName}%`;
     }
 
     if (filter.applicationStatus) {
