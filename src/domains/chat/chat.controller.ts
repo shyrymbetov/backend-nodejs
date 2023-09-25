@@ -8,3 +8,6 @@ export async function getChatMessagesHandler(req: Request, res: Response) {
   return res.send(await getChatMessages(id));
 }
 
+
+
+

@@ -8,6 +8,7 @@ import {getApplicationUsersByChatId, getChatMessages} from "../domains/chat/chat
 import {dataSource} from "../database";
 import {ChatEntity} from "../domains/chat/model/chat.entity";
 import {ChatMessagesEntity} from "../domains/chat/model/chat-messages.entity";
+import {getApplicationById} from "../domains/application/application.service";
 
 const userConnections = new Map();
 const chatRepository = dataSource.getRepository(ChatEntity);
@@ -21,7 +22,7 @@ export function addUserOnline(ws: InstanceType<typeof WebSocket.WebSocket>) {
             handleUserJoin(ws, userId);
             await sendNotificationCount(userId);
         } else if (parsedMessage.type === 'chat_message') {
-            console.log('chat_message')
+            console.log(userId, message.toString())
             await broadcastToApplication(userId, parsedMessage)
             await sendNotification(userId, message)
         } else if (parsedMessage.type === 'logout') {
@@ -67,22 +68,29 @@ async function broadcastToApplication(userId: string, message: any) {
 
     for (const user of chat.userIds) {
         // await sendMailNotification(userId, message.content)
-        //
+
         // if (user == userId) continue;
         await sendToUser(user, JSON.stringify(message));
     }
 }
 async function sendNotification(userId: string, message: any) {
 
+    message = JSON.parse(message.toString())
+
     const chat = await getApplicationUsersByChatId(message['applicationId'])
+    // const application = await getApplicationById(message['applicationId'])
     //Save Chat Message
     const sender = await getUserType(userId)
-    sender['university'] = message['university']
+    // TODO sender university
+    // sender['university'] = message['university']
     const newNotification: any = {
         link: message['applicationId'],
         content: message.content,
-        user: sender,
+        sender: sender,
+
     }
+    console.log(newNotification)
+    console.log(chat.userIds)
 
     for (const user of chat.userIds) {
         if (user == userId) continue;

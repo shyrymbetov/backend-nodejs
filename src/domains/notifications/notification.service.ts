@@ -1,6 +1,7 @@
 import {dataSource} from '../../database';
 import {NotificationEntity} from "./model/notification.entity";
 import {CreateNotificationType} from "./type/notification.type";
+import {sendNotificationCount} from "../../sockets/websocket.service";
 
 const notificationRepository = dataSource.getRepository(NotificationEntity);
 
@@ -8,7 +9,7 @@ export async function getNotificationsByUserId(userId: string, filter: any): Pro
     return await notificationRepository
         .createQueryBuilder('notification')
         .where('notification.userId = :id', {id: userId})
-        .orderBy('createdAt', 'DESC')
+        .orderBy('created_at', 'DESC')
         .skip((filter.page - 1) * filter.size)
         .take(filter.size)
         .getMany();
@@ -29,7 +30,7 @@ export async function getNotificationById(id: string): Promise<NotificationEntit
 }
 
 export async function createNotification(notification: CreateNotificationType) {
-    // await sendNotificationCount(notification.userId);
+    await sendNotificationCount(notification.userId);
 
     return await notificationRepository.save(notification)
 }

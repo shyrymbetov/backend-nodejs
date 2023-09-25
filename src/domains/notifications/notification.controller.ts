@@ -11,6 +11,7 @@ import {CreateNotificationSchema} from "./schema/create-notification.schema";
 
 export async function getMyNotificationsHandler(req: Request, res: Response) {
   let id: string = req.user?.id!!
+  console.log(id)
   const { query} = GetNotificationFilterSchema.parse(req)
   return res.send(await getNotificationsByUserId(id, query));
 }

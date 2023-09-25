@@ -11,6 +11,9 @@ import {UniversityImportantDatesEntity} from "../university/model/university-imp
 import {In} from "typeorm";
 import {SchoolEntity} from "../data/model/school.entity";
 import {sendMailMessage} from "../mail/mail.service";
+import {UserType} from "../notifications/type/user.type";
+import {getUserById} from "../user/user.service";
+import {UserRoleEnum} from "../user/types/user-role.enum";
 
 
 const applicationRepository = dataSource.getRepository(ApplicationEntity);
@@ -235,15 +238,43 @@ function generateConditionsForGetApplicationForDraft(filter: GetApplicationsPara
     };
 }
 
+async function sendEmailMessage(application: ApplicationEntity, html: string) {
+    const user = await getUserById(application.studentId!)
+    const master = await getUserById(user?.masterId!)
+    const orientator = await getUserById(user?.orientatorId!)
+    const emails = [user?.email, master?.email, orientator?.email]
+
+    for (let email of emails) {
+        //TODO html
+        await sendMailMessage({
+            to: email ?? '',
+            subject: 'Notification ',
+            html: html
+        })
+    }
+}
+
+
 export async function createApplication(application: CreateApplicationDto) {
     const applicationSaved = await applicationRepository.save(application);
+    const currentApplication = await getApplicationById(applicationSaved['id'])
+
+    if (applicationSaved['applicationStatus'] == 'APPLICATION_RECEIVED') {
+        await sendEmailMessage(currentApplication!, "Application Recived to Server")
+    }
+
     await createApplicationChat(applicationSaved)
     return applicationSaved
 }
 
 export async function editApplication(id: string, application: CreateApplicationDto) {
     application.id = id
-    return await applicationRepository.save(application);
+    const applicationSaved = await applicationRepository.save(application);
+
+    const currentApplication = await getApplicationById(id)
+    await sendEmailMessage(currentApplication!, "Application Changed")
+
+    return applicationSaved
 }
 
 
@@ -277,7 +308,10 @@ export async function editApplicationAfterWorkSheetChange(universityId: string, 
 }
 
 export async function editApplicationActions(id: string, universityDto: ApplicationActionsDto) {
-    // TODO send notification to all participant except own
+    const currentApplication = await getApplicationById(id)
+    await sendEmailMessage(currentApplication!, "Application and Action Status Changed")
+
+
     return await applicationRepository.update(id, {
         applicationStatus: universityDto.applicationStatus,
         actionsStatus: universityDto.actionsStatus
