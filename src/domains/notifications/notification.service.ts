@@ -1,7 +1,6 @@
 import {dataSource} from '../../database';
 import {NotificationEntity} from "./model/notification.entity";
 import {CreateNotificationType} from "./type/notification.type";
-import {sendNotificationCount} from "../../sockets/websocket.service";
 
 const notificationRepository = dataSource.getRepository(NotificationEntity);
 
@@ -18,7 +17,7 @@ export async function getNotificationsByUserId(userId: string, filter: any): Pro
 export async function getCountUnreadNotificationsByUserId(userId: string): Promise<number> {
     return await notificationRepository
         .createQueryBuilder('notification')
-        .where('notification.userId = :id AND notification.read is false', {id: userId})
+        .where('notification.userId = :userId AND notification.read is false', {userId: userId})
         .getCount();
 }
 
@@ -30,8 +29,6 @@ export async function getNotificationById(id: string): Promise<NotificationEntit
 }
 
 export async function createNotification(notification: CreateNotificationType) {
-    await sendNotificationCount(notification.userId);
-
     return await notificationRepository.save(notification)
 }
 

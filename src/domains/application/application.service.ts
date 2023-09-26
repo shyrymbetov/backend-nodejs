@@ -14,6 +14,7 @@ import {sendMailMessage} from "../mail/mail.service";
 import {UserType} from "../notifications/type/user.type";
 import {getUserById} from "../user/user.service";
 import {UserRoleEnum} from "../user/types/user-role.enum";
+import {sendNotificationCount} from "../../sockets/websocket.service";
 
 
 const applicationRepository = dataSource.getRepository(ApplicationEntity);

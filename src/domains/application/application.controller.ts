@@ -20,6 +20,7 @@ import {
 import {CreateApplicationSchema} from "./schemas/create-application.schema";
 import {ApplicationActionsSchema} from "./schemas/application-actions.schema";
 import {GetMyApplicationsFilterSchema} from "./schemas/get-my-applications-filter.schema";
+import {sendNotification} from "../../sockets/websocket.service";
 
 export async function getApplicationHandler(req: Request, res: Response) {
     let {id} = req.params

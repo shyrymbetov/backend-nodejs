@@ -24,7 +24,7 @@ export function addUserOnline(ws: InstanceType<typeof WebSocket.WebSocket>) {
         } else if (parsedMessage.type === 'chat_message') {
             console.log(userId, message.toString())
             await broadcastToApplication(userId, parsedMessage)
-            await sendNotification(userId, message)
+            await sendNotification(userId, parsedMessage)
         } else if (parsedMessage.type === 'logout') {
             handleUserClose(ws, userId);
         }
@@ -45,7 +45,6 @@ function handleUserClose(socket, userId: string) {
 }
 
 async function broadcastToApplication(userId: string, message: any) {
-
     const chat = await getApplicationUsersByChatId(message['applicationId'])
     // If chat doesn't exist, then quit
     if (!chat) {
@@ -65,37 +64,33 @@ async function broadcastToApplication(userId: string, message: any) {
     // End Save Chat Message to DB
 
     message['user']= sender
-
     for (const user of chat.userIds) {
         // await sendMailNotification(userId, message.content)
-
-        // if (user == userId) continue;
         await sendToUser(user, JSON.stringify(message));
     }
 }
-async function sendNotification(userId: string, message: any) {
-
-    message = JSON.parse(message.toString())
+export async function sendNotification(userId: string, message: any) {
+    // message = JSON.parse(message.toString())
 
     const chat = await getApplicationUsersByChatId(message['applicationId'])
     // const application = await getApplicationById(message['applicationId'])
     //Save Chat Message
     const sender = await getUserType(userId)
     // TODO sender university
-    // sender['university'] = message['university']
+    sender['university'] = message['university']
     const newNotification: any = {
         link: message['applicationId'],
         content: message.content,
         sender: sender,
-
     }
-    console.log(newNotification)
-    console.log(chat.userIds)
-
     for (const user of chat.userIds) {
-        if (user == userId) continue;
+        if (user == userId)  {
+            continue;
+        }
+        delete newNotification["id"]
         newNotification['userId'] = user
         await createNotification(newNotification)
+        await sendNotificationCount(user);
     }
 }
 
@@ -116,8 +111,6 @@ async function sendToUser(userId: string, message: string) {
     // console.log(message);
     if (userSocket && userSocket.readyState === WebSocket.OPEN) {
         userSocket.send(message);
-    } else {
-        await sendNotificationCount(userId)
     }
 }
 
@@ -126,7 +119,7 @@ async function getUserType(userId: string): Promise<UserType> {
     return {
         id: user?.id,
         email: user?.email,
-        fullName: (user?.firstName ?? '') + (user?.lastName ?? ''),
+        fullName: (user?.firstName ?? '') + " " + (user?.lastName ?? ''),
         avatar: user?.avatar,
         role: user?.role
     }
