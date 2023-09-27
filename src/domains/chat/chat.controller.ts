@@ -8,6 +8,8 @@ export async function getChatMessagesHandler(req: Request, res: Response) {
   return res.send(await getChatMessages(id));
 }
 
-
-
-
+export async function postSeenMessageHandler(req: Request, res: Response) {
+  // let { id } = req.params
+  // const { query } = GetNotificationFilterSchema.parse(req)
+  // return res.send(await getChatMessages(id));
+}
