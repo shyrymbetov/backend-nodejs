@@ -4,7 +4,7 @@ import {
     PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
-    DeleteDateColumn, OneToMany, JoinColumn, OneToOne, ManyToOne,
+    DeleteDateColumn, OneToMany, JoinColumn, OneToOne, ManyToOne, Unique,
 } from 'typeorm';
 import {env} from '../../../env';
 import {ChatMessagesEntity} from "./chat-messages.entity";
@@ -13,24 +13,18 @@ import {UserEntity} from "../../user/model/user.entity";
 
 
 @Entity({schema: env.DB_SCHEMA})
+@Unique('unique_chatMessageId_userId', ['chatMessageId', 'userId'])
 export class ChatMessagesSeenEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @OneToOne(() => ChatMessagesEntity)
-    @JoinColumn()
-    chatMessage!: ChatMessagesEntity
+    @Column('uuid')
+    chatId!: string
 
-    @OneToOne(() => UserEntity)
-    @JoinColumn()
-    user!: UserEntity
+    @Column('uuid')
+    chatMessageId!: string
 
-    @CreateDateColumn()
-    createdAt!: Date;
+    @Column('uuid')
+    userId!: string
 
-    @UpdateDateColumn()
-    updatedAt!: Date;
-
-    @DeleteDateColumn()
-    deactivatedAt!: Date;
 }

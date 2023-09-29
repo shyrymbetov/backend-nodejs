@@ -11,6 +11,7 @@ import {env} from '../../../env';
 import {ChatEntity} from "./chat.entity";
 import {UserType} from "../../notifications/type/user.type";
 import {UniversityEntity} from "../../university/model/university.entity";
+import {ChatMessageFileType} from "../type/chat-message-file.type";
 
 @Entity({schema: env.DB_SCHEMA})
 export class ChatMessagesEntity {
@@ -30,6 +31,8 @@ export class ChatMessagesEntity {
     @JoinColumn({ name: 'chat_id' }) // Correct the join column name to 'universityId'
     chat!: ChatEntity;
 
+    @Column({type: "json", nullable: true})
+    file!: ChatMessageFileType;
 
     @CreateDateColumn()
     createdAt!: Date;
@@ -39,4 +42,6 @@ export class ChatMessagesEntity {
 
     @DeleteDateColumn()
     deactivatedAt!: Date;
+
+    seen: boolean = false;
 }

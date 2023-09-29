@@ -4,7 +4,7 @@ import {createNotification, getCountUnreadNotificationsByUserId} from "../domain
 import {UserType} from "../domains/notifications/type/user.type";
 import {getUserById} from "../domains/user/user.service";
 import {sendMailMessage} from "../domains/mail/mail.service";
-import {getApplicationUsersByChatId, getChatMessages} from "../domains/chat/chat.service";
+import {createChatMessage, getApplicationUsersByChatId, getChatMessages} from "../domains/chat/chat.service";
 import {dataSource} from "../database";
 import {ChatEntity} from "../domains/chat/model/chat.entity";
 import {ChatMessagesEntity} from "../domains/chat/model/chat-messages.entity";
@@ -58,9 +58,10 @@ async function broadcastToApplication(userId: string, message: any) {
     const newChatMessage = {
         user: sender,
         chatId: chat['chatId'],
-        content: message['content']
+        content: message['content'],
+        file: message['file']
     }
-    await chatMessageRepository.save(newChatMessage)
+    await createChatMessage(newChatMessage)
     // End Save Chat Message to DB
 
     message['user']= sender
