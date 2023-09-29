@@ -71,9 +71,11 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
             'university.topRating as topRating',
             'tuitionCost.tuitionCost as cost',
             'worksheet.id as "worksheetId"',
+            'CAST(eduDegrees.degree AS TEXT) as degree',
+            'faculties.name as faculty'
         ])
         .where(conditionString, conditionParameters)
-        .groupBy("university.id, country.name, tuitionCost.tuitionCost, worksheet.id")
+        .groupBy("university.id, country.name, tuitionCost.tuitionCost, worksheet.id, eduDegrees.degree, faculties.name")
         .skip((filter.page - 1) * filter.size)
         .take(filter.size)
         .getRawMany();
@@ -128,13 +130,13 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto, 
     }
 
     if (filter.search) {
-        conditionString += ' AND (' + // Start of the AND clause
+        conditionString += 'and (' +
             'country.name ILIKE :search OR ' +
             'CAST(eduDegrees.degree AS TEXT) ILIKE :search OR ' +
             'faculties.name ILIKE :search ' +
-            ')'; // End of the AND clause
+            ')';
 
-        conditionParameters['search'] = filter.search;
+        conditionParameters['search'] = `%${filter.search}%`;
     }
 
     return {
