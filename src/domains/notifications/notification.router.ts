@@ -9,13 +9,14 @@ import {isAuthenticatedMiddleware} from '../../middlewares/is-authenticated.midd
 export const notificationRouter = Router();
 
 notificationRouter.route('/')
-  .get(isAuthenticatedMiddleware, getMyNotificationsHandler)
-  .post(createNotificationHandler)
+    .get(isAuthenticatedMiddleware, getMyNotificationsHandler)
+    .patch(isAuthenticatedMiddleware, readNotificationHandler)
+    .post(createNotificationHandler)
 ;
 
 notificationRouter.route('/:id')
   .get(isAuthenticatedMiddleware, getNotificationByIdHandler)
-  .patch(isAuthenticatedMiddleware, readNotificationHandler)
+
   .delete(isAuthenticatedMiddleware, deleteNotificationHandler)
 ;
 

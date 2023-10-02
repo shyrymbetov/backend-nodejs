@@ -33,9 +33,18 @@ export async function createNotification(notification: CreateNotificationType) {
 }
 
 export async function readNotification(id: string) {
-    return await notificationRepository.update(id, {
-        read: true
-    });
+    // Find all unread notifications
+    const allUnreadNotifications = await notificationRepository.findBy({ read: false, userId: id });
+    // Create an array of IDs for the unread notifications
+    const notificationIds = allUnreadNotifications.map(notification => notification.id);
+    // Check if there are notifications to update
+    if (notificationIds.length === 0) {
+        return; // No notifications to update, return 0
+    }
+    // Update the 'read' status for all unread notifications in a single query
+    await notificationRepository.update(notificationIds, { read: true });
+    // Optionally, you can return the updated notifications
+    return 'Success';
 }
 
 export async function deleteNotification(id: string) {

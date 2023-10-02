@@ -26,8 +26,8 @@ export async function getNotificationByIdHandler(req: Request, res: Response) {
   return res.send(await getNotificationById(id));
 }
 export async function readNotificationHandler(req: Request, res: Response) {
-  const {id} = req.params
-  return res.send(await readNotification(id));
+  const userId = req.user?.id ?? ''
+  return res.send(await readNotification(userId));
 }
 export async function  deleteNotificationHandler(req: Request, res: Response) {
   const {id} = req.params

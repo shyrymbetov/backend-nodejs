@@ -22,6 +22,7 @@ export async function getChatMessages(applicationId: string, userId: string): Pr
 
     const seenMessages = await chatMessagesSeenRepository
         .createQueryBuilder('seen')
+        .where('seen.user_id = :userId', {userId: userId})
         .getMany();
 
     // Create a map of chatMessageId and userId from seenMessages for quick lookup
@@ -96,7 +97,6 @@ export async function getUnseenMessageCount(userId: string, chatId: string): Pro
     // Create the main query to count ChatMessages that are not in ChatMessageSeen
     const query = chatMessageRepository.createQueryBuilder('chatMessage')
         .where(`chatMessage.chatId = :chatId and chatMessage.id NOT IN (${subquery.getQuery()})`, { chatId: chatId })
-        .where(`chatMessage.id NOT IN (${subquery.getQuery()})`)
         .setParameters(subquery.getParameters());
 
     const countUnseenMessages = await query.getCount();
