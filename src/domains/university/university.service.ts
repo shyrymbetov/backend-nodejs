@@ -130,6 +130,7 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto, 
     if (filter.search) {
         conditionString += 'and (' +
             'country.name ILIKE :search OR ' +
+            'LOWER(university.universityName) like LOWER(:search) OR ' +
             'CAST(eduDegrees.degree AS TEXT) ILIKE :search OR ' +
             'faculties.name ILIKE :search ' +
             ')';
