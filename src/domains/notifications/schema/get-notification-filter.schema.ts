@@ -5,6 +5,7 @@ export const GetNotificationFilterSchema = z.object({
   query: z.object({
       page: z.string().regex(/^\d+$/).optional().default('1').transform(Number),
       size: z.string().regex(/^\d+$/).optional().default('20').transform(Number),
+      search: z.string().optional()
   }),
   params: z.object({}),
 });

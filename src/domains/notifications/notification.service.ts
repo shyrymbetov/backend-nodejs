@@ -1,17 +1,47 @@
 import {dataSource} from '../../database';
 import {NotificationEntity} from "./model/notification.entity";
 import {CreateNotificationType} from "./type/notification.type";
+import {GetApplicationsParamsDto} from "../application/dto/get-applications-params.dto";
 
 const notificationRepository = dataSource.getRepository(NotificationEntity);
 
 export async function getNotificationsByUserId(userId: string, filter: any): Promise<NotificationEntity[] | null> {
+
+    let {conditionString, conditionParameters} = generateConditionsForMyNotifications(filter, userId)
+
+
     return await notificationRepository
         .createQueryBuilder('notification')
-        .where('notification.userId = :id', {id: userId})
+        .where(conditionString, conditionParameters)
         .orderBy('created_at', 'DESC')
+        // .select("notification.sender->>'fullName'")
         .skip((filter.page - 1) * filter.size)
         .take(filter.size)
         .getMany();
+}
+
+function generateConditionsForMyNotifications(filter: any, userId: string) {
+
+    let conditionString = 'true '
+    let conditionParameters = {}
+
+    conditionString += "and notification.userId = :id ";
+    conditionParameters['id'] = userId;
+
+    if (filter.search) {
+        conditionString += ' AND (' +
+            'notification.content ILIKE :filterSearch ' +
+            'OR notification.sender->>\'fullName\' ILIKE :filterSearch ' +
+            'OR notification.sender->>\'university\' ILIKE :filterSearch' +
+            ') ';
+        conditionParameters['filterSearch'] = `%${filter.search}%`;
+    }
+
+
+    return {
+        conditionString: conditionString,
+        conditionParameters: conditionParameters,
+    };
 }
 
 export async function getCountUnreadNotificationsByUserId(userId: string): Promise<number> {

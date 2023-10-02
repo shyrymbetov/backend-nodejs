@@ -16,7 +16,6 @@ notificationRouter.route('/')
 
 notificationRouter.route('/:id')
   .get(isAuthenticatedMiddleware, getNotificationByIdHandler)
-
   .delete(isAuthenticatedMiddleware, deleteNotificationHandler)
 ;
 

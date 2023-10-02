@@ -51,7 +51,7 @@ export async function getUniversities(filter: any): Promise<any> {
 export async function getUniversitiesToLanding(filter: any): Promise<any> {
     const {conditionString, conditionParameters} = generateConditionsForGetUniversities(filter, true)
 
-    const data = universityRepository.createQueryBuilder('university')
+    const data = await universityRepository.createQueryBuilder('university')
         .leftJoinAndSelect('university.country', 'country')
         .leftJoinAndSelect('university.eduDegrees', 'eduDegrees')
         .leftJoinAndSelect('eduDegrees.faculties', 'faculties')
@@ -77,10 +77,23 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
         .skip((filter.page - 1) * filter.size)
         .take(filter.size)
         .getRawMany();
-    // there
-    const totalCount = 0 // there Total count
 
-    return data;
+    const totalCount = await universityRepository.createQueryBuilder('university')
+        .leftJoinAndSelect('university.country', 'country')
+        .leftJoinAndSelect('university.eduDegrees', 'eduDegrees')
+        .leftJoinAndSelect('eduDegrees.faculties', 'faculties')
+        .leftJoinAndSelect('university.tuitionCost', 'tuitionCost')
+        .leftJoinAndSelect('university.worksheet', 'worksheet')
+        .where(conditionString, conditionParameters)
+        .getCount();
+
+    // return data
+
+    return {
+        data: data,
+        totalCount: totalCount
+    }
+
 
 }
 
