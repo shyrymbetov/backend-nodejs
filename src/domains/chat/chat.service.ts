@@ -107,5 +107,8 @@ export async function getUnseenMessageCount(userId: string, chatId: string): Pro
 
 
 export async function createChatMessage(message: CreateChatMessageType) {
-    return await chatMessageRepository.save(message)
+    const newMessage = await chatMessageRepository.save(message)
+    const newSeenMessage = {userId: newMessage['user']['id'], chatMessageId: newMessage['id'], chatId: newMessage['chatId']}
+    await chatMessagesSeenRepository.save(newSeenMessage)
+    return newMessage
 }

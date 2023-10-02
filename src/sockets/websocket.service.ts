@@ -4,7 +4,12 @@ import {createNotification, getCountUnreadNotificationsByUserId} from "../domain
 import {UserType} from "../domains/notifications/type/user.type";
 import {getUserById} from "../domains/user/user.service";
 import {sendMailMessage} from "../domains/mail/mail.service";
-import {createChatMessage, getApplicationUsersByChatId, getChatMessages} from "../domains/chat/chat.service";
+import {
+    createChatMessage,
+    createSeenMessage,
+    getApplicationUsersByChatId,
+    getChatMessages
+} from "../domains/chat/chat.service";
 import {dataSource} from "../database";
 import {ChatEntity} from "../domains/chat/model/chat.entity";
 import {ChatMessagesEntity} from "../domains/chat/model/chat-messages.entity";
