@@ -55,6 +55,7 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
         .leftJoinAndSelect('university.country', 'country')
         .leftJoinAndSelect('university.eduDegrees', 'eduDegrees')
         .leftJoinAndSelect('eduDegrees.faculties', 'faculties')
+        .leftJoinAndSelect('faculties.specialities', 'specialities')
         .leftJoinAndSelect('university.tuitionCost', 'tuitionCost')
         .leftJoinAndSelect('university.worksheet', 'worksheet')
         .select([
@@ -73,7 +74,7 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
             'worksheet.id as "worksheetId"',
         ])
         .where(conditionString, conditionParameters)
-        .groupBy("university.id, country.name, tuitionCost.tuitionCost, worksheet.id")
+        .groupBy("university.id, country.name, tuitionCost.tuitionCost, worksheet.id ")
         .skip((filter.page - 1) * filter.size)
         .take(filter.size)
         .getRawMany();
@@ -82,6 +83,7 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
         .leftJoinAndSelect('university.country', 'country')
         .leftJoinAndSelect('university.eduDegrees', 'eduDegrees')
         .leftJoinAndSelect('eduDegrees.faculties', 'faculties')
+        .leftJoinAndSelect('faculties.specialities', 'specialities')
         .leftJoinAndSelect('university.tuitionCost', 'tuitionCost')
         .leftJoinAndSelect('university.worksheet', 'worksheet')
         .where(conditionString, conditionParameters)
@@ -141,14 +143,15 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto, 
     }
 
     if (filter.search) {
+        // 'specialities.directions' 'specialities.name'
         conditionString += 'and (' +
-            'country.name ILIKE :search OR ' +
             'LOWER(university.universityName) like LOWER(:search) OR ' +
-            'CAST(eduDegrees.degree AS TEXT) ILIKE :search OR ' +
-            'faculties.name ILIKE :search ' +
+            'LOWER(specialities.name) like LOWER(:search) ' +
+            // '(:searchIn IN specialities.directions ) ' +
             ')';
 
         conditionParameters['search'] = `%${filter.search}%`;
+        conditionParameters['searchIn'] = filter.search;
     }
 
     return {
