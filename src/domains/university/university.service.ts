@@ -50,8 +50,9 @@ export async function getUniversities(filter: any): Promise<any> {
 
 export async function getUniversitiesToLanding(filter: any): Promise<any> {
     const {conditionString, conditionParameters} = generateConditionsForGetUniversities(filter, true)
-
-    const data = await universityRepository.createQueryBuilder('university')
+    const skip = (filter.page - 1) * filter.size
+    const take = filter.size
+    let sql = universityRepository.createQueryBuilder('university')
         .leftJoinAndSelect('university.country', 'country')
         .leftJoinAndSelect('university.eduDegrees', 'eduDegrees')
         .leftJoinAndSelect('eduDegrees.faculties', 'faculties')
@@ -75,9 +76,12 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
         ])
         .where(conditionString, conditionParameters)
         .groupBy("university.id, country.name, tuitionCost.tuitionCost, worksheet.id ")
-        .skip((filter.page - 1) * filter.size)
-        .take(filter.size)
-        .getRawMany();
+        .getSql();
+
+    // Add LIMIT and OFFSET to the query string
+    sql = `${sql} LIMIT ${take} OFFSET ${skip}`;
+
+    const data = await universityRepository.query(sql);
 
     const totalCount = await universityRepository.createQueryBuilder('university')
         .leftJoinAndSelect('university.country', 'country')
@@ -87,9 +91,8 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
         .leftJoinAndSelect('university.tuitionCost', 'tuitionCost')
         .leftJoinAndSelect('university.worksheet', 'worksheet')
         .where(conditionString, conditionParameters)
+        .groupBy("university.id, country.name, tuitionCost.tuitionCost, worksheet.id ")
         .getCount();
-
-    // return data
 
     return {
         data: data,
@@ -125,8 +128,8 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto, 
         conditionString += 'and eduDegrees.degree = :degree '
         conditionParameters['degree'] = filter.degree
     }
-    if (filter.scholarshipType) {
-        conditionString += 'and university.scholarshipType = :scholarshipType '
+    if (filter.scholarshipType.length) {
+        conditionString += 'and CAST(university.scholarshipType as varchar) in (:...scholarshipType) '
         conditionParameters['scholarshipType'] = filter.scholarshipType
     }
     if (filter.rating) {

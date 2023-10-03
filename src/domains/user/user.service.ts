@@ -16,7 +16,10 @@ export async function getUsers(filter: GetUsersParamsDto): Promise<any> {
 
     const { conditionString, conditionParameters } = generateConditionsForGetUser(filter)
 
-    const data = await userRepository.createQueryBuilder('managers')
+    const skip = (filter.page - 1) * filter.size
+    const take = filter.size
+
+    let sql = userRepository.createQueryBuilder('managers')
         .leftJoinAndSelect('managers.orientatorStudents', 'orientatorStudents')
         .leftJoinAndSelect('managers.masterStudents', 'masterStudents')
         .select([
@@ -42,7 +45,11 @@ export async function getUsers(filter: GetUsersParamsDto): Promise<any> {
         .orderBy('stuCount', 'DESC')
         .skip((filter.page - 1) * filter.size)
         .take(filter.size)
-        .getRawMany();
+        .getSql();
+
+    sql = `${sql} LIMIT ${take} OFFSET ${skip}`;
+
+    const data = await userRepository.query(sql);
 
     const totalCount = await userRepository
         .createQueryBuilder('managers')
