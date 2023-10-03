@@ -18,7 +18,7 @@ const universityRepository = dataSource.getRepository(UniversityEntity);
 
 export async function getUniversities(filter: any): Promise<any> {
 
-    const {conditionString, conditionParameters} = generateConditionsForGetUniversities(filter)
+    const {conditionString, conditionParameters, conditionParametersArray} = generateConditionsForGetUniversities(filter)
     const skip = (filter.page - 1) * filter.size
     const take = filter.size
 
@@ -39,7 +39,7 @@ export async function getUniversities(filter: any): Promise<any> {
 
     sql = `${sql} LIMIT ${take} OFFSET ${skip}`;
 
-    const data = await universityRepository.query(sql);
+    const data = await universityRepository.query(sql, conditionParametersArray);
 
     const totalCount = await universityRepository
         .createQueryBuilder('university')
@@ -53,7 +53,8 @@ export async function getUniversities(filter: any): Promise<any> {
 }
 
 export async function getUniversitiesToLanding(filter: any): Promise<any> {
-    const {conditionString, conditionParameters} = generateConditionsForGetUniversities(filter, true)
+    const {conditionString, conditionParameters, conditionParametersArray} =
+        generateConditionsForGetUniversities(filter, true)
     const skip = (filter.page - 1) * filter.size
     const take = filter.size
     let sql = universityRepository.createQueryBuilder('university')
@@ -82,12 +83,11 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
         .groupBy("university.id, country.name, tuitionCost.tuitionCost, worksheet.id ")
         .getSql();
 
+
     // Add LIMIT and OFFSET to the query string
     sql = `${sql} LIMIT ${take} OFFSET ${skip}`;
 
-    // console.log('Generated SQL:', sql);
-
-    const data = await universityRepository.query(sql);
+    const data = await universityRepository.query(sql, conditionParametersArray);
 
     const totalCount = await universityRepository.createQueryBuilder('university')
         .leftJoinAndSelect('university.country', 'country')
@@ -112,9 +112,11 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
 function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto, landing = false) {
     let conditionString = 'true '
     let conditionParameters = {}
+    let conditionParametersArray: any[] = []
     if (filter.country) {
         conditionString += 'and university.country = :country '
         conditionParameters['country'] = filter.country
+        conditionParametersArray.push(filter.country)
     }
     if (landing) {
         conditionString += 'and university.isVisible '
@@ -123,34 +125,39 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto, 
     if (filter.universityName) {
         conditionString += 'and LOWER(university.universityName) like LOWER(:universityName) '
         conditionParameters['universityName'] = `%${filter.universityName}%`
+        conditionParametersArray.push(`%${filter.universityName}%`)
     }
 
     if (filter.faculty) {
         conditionString += 'and LOWER(faculties.name) like LOWER(:facultyName) '
         conditionParameters['facultyName'] = `%${filter.faculty}%`
+        conditionParametersArray.push(`%${filter.faculty}%`)
     }
 
     if (filter.degree) {
         conditionString += 'and eduDegrees.degree = :degree '
         conditionParameters['degree'] = filter.degree
+        conditionParametersArray.push(filter.degree)
     }
     if (filter.scholarshipType.length) {
-
-        conditionParameters['scholarshipType'] = filter.scholarshipType.map(type => `'${type}'`).join(',');
-        conditionString += `and CAST(university.scholarshipType as varchar) in (${conditionParameters['scholarshipType']}) `
-        console.log('Generated Params:', `${conditionParameters['scholarshipType']}`)
+        conditionString += `AND CAST(university.scholarshipType as varchar) IN (:...scholarshipType)`;
+        conditionParameters['scholarshipType'] = filter.scholarshipType;
+        conditionParametersArray.push(...filter.scholarshipType)
     }
     if (filter.rating) {
         conditionString += 'and university.topRating = :rating '
         conditionParameters['rating'] = filter.rating
+        conditionParametersArray.push(filter.rating)
     }
     if (filter.minFee) {
         conditionString += 'and tuitionCost.tuitionCost >= :minFee '
         conditionParameters['minFee'] = filter.minFee
+        conditionParametersArray.push(filter.minFee)
     }
     if (filter.maxFee) {
         conditionString += 'and tuitionCost.tuitionCost <= :maxFee '
         conditionParameters['maxFee'] = filter.maxFee
+        conditionParametersArray.push(filter.maxFee)
     }
 
     if (filter.search) {
@@ -162,12 +169,14 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto, 
             ')';
 
         conditionParameters['search'] = `%${filter.search}%`;
-        conditionParameters['searchIn'] = filter.search;
+        // conditionParameters['searchIn'] = filter.search;
+        conditionParametersArray.push(`%${filter.search}%`, `%${filter.search}%`)
     }
 
     return {
         conditionString: conditionString,
         conditionParameters: conditionParameters,
+        conditionParametersArray: conditionParametersArray,
     };
 }
 

@@ -21,7 +21,7 @@ export async function setManagerIdsToQuery(userId: string, query: GetStudentsPar
 }
 
 export async function getStudents(filter: GetStudentsParamsDto): Promise<any> {
-    const { conditionString, conditionParameters } = generateConditionsForGetStudents(filter)
+    const { conditionString, conditionParameters,  conditionParametersArray} = generateConditionsForGetStudents(filter)
 
     const skip = (filter.page-1) * filter.size
     const take = filter.size
@@ -42,8 +42,9 @@ export async function getStudents(filter: GetStudentsParamsDto): Promise<any> {
         .getSql();
 
     sql = `${sql} LIMIT ${take} OFFSET ${skip}`;
+    console.log(sql)
 
-    const data = await userRepository.query(sql);
+    const data = await userRepository.query(sql, conditionParametersArray);
 
     const totalCount = await userRepository
         .createQueryBuilder('students')
@@ -151,44 +152,54 @@ function generateConditionsForGetStudentsWithApplication(filter: GetApplications
 
 
 function generateConditionsForGetStudents(filter: GetStudentsParamsDto) {
-
+    let conditionString = 'students.role IN (:...roles) '
     let conditionParameters = {
-        roles: [UserRoleEnum.Schoolboy, UserRoleEnum.Student].map(type => `'${type}'`).join(','),
+        roles: [UserRoleEnum.Schoolboy, UserRoleEnum.Student],
     }
-    let conditionString = `students.role IN (${conditionParameters['roles']}) `
+
+    let conditionParametersArray: any[] = [
+            ...[UserRoleEnum.Schoolboy, UserRoleEnum.Student],
+    ]
 
     if (filter.orientatorId) {
         conditionString += 'and students.orientatorId = :orientatorId '
         conditionParameters['orientatorId'] = filter.orientatorId
+        conditionParametersArray.push(filter.orientatorId)
     }
 
     if (filter.masterId) {
+        conditionString += `and students.masterId = :masterId `
         conditionParameters['masterId'] = filter.masterId
-        conditionString += `and students.masterId = '${filter.masterId}' `
+        conditionParametersArray.push(filter.masterId)
     }
 
     if (filter.localId) {
         conditionString += 'and students.localId = :localId '
         conditionParameters['localId'] = filter.localId
+        conditionParametersArray.push(filter.localId)
     }
 
     if (filter.school) {
         conditionString += 'and students.school = :school '
         conditionParameters['school'] = filter.school
+        conditionParametersArray.push(filter.school)
     }
     if (filter.class) {
         conditionString += 'and students.class = :class '
         conditionParameters['class'] = filter.class
+        conditionParametersArray.push(filter.class)
     }
 
     if (filter.search) {
         conditionString += 'and LOWER(students.firstName || \' \' || students.lastName) like :name '
         conditionParameters['name'] = `%${filter.search.toLowerCase()}%`
+        conditionParametersArray.push(`%${filter.search.toLowerCase()}%`)
     }
 
     return {
         conditionString: conditionString,
         conditionParameters: conditionParameters,
+        conditionParametersArray: conditionParametersArray
     };
 }
 
