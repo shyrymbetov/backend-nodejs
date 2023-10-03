@@ -39,7 +39,10 @@ export async function getApplications(filter: GetApplicationsParamsDto): Promise
 
     const {conditionString, conditionParameters} = generateConditionsForGetApplication(filter)
 
-    const data = await applicationRepository.createQueryBuilder('application')
+    const skip = (filter.page - 1) * filter.size
+    const take = filter.size
+
+    let sql = applicationRepository.createQueryBuilder('application')
         .leftJoinAndSelect('managers.university', 'university')
         .select([
             'managers.id as id',
@@ -47,9 +50,12 @@ export async function getApplications(filter: GetApplicationsParamsDto): Promise
         ])
         .where(conditionString, conditionParameters)
         .orderBy('createdAt', 'DESC')
-        .skip((filter.page - 1) * filter.size)
-        .take(filter.size)
-        .getRawMany();
+        .getSql();
+
+    // Add LIMIT and OFFSET to the query string
+    sql = `${sql} LIMIT ${take} OFFSET ${skip}`;
+
+    const data = await applicationRepository.query(sql);
 
     const totalCount = await applicationRepository
         .createQueryBuilder('application')

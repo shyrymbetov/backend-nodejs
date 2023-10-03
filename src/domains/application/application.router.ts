@@ -23,7 +23,7 @@ import { isAbleToEditApplication } from '../../middlewares/is-able-to-edit-appli
 
 export const applicationRouter = Router();
 applicationRouter.route('/')
-    .get(isAuthenticatedMiddleware, getApplicationsHandler)
+    // .get(isAuthenticatedMiddleware, getApplicationsHandler)
     .post(isAuthenticatedMiddleware, createApplicationHandler)
 ;
 applicationRouter.route('/user/:id')

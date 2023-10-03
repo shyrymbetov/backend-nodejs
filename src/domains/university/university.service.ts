@@ -19,8 +19,10 @@ const universityRepository = dataSource.getRepository(UniversityEntity);
 export async function getUniversities(filter: any): Promise<any> {
 
     const {conditionString, conditionParameters} = generateConditionsForGetUniversities(filter)
+    const skip = (filter.page - 1) * filter.size
+    const take = filter.size
 
-    const data = await universityRepository.createQueryBuilder('university')
+    let sql = universityRepository.createQueryBuilder('university')
         .leftJoinAndSelect('university.tuitionCost', 'tuition')
         .leftJoinAndSelect('university.worksheet', 'worksheet')
         .select([
@@ -33,9 +35,11 @@ export async function getUniversities(filter: any): Promise<any> {
             'worksheet.id as worksheetId',
         ])
         .where(conditionString, conditionParameters)
-        .skip((filter.page - 1) * filter.size)
-        .take(filter.size)
-        .getRawMany();
+        .getSql();
+
+    sql = `${sql} LIMIT ${take} OFFSET ${skip}`;
+
+    const data = await universityRepository.query(sql);
 
     const totalCount = await universityRepository
         .createQueryBuilder('university')
@@ -80,6 +84,8 @@ export async function getUniversitiesToLanding(filter: any): Promise<any> {
 
     // Add LIMIT and OFFSET to the query string
     sql = `${sql} LIMIT ${take} OFFSET ${skip}`;
+
+    // console.log('Generated SQL:', sql);
 
     const data = await universityRepository.query(sql);
 
@@ -129,8 +135,10 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto, 
         conditionParameters['degree'] = filter.degree
     }
     if (filter.scholarshipType.length) {
-        conditionString += 'and CAST(university.scholarshipType as varchar) in (:...scholarshipType) '
-        conditionParameters['scholarshipType'] = filter.scholarshipType
+
+        conditionParameters['scholarshipType'] = filter.scholarshipType.map(type => `'${type}'`).join(',');
+        conditionString += `and CAST(university.scholarshipType as varchar) in (${conditionParameters['scholarshipType']}) `
+        console.log('Generated Params:', `${conditionParameters['scholarshipType']}`)
     }
     if (filter.rating) {
         conditionString += 'and university.topRating = :rating '

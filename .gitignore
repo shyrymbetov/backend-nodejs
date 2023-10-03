@@ -3,3 +3,4 @@ dist
 .env
 .idea
 uploads
+src/env.ts

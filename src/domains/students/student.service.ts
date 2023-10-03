@@ -23,7 +23,11 @@ export async function setManagerIdsToQuery(userId: string, query: GetStudentsPar
 export async function getStudents(filter: GetStudentsParamsDto): Promise<any> {
     const { conditionString, conditionParameters } = generateConditionsForGetStudents(filter)
 
-    const data = await userRepository.createQueryBuilder('students')
+    const skip = (filter.page-1) * filter.size
+    const take = filter.size
+
+
+    let sql = userRepository.createQueryBuilder('students')
         .select([
             'students.id as id',
             'students.avatar as avatar',
@@ -35,9 +39,11 @@ export async function getStudents(filter: GetStudentsParamsDto): Promise<any> {
             'students.masterId as masterId',
         ])
         .where(conditionString, conditionParameters)
-        .skip((filter.page - 1) * filter.size)
-        .take(filter.size)
-        .getRawMany();
+        .getSql();
+
+    sql = `${sql} LIMIT ${take} OFFSET ${skip}`;
+
+    const data = await userRepository.query(sql);
 
     const totalCount = await userRepository
         .createQueryBuilder('students')
@@ -145,10 +151,11 @@ function generateConditionsForGetStudentsWithApplication(filter: GetApplications
 
 
 function generateConditionsForGetStudents(filter: GetStudentsParamsDto) {
-    let conditionString = 'students.role IN (:...roles) '
+
     let conditionParameters = {
-        roles: [UserRoleEnum.Schoolboy, UserRoleEnum.Student],
+        roles: [UserRoleEnum.Schoolboy, UserRoleEnum.Student].map(type => `'${type}'`).join(','),
     }
+    let conditionString = `students.role IN (${conditionParameters['roles']}) `
 
     if (filter.orientatorId) {
         conditionString += 'and students.orientatorId = :orientatorId '
@@ -156,8 +163,8 @@ function generateConditionsForGetStudents(filter: GetStudentsParamsDto) {
     }
 
     if (filter.masterId) {
-        conditionString += 'and students.masterId = :masterId '
         conditionParameters['masterId'] = filter.masterId
+        conditionString += `and students.masterId = '${filter.masterId}' `
     }
 
     if (filter.localId) {

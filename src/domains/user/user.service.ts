@@ -15,11 +15,7 @@ const userRepository = dataSource.getRepository(UserEntity);
 export async function getUsers(filter: GetUsersParamsDto): Promise<any> {
 
     const { conditionString, conditionParameters } = generateConditionsForGetUser(filter)
-
-    const skip = (filter.page - 1) * filter.size
-    const take = filter.size
-
-    let sql = userRepository.createQueryBuilder('managers')
+    const data = await userRepository.createQueryBuilder('managers')
         .leftJoinAndSelect('managers.orientatorStudents', 'orientatorStudents')
         .leftJoinAndSelect('managers.masterStudents', 'masterStudents')
         .select([
@@ -45,11 +41,8 @@ export async function getUsers(filter: GetUsersParamsDto): Promise<any> {
         .orderBy('stuCount', 'DESC')
         .skip((filter.page - 1) * filter.size)
         .take(filter.size)
-        .getSql();
+        .getRawMany();
 
-    sql = `${sql} LIMIT ${take} OFFSET ${skip}`;
-
-    const data = await userRepository.query(sql);
 
     const totalCount = await userRepository
         .createQueryBuilder('managers')
@@ -67,8 +60,13 @@ function generateConditionsForGetUser(filter: GetUsersParamsDto) {
     let conditionString = 'true '
     let conditionParameters = {}
     if (filter.roles) {
-        conditionString += 'and managers.role IN (:...roles) '
-        conditionParameters['roles'] = filter.roles
+
+        // conditionParameters['scholarshipType'] = filter.scholarshipType.map(type => `'${type}'`).join(',');
+        // conditionString += `and CAST(university.scholarshipType as varchar) in (${conditionParameters['scholarshipType']}) `
+        conditionParameters['roles'] = filter.roles.map(type => `'${type}'`).join(',')
+        console.log(conditionParameters['roles'])
+        conditionString += `and managers.role IN (${conditionParameters['roles']}) `
+
     }
 
     if (filter.search) {
