@@ -16,9 +16,10 @@ import {TokenPayloadSchema} from './schemas/token-payload.schema';
 import {TokenPayloadType} from './types/token-payload.type';
 import {UserRoleEnum} from '../user/types/user-role.enum';
 import {BadRequest, Forbidden} from "http-errors";
-import {deactivatePasswordChangeLink} from "./user-action-link.service";
+import {deactivatePasswordChangeLink, sendMailEmailVerifyLink} from "./user-action-link.service";
 import {RegisterUserType} from "./types/register-user.type";
 import {VerifyOrChangePwdDto} from "./dtos/verify-change.dto";
+import {sendMailMessage} from "../mail/mail.service";
 
 
 export async function changeUserPasswordByLink(pwdChangeId: string, userDto: VerifyOrChangePwdDto) {
@@ -58,8 +59,24 @@ export async function register(userDto: RegisterUserType | RegisterUserDto) {
         role: role,
     }
 
-    return await createUser(user);
+    const newUser = await createUser(user)
+    // await sendMailCreatenStudentLink(user.email, changeEmailLink.id, changeEmailLink.code, user.firstName)
+
+    return newUser;
 }
+
+// export async function sendMailCreatenStudentLink(email: string, mailEmailLink: string, code: string, userName: string) {
+//     await sendMailMessage({
+//         to: email,
+//         subject: 'Активация учетной записи',
+//         html: `Здравствуйте ${userName},<br><br>
+//                 Для активации вашей учетной записи, пожалуйста, перейдите по следующей ссылке:<br>
+//                 ${link}<br>
+//                 Спасибо за выбор нашей платформы!<br><br>
+//                 С уважением,<br>
+//                 Nova Education`
+//     })
+// }
 
 export async function registerWithReferralLink(userId: string, userDto: RegisterUserDto) {
     const user = await getUserById(userId)

@@ -16,17 +16,26 @@ export async function generateChangePasswordLink(email: string) {
         throw new BadRequest('User not found');
     }
     const changePasswordLink = await createChangePasswordLink(user.id);
-    await sendMailChangePasswordLink(email, changePasswordLink)
+    await sendMailChangePasswordLink(email, changePasswordLink, user.lastName)
     console.log(changePasswordLink)
     return "generated";
 }
 
-export async function sendMailChangePasswordLink(email: string, changePasswordLink: string) {
+export async function sendMailChangePasswordLink(email: string, changePasswordLink: string, userName: string) {
     //TODO html
     await sendMailMessage({
         to: email,
-        subject: 'Password Change Link',
-        html: `/generate-pwd/${changePasswordLink}`
+        subject: 'Запрос на сброс пароля',
+        html: `Здравствуйте ${userName},
+                <br><br>
+                Вы получили это письмо, потому что запросили сброс пароля для вашей учетной записи на нашем сайте. 
+                Пожалуйста, нажмите на ссылку ниже, чтобы сбросить пароль:
+                <br>
+                ${changePasswordLink}
+                <br><br>
+                Если вы не запрашивали сброс пароля, проигнорируйте это сообщение. Ваш пароль останется без изменений.<br>
+                С наилучшими пожеланиями,<br>
+                Nova Education`,
     })
 }
 
@@ -86,16 +95,21 @@ export async function generateEmailVerificationLink(email: string) {
         throw new BadRequest('User not found');
     }
     const changeEmailLink = await createEmailVerificationLink(user.id, email);
-    await sendMailEmailVerifyLink(email, changeEmailLink.id, changeEmailLink.code)
+    await sendMailEmailVerifyLink(email, changeEmailLink.id, changeEmailLink.code, user.firstName)
     return changeEmailLink.id;
 }
 
-export async function sendMailEmailVerifyLink(email: string, changePasswordLink: string, code: string) {
+export async function sendMailEmailVerifyLink(email: string, mailEmailLink: string, code: string, userName: string) {
     //TODO html
     await sendMailMessage({
         to: email,
-        subject: 'Password Change Link',
-        html: `Code: ${code}`
+        subject: 'Подтверждение адреса электронной почты',
+        html: `Здравствуйте ${userName},<br><br>
+                Для завершения процесса регистрации, пожалуйста, введите следующий код верификации на нашем сайте:<br>
+                Код верификации: ${code}<br>
+                Если вы не регистрировались на нашем сайте, проигнорируйте это сообщение.<br><br>
+                С уважением,<br>
+                Nova Education`
     })
 }
 
