@@ -255,6 +255,7 @@ export async function editStudent(id: string, userDto: CreateStudentDto) {
         email: userDto.email,
         firstName: userDto.firstName,
         lastName: userDto.lastName,
+        avatar: userDto.avatar || undefined,
         birthDate: new Date(Date.parse(userDto.birthDate)),
         regionId: userDto.regionId,
         phone: userDto.phone,
