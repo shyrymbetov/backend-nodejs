@@ -168,7 +168,7 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto, 
         // 'specialities.directions' 'specialities.name'
         conditionString += 'and (' +
             'LOWER(university.universityName) like LOWER(:search) OR ' +
-            'LOWER(faculty.name) like LOWER(:search) OR ' +
+            'LOWER(faculties.name) like LOWER(:search) OR ' +
             'LOWER(specialities.name) like LOWER(:search) ' +
             // '(:searchIn IN specialities.directions ) ' +
             ')';
