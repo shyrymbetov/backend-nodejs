@@ -35,38 +35,19 @@ export async function getApplicationById(id: string): Promise<ApplicationEntity 
     return await applicationRepository.findOneBy({id: id});
 }
 
-export async function getApplications(filter: GetApplicationsParamsDto): Promise<any> {
+export async function getApplications(userId: string, filter: any): Promise<any> {
 
-    const {conditionString, conditionParameters} = generateConditionsForGetApplication(filter)
+    const {conditionString, conditionParameters} = generateConditionsForGetApplication(userId, filter)
 
-    const skip = (filter.page - 1) * filter.size
-    const take = filter.size
-
-    let sql = applicationRepository.createQueryBuilder('application')
-        .leftJoinAndSelect('managers.university', 'university')
+    return await applicationRepository.createQueryBuilder('application')
+        .leftJoinAndSelect('application.university', 'university')
         .select([
-            'managers.id as id',
-            'managers.avatar as avatar',
+            'application.id as id',
+            'university.universityName as "universityName"',
         ])
         .where(conditionString, conditionParameters)
-        .orderBy('createdAt', 'DESC')
-        .getSql();
-
-    // Add LIMIT and OFFSET to the query string
-    sql = `${sql} LIMIT ${take} OFFSET ${skip}`;
-
-    const data = await applicationRepository.query(sql);
-
-    const totalCount = await applicationRepository
-        .createQueryBuilder('application')
-        .where(conditionString, conditionParameters)
-        .getCount();
-
-
-    return {
-        data: data,
-        totalCount: totalCount
-    }
+        .orderBy('application.created_at', 'DESC')
+        .getRawMany();
 }
 
 export async function getStudentApplicationById(filter: GetMyApplicationsParamsDto, studentId: string): Promise<any> {
@@ -146,38 +127,10 @@ export async function getMyStudentsApplicationsDraft(filter: GetApplicationsPara
     }
 }
 
-function generateConditionsForGetApplication(filter: GetApplicationsParamsDto) {
+function generateConditionsForGetApplication(userId: string, filter: GetApplicationsParamsDto) {
 
-    let conditionString = 'true '
-    let conditionParameters = {}
-    if (filter.country) {
-        conditionString += 'and university.countryId = :country '
-        conditionParameters['country'] = filter.country
-    }
-
-    if (filter.university) {
-        conditionString += 'and university_id = :university '
-        conditionParameters['university'] = filter.university
-    }
-
-    if (filter.semester) {
-        conditionString += "and application.specialityType ->> 'importantDayId' = :semester "
-        conditionParameters['semester'] = filter.semester
-    }
-
-    if (filter.school) {
-        conditionString += 'and student.school = :school '
-        conditionParameters['school'] = filter.school
-    }
-    if (filter.expert) {
-        conditionString += 'and student.masterId = :expert '
-        conditionParameters['expert'] = filter.expert
-    }
-
-    if (filter.orientator) {
-        conditionString += 'and student.orientatorId = :orientator '
-        conditionParameters['orientator'] = filter.orientator
-    }
+    let conditionString = "application.studentId = :userId AND application.applicationStatus != 'DRAFT'"
+    let conditionParameters = {userId}
 
     return {
         conditionString: conditionString,
@@ -233,11 +186,7 @@ function generateConditionsForGetApplicationForDraft(filter: GetApplicationsPara
         conditionParameters['orientatorString'] = filter.orientatorString
     }
 
-
     conditionString += "and application.applicationStatus = 'DRAFT' "
-
-
-
 
     return {
         conditionString: conditionString,
@@ -267,7 +216,7 @@ export async function createApplication(application: CreateApplicationDto) {
     const currentApplication = await getApplicationById(applicationSaved['id'])
 
     if (applicationSaved['applicationStatus'] == 'APPLICATION_RECEIVED') {
-        await sendEmailMessage(currentApplication!, "Application Recived to Server")
+        sendEmailMessage(currentApplication!, "Application Recived to Server").then()
     }
 
     await createApplicationChat(applicationSaved)
@@ -279,7 +228,7 @@ export async function editApplication(id: string, application: CreateApplication
     const applicationSaved = await applicationRepository.save(application);
 
     const currentApplication = await getApplicationById(id)
-    await sendEmailMessage(currentApplication!, "Application Changed")
+    sendEmailMessage(currentApplication!, "Application Changed").then()
 
     return applicationSaved
 }
@@ -316,8 +265,7 @@ export async function editApplicationAfterWorkSheetChange(universityId: string, 
 
 export async function editApplicationActions(id: string, universityDto: ApplicationActionsDto) {
     const currentApplication = await getApplicationById(id)
-    await sendEmailMessage(currentApplication!, "Application and Action Status Changed")
-
+    sendEmailMessage(currentApplication!, "Application and Action Status Changed").then()
 
     return await applicationRepository.update(id, {
         applicationStatus: universityDto.applicationStatus,
@@ -348,8 +296,6 @@ function getExactlyMy(managerId: string) {
 }
 
 export async function getAvailableCountries(managerId: string) {
-
-    console.log(managerId)
 
     let {conditionString, conditionParameters} = getExactlyMy(managerId)
 

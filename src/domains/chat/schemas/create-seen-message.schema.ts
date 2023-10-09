@@ -5,7 +5,7 @@ export const CreateSeenMessageSchema = z.object({
     body: z
         .object({
             chatMessageIds: z.string().array(),
-            chatId: z.string(),
+            applicationId: z.string(),
         })
         .strict(),
     query: z.object({}).strict(),

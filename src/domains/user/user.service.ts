@@ -64,7 +64,6 @@ function generateConditionsForGetUser(filter: GetUsersParamsDto) {
         // conditionParameters['scholarshipType'] = filter.scholarshipType.map(type => `'${type}'`).join(',');
         // conditionString += `and CAST(university.scholarshipType as varchar) in (${conditionParameters['scholarshipType']}) `
         conditionParameters['roles'] = filter.roles.map(type => `'${type}'`).join(',')
-        console.log(conditionParameters['roles'])
         conditionString += `and managers.role IN (${conditionParameters['roles']}) `
 
     }
@@ -188,7 +187,7 @@ export async function createNewUser(userDto: CreateUserDto) {
         localId: userDto.localId
     });
 
-    await sendReferralLinkToNewUser(newUser.email, newUser.id)
+    sendReferralLinkToNewUser(newUser.email, newUser.id).then()
 
     return newUser
 }
@@ -273,7 +272,7 @@ async function sendReferralLinkToNewUser(email:string, userId: string) {
     await sendMailMessage({
         to: email,
         subject: 'Password Change Link',
-        html: `/generate-pwd/${changePasswordLink}`
+        html: `https://www.talaptan.ru/auth/change-password/${changePasswordLink}`
     })
     return "generated";
 }

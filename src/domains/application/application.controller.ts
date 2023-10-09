@@ -27,16 +27,9 @@ export async function getApplicationHandler(req: Request, res: Response) {
     return res.send(await getApplicationById(id));
 }
 
-export async function getApplicationsHandler(req: Request, res: Response) {
-    const id = req.user?.id ?? ''
-    const {query} = GetApplicationsFilterSchema.parse(req);
-    return res.send(await getApplications(query));
-}
-
 export async function getApplicationsByUserHandler(req: Request, res: Response) {
-    const id = req.user?.id ?? ''
-    const {query} = GetApplicationsFilterSchema.parse(req);
-    return res.send(await getApplications(query));
+    const userId = req.params?.userId ?? ''
+    return res.send(await getApplications(userId, {}));
 }
 
 export async function getMyApplicationHandler(req: Request, res: Response) {

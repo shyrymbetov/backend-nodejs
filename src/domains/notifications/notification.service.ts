@@ -2,6 +2,7 @@ import {dataSource} from '../../database';
 import {NotificationEntity} from "./model/notification.entity";
 import {CreateNotificationType} from "./type/notification.type";
 import {GetApplicationsParamsDto} from "../application/dto/get-applications-params.dto";
+import {sendNotification, sendNotificationCount} from "../../sockets/websocket.service";
 
 const notificationRepository = dataSource.getRepository(NotificationEntity);
 
@@ -74,6 +75,7 @@ export async function readNotification(id: string) {
     // Update the 'read' status for all unread notifications in a single query
     await notificationRepository.update(notificationIds, { read: true });
     // Optionally, you can return the updated notifications
+    sendNotificationCount(id).then();
     return 'Success';
 }
 

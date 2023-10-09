@@ -42,7 +42,6 @@ export async function getStudents(filter: GetStudentsParamsDto): Promise<any> {
         .getSql();
 
     sql = `${sql} LIMIT ${take} OFFSET ${skip}`;
-    console.log(sql)
 
     const data = await userRepository.query(sql, conditionParametersArray);
 

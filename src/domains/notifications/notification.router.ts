@@ -10,9 +10,9 @@ export const notificationRouter = Router();
 
 notificationRouter.route('/')
     .get(isAuthenticatedMiddleware, getMyNotificationsHandler)
-    .patch(isAuthenticatedMiddleware, readNotificationHandler)
     .post(createNotificationHandler)
 ;
+notificationRouter.route('/seen').put(isAuthenticatedMiddleware, readNotificationHandler);
 
 notificationRouter.route('/:id')
   .get(isAuthenticatedMiddleware, getNotificationByIdHandler)

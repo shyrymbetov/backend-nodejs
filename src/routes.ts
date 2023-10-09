@@ -21,5 +21,5 @@ export function addRoutes(app: Express) {
   app.use('/data', dataRouter);
   app.use('/files', fileRouter);
   app.use('/notification', notificationRouter);
-  app.use('/chat/', chatRouter)
+  app.use('/chat', chatRouter)
 }

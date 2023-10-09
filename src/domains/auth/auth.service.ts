@@ -19,8 +19,6 @@ import {BadRequest, Forbidden} from "http-errors";
 import {deactivatePasswordChangeLink, sendMailEmailVerifyLink} from "./user-action-link.service";
 import {RegisterUserType} from "./types/register-user.type";
 import {VerifyOrChangePwdDto} from "./dtos/verify-change.dto";
-import {sendMailMessage} from "../mail/mail.service";
-
 
 export async function changeUserPasswordByLink(pwdChangeId: string, userDto: VerifyOrChangePwdDto) {
     const userId = await deactivatePasswordChangeLink(pwdChangeId)

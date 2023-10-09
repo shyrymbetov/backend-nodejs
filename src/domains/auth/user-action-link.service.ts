@@ -16,8 +16,7 @@ export async function generateChangePasswordLink(email: string) {
         throw new BadRequest('User not found');
     }
     const changePasswordLink = await createChangePasswordLink(user.id);
-    await sendMailChangePasswordLink(email, changePasswordLink, user.lastName)
-    console.log(changePasswordLink)
+    sendMailChangePasswordLink(email, changePasswordLink, user.lastName).then()
     return "generated";
 }
 
@@ -95,7 +94,7 @@ export async function generateEmailVerificationLink(email: string) {
         throw new BadRequest('User not found');
     }
     const changeEmailLink = await createEmailVerificationLink(user.id, email);
-    await sendMailEmailVerifyLink(email, changeEmailLink.id, changeEmailLink.code, user.firstName)
+    sendMailEmailVerifyLink(email, changeEmailLink.id, changeEmailLink.code, user.firstName).then()
     return changeEmailLink.id;
 }
 

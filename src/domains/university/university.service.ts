@@ -134,6 +134,10 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto, 
         conditionParametersArray.push(`%${filter.faculty}%`)
     }
 
+    if (filter.canApply) {
+        conditionString += 'and university.canApply and (worksheet.id is not null) '
+    }
+
     if (filter.degree) {
         conditionString += 'and eduDegrees.degree = :degree '
         conditionParameters['degree'] = filter.degree
@@ -164,13 +168,14 @@ function generateConditionsForGetUniversities(filter: GetUniversitiesFilterDto, 
         // 'specialities.directions' 'specialities.name'
         conditionString += 'and (' +
             'LOWER(university.universityName) like LOWER(:search) OR ' +
+            'LOWER(faculty.name) like LOWER(:search) OR' +
             'LOWER(specialities.name) like LOWER(:search) ' +
             // '(:searchIn IN specialities.directions ) ' +
             ')';
 
         conditionParameters['search'] = `%${filter.search}%`;
         // conditionParameters['searchIn'] = filter.search;
-        conditionParametersArray.push(`%${filter.search}%`, `%${filter.search}%`)
+        conditionParametersArray.push(`%${filter.search}%`, `%${filter.search}%`, `%${filter.search}%`)
     }
 
     return {

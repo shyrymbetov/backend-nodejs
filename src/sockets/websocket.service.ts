@@ -27,7 +27,6 @@ export function addUserOnline(ws: InstanceType<typeof WebSocket.WebSocket>) {
             handleUserJoin(ws, userId);
             await sendNotificationCount(userId);
         } else if (parsedMessage.type === 'chat_message') {
-            console.log(userId, message.toString())
             await broadcastToApplication(userId, parsedMessage)
             await sendNotification(userId, parsedMessage)
         } else if (parsedMessage.type === 'logout') {
@@ -49,7 +48,7 @@ function handleUserClose(socket, userId: string) {
     }
 }
 
-async function broadcastToApplication(userId: string, message: any) {
+export async function broadcastToApplication(userId: string, message: any) {
     const chat = await getApplicationUsersByChatId(message['applicationId'])
     // If chat doesn't exist, then quit
     if (!chat) {
@@ -66,11 +65,12 @@ async function broadcastToApplication(userId: string, message: any) {
         content: message['content'],
         file: message['file']
     }
-    await createChatMessage(newChatMessage)
+    const savedMessage = await createChatMessage(newChatMessage)
     // End Save Chat Message to DB
 
     message['user']= sender
     for (const user of chat.userIds) {
+        message['createdAt'] = savedMessage['createdAt']
         // await sendMailNotification(userId, message.content)
         await sendToUser(user, JSON.stringify(message));
     }

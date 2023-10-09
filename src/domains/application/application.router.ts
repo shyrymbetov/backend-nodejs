@@ -6,7 +6,6 @@ import {
     editApplicationStatusHandler,
     getApplicationHandler,
     getApplicationsByUserHandler,
-    getApplicationsHandler,
     getMyApplicationHandler,
     getMyStudentApplicationByIdHandler,
     getMyStudentsApplicationsDraftHandler,
@@ -26,7 +25,7 @@ applicationRouter.route('/')
     // .get(isAuthenticatedMiddleware, getApplicationsHandler)
     .post(isAuthenticatedMiddleware, createApplicationHandler)
 ;
-applicationRouter.route('/user/:id')
+applicationRouter.route('/user/:userId')
     .get(isAuthenticatedMiddleware, getApplicationsByUserHandler)
 ;
 
