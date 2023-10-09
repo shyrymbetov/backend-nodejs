@@ -56,6 +56,7 @@ export async function getStudentApplicationById(filter: GetMyApplicationsParamsD
 
     return await applicationRepository.createQueryBuilder('application')
         .leftJoinAndSelect('application.student', 'student')
+        .leftJoinAndSelect('application.university', 'university')
         .leftJoinAndSelect('student.applications', 'applications')
         .where(conditionString, conditionParameters)
         .getMany()
