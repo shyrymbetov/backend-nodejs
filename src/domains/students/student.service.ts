@@ -245,9 +245,9 @@ export async function createStudent(userDto: CreateStudentDto) {
 export async function editStudent(id: string, userDto: CreateStudentDto) {
     const student = await getStudentById(id)
 
-    if (student.active) {
-        return "student active";
-    }
+    // if (student.active) {
+    //     return "student active";
+    // }
 
     // if (masterExpert) {}
     const role: UserRoleEnum = getRoleByType(userDto.type)
